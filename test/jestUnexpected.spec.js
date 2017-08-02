@@ -1,7 +1,7 @@
 const expect = require('../lib/jestUnexpected');
 const unexpected = require('unexpected');
 
-describe('jest-unexpected', function() {
+describe('jest-unexpected', () => {
     describe('toEqual()', () => {
         it('should compare strings failing', () => {
             unexpected(
@@ -10,6 +10,7 @@ describe('jest-unexpected', function() {
                 "expected 'foo' to equal 'bar'\n" + '\n' + '-foo\n' + '+bar'
             );
         });
+
         it('should compare strings', () => {
             unexpected(() => expect('foo').toEqual('foo'), 'not to throw');
         });
