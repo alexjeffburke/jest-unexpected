@@ -1,3 +1,4 @@
+const jestExpect = global.expect;
 const expect = require('../lib/jestUnexpected');
 const unexpected = require('unexpected');
 
@@ -101,6 +102,22 @@ describe('toMatch()', () => {
                     "expected 'foo' to match /bar/"
                 );
             });
+        });
+    });
+
+    describe.skip('with non-string subject', () => {
+        it('should give a meaningful error', () => {
+            try {
+                jestExpect(['foo']).toMatch('foo');
+                throw new Error('expected jest to throw :-(');
+            } catch (e) {
+                if (/to throw :-/.test(e.message)) throw e;
+                unexpected(
+                    () => expect(['foo']).toMatch('foo'),
+                    'to throw',
+                    e.message
+                );
+            }
         });
     });
 });
