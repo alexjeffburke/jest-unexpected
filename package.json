@@ -1,0 +1,18 @@
+{
+  "name": "jest-unexpected",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/jestUnexpected.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Alex J Burke <alex@alexjeffburke.com>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "unexpected": "^10.33.0"
+  },
+  "devDependencies": {
+    "jest": "20.0.4"
+  }
+}
