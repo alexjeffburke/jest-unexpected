@@ -15,4 +15,23 @@ describe('jest-unexpected', () => {
             unexpected(() => expect('foo').toEqual('foo'), 'not to throw');
         });
     });
+
+    describe('.not', () => {
+        describe('toEqual()', () => {
+            it('should compare strings failing', () => {
+                unexpected(
+                    () => expect('foo').not.toEqual('foo'),
+                    'to throw',
+                    "expected 'foo' not to equal 'foo'"
+                );
+            });
+
+            it('should compare strings', () => {
+                unexpected(
+                    () => expect('foo').not.toEqual('bar'),
+                    'not to throw'
+                );
+            });
+        });
+    });
 });
