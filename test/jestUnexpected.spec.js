@@ -60,3 +60,26 @@ describe('toEqual()', () => {
         });
     });
 });
+
+describe('toMatch()', () => {
+    describe('with string subject', () => {
+        describe('string', () => {
+            it('should match two strings', () => {
+                unexpected(() => expect('foo').toMatch('foo'), 'not to throw');
+            });
+
+            it('should match two different strings', () => {
+                unexpected(
+                    () => expect('foo').toMatch('bar'),
+                    'to throw',
+                    "expected 'foo' to contain 'bar'\n" + '\n' + 'foo'
+                );
+            });
+        });
+
+        it('should it substring match?', () => {
+            unexpected(() => expect('foobar').toMatch('foo'), 'not to throw');
+            unexpected(() => expect('foobar').toMatch('bar'), 'not to throw');
+        });
+    });
+});
