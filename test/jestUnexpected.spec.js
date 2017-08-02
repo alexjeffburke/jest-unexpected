@@ -81,5 +81,20 @@ describe('toMatch()', () => {
             unexpected(() => expect('foobar').toMatch('foo'), 'not to throw');
             unexpected(() => expect('foobar').toMatch('bar'), 'not to throw');
         });
+
+        describe('with regex', () => {
+            it('passing', () => {
+                unexpected(() => expect('foobar').toMatch(/foo/), 'not to throw');
+                unexpected(() => expect('foobar').toMatch(/bar/), 'not to throw');
+            });
+
+            it('failing', () => {
+                unexpected(
+                    () => expect('foo').toMatch(/bar/),
+                    'to throw',
+                    "expected 'foo' to match /bar/"
+                );
+            });
+        });
     });
 });
