@@ -1,6 +1,6 @@
 const jestExpect = global.expect;
 const expect = require('../lib/jestUnexpected');
-const unexpected = require('unexpected');
+const unexpected = require('unexpected').clone();
 
 describe('toBe()', () => {
     it('should compare instances failing', () => {
@@ -105,19 +105,23 @@ describe('toMatch()', () => {
         });
     });
 
-    describe.skip('with non-string subject', () => {
+    describe('with non-string subject', () => {
         it('should give a meaningful error', () => {
             try {
                 jestExpect(['foo']).toMatch('foo');
                 throw new Error('expected jest to throw :-(');
             } catch (e) {
-                if (/to throw :-/.test(e.message)) throw e;
-                unexpected(
+                const expectedMessage = e.message;
+
+                if (/to throw :-/.test(expectedMessage)) throw e;
+
+                return unexpected(
                     () => expect(['foo']).toMatch('foo'),
-                    'to throw',
-                    e.message
+                    'to error',
+                    e => unexpected(e.toString('asci'), 'to equal', expectedMessage)
                 );
             }
+
         });
     });
 });
