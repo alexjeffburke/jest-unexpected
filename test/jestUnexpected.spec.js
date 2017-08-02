@@ -84,8 +84,14 @@ describe('toMatch()', () => {
 
         describe('with regex', () => {
             it('passing', () => {
-                unexpected(() => expect('foobar').toMatch(/foo/), 'not to throw');
-                unexpected(() => expect('foobar').toMatch(/bar/), 'not to throw');
+                unexpected(
+                    () => expect('foobar').toMatch(/foo/),
+                    'not to throw'
+                );
+                unexpected(
+                    () => expect('foobar').toMatch(/bar/),
+                    'not to throw'
+                );
             });
 
             it('failing', () => {
