@@ -148,3 +148,28 @@ describe('.resolves', () => {
         );
     });
 });
+
+describe('.rejects', () => {
+    it('should pass on resolved promise and allow further assertions', () => {
+        const rejectionValue = new Error('foo and bar');
+
+        return unexpected(
+            expect(Promise.reject(rejectionValue)).rejects,
+            'to be fulfilled with',
+            result => {
+                expect(result, 'not to be', rejectionValue);
+
+                return unexpected(() => {
+                    result.toMatch('and bar');
+                }, 'not to error');
+            }
+        );
+    });
+
+    it('should fail on rejected promised and allow further assertions', () => {
+        return unexpected(
+            expect(Promise.resolve({})).rejects,
+            'to be rejected'
+        );
+    });
+});
