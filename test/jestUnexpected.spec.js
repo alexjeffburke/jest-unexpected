@@ -121,3 +121,30 @@ describe('toMatch()', () => {
         });
     });
 });
+
+describe('.resolves', () => {
+    it('should pass on resolved promise and allow further assertions', () => {
+        const resolutionValue = ['foo', 'bar'];
+
+        return unexpected(
+            expect(Promise.resolve(resolutionValue)).resolves,
+            'to be fulfilled with',
+            result => {
+                expect(result, 'not to be', resolutionValue);
+
+                return unexpected(() => {
+                    result.toEqual(resolutionValue);
+                }, 'not to error');
+            }
+        );
+    });
+
+    it('should fail on rejected promised and allow further assertions', () => {
+        const rejectionValue = new Error('foobar');
+
+        return unexpected(
+            expect(Promise.reject(rejectionValue)).resolves,
+            'to be rejected'
+        );
+    });
+});
