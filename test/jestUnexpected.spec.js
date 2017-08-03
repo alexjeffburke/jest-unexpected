@@ -136,6 +136,99 @@ describe('toMatch()', () => {
     });
 });
 
+describe('toThrow()', () => {
+    it('should pass on throw', () => {
+        return unexpected(() => {
+            expect(() => {
+                throw new Error();
+            }).toThrow();
+        }, 'not to error');
+    });
+
+    it('should pass with string', () => {
+        return unexpected(() => {
+            expect(() => {
+                throw new Error('baz');
+            }).toThrow('baz');
+        }, 'not to error');
+    });
+
+    it('should pass with regex', () => {
+        return unexpected(() => {
+            expect(() => {
+                throw new Error('bazbazbaz');
+            }).toThrow(/baz/);
+        }, 'not to error');
+    });
+
+    it('should pass with error', () => {
+        return unexpected(() => {
+            expect(() => {
+                throw new Error('erroneous baz');
+            }).toThrow(new Error('erroneous baz'));
+        }, 'not to error');
+    });
+
+    it('should fail on no throw', () => {
+        return unexpected(
+            () => {
+                expect(() => {}).toThrow();
+            },
+            'to error',
+            'expected () => {} to throw' + '\n' + '  did not throw'
+        );
+    });
+
+    it('should fail on mismatch string', () => {
+        return unexpected(
+            () => {
+                expect(() => {
+                    throw new Error('baz');
+                }).toThrow('ba');
+            },
+            'to error',
+            "expected () => { throw new Error('baz'); } to throw 'ba'\n" +
+                "  expected Error('baz') to satisfy 'ba'\n" +
+                '\n' +
+                '  -baz\n' +
+                '  +ba'
+        );
+    });
+
+    it('should fail on mismatch regex', () => {
+        return unexpected(
+            () => {
+                expect(() => {
+                    throw new Error('baz');
+                }).toThrow(/bar/);
+            },
+            'to error',
+            "expected () => { throw new Error('baz'); } to throw /bar/\n" +
+                "  expected Error('baz') to satisfy /bar/"
+        );
+    });
+
+    it('should fail on mismatch error', () => {
+        return unexpected(
+            () => {
+                expect(() => {
+                    throw new Error('baz');
+                }).toThrow(new Error('bar'));
+            },
+            'to error',
+            "expected () => { throw new Error('baz'); } to throw Error('bar')\n" +
+                "  expected Error('baz') to satisfy Error('bar')\n" +
+                '\n' +
+                '  Error({\n' +
+                "    message: 'baz' // should equal 'bar'\n" +
+                '                   //\n' +
+                '                   // -baz\n' +
+                '                   // +bar\n' +
+                '  })'
+        );
+    });
+});
+
 describe('.resolves', () => {
     it('should pass on resolved promise and allow further assertions', () => {
         const resolutionValue = ['foo', 'bar'];
