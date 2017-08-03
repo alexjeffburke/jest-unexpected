@@ -34,6 +34,20 @@ describe('toBe()', () => {
     });
 });
 
+describe('toBeDefined()', () => {
+    it('should check defined failing', () => {
+        unexpected(
+            () => expect(undefined).toBeDefined(),
+            'to throw',
+            'expected undefined to be defined'
+        );
+    });
+
+    it('should check defined', () => {
+        unexpected(() => expect({}).toBeDefined(), 'not to throw');
+    });
+});
+
 describe('toEqual()', () => {
     it('should compare strings failing', () => {
         unexpected(
