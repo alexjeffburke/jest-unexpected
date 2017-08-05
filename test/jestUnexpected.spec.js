@@ -300,7 +300,8 @@ describe('expect.objectContaining', () => {
                 ),
             'to error',
             [
-                "expected { foo: 'barbar', baz: 'qux' } to equal ObjectContainingSpec({ foo: 'bar' })",
+                "expected { foo: 'barbar', baz: 'qux' }",
+                "to equal ObjectContainingSpec({ foo: 'bar' })",
                 '',
                 '{',
                 "  foo: 'barbar', // should equal 'bar'",
