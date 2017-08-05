@@ -48,6 +48,32 @@ describe('toBeDefined()', () => {
     });
 });
 
+describe('toBeFalsy()', () => {
+    it('should pass undefined', () => {
+        unexpected(() => expect(undefined).toBeFalsy(), 'not to throw');
+    });
+
+    it('should pass null', () => {
+        unexpected(() => expect(null).toBeFalsy(), 'not to throw');
+    });
+
+    it('should pass empty string', () => {
+        unexpected(() => expect('').toBeFalsy(), 'not to throw');
+    });
+
+    it('should pass 0', () => {
+        unexpected(() => expect(0).toBeFalsy(), 'not to throw');
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect({}).toBeFalsy(),
+            'to throw',
+            'expected {} to be falsy'
+        );
+    });
+});
+
 describe('toContain()', () => {
     it('should pass', () => {
         const instance = { a: 'something' };
