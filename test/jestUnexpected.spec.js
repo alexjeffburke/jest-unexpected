@@ -281,6 +281,31 @@ describe('.rejects', () => {
     });
 });
 
+describe('expect.arrayContaining', () => {
+    it('should pass', () => {
+        unexpected(
+            () =>
+                expect(['foo', 'bar', 'baz']).toEqual(
+                    expect.arrayContaining(['bar', 'baz'])
+                ),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () =>
+                expect(['foo', 'bar']).toEqual(
+                    expect.arrayContaining(['barbar'])
+                ),
+            'to error',
+            [
+                "expected [ 'foo', 'bar' ] to equal ArrayContainingSpec([ 'barbar' ])"
+            ].join('\n')
+        );
+    });
+});
+
 describe('expect.objectContaining', () => {
     it('should pass', () => {
         unexpected(
