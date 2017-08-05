@@ -48,6 +48,37 @@ describe('toBeDefined()', () => {
     });
 });
 
+describe('toContain()', () => {
+    it('should pass', () => {
+        const instance = { a: 'something' };
+
+        unexpected(
+            () =>
+                expect([{ foo: 'bar' }, instance, { quux: 'xuuq' }]).toContain(
+                    instance
+                ),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        const instance = { a: 'something' };
+        const clonedInstance = Object.assign({}, instance);
+
+        unexpected(
+            () =>
+                expect([{ foo: 'bar' }, instance, { quux: 'xuuq' }]).toContain(
+                    clonedInstance
+                ),
+            'to throw',
+            [
+                "expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]",
+                "to contain { a: 'something' }"
+            ].join('\n')
+        );
+    });
+});
+
 describe('toEqual()', () => {
     it('should compare strings failing', () => {
         unexpected(
