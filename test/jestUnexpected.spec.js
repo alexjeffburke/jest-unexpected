@@ -74,6 +74,20 @@ describe('toBeFalsy()', () => {
     });
 });
 
+describe('toBeNull()', () => {
+    it('should pass', () => {
+        unexpected(() => expect(null).toBeNull(), 'not to throw');
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect(undefined).toBeNull(),
+            'to throw',
+            'expected undefined to be null'
+        );
+    });
+});
+
 describe('toBeTruthy()', () => {
     it('should pass', () => {
         unexpected(() => expect({}).toBeTruthy(), 'not to throw');
