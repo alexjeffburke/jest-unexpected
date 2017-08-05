@@ -79,6 +79,39 @@ describe('toContain()', () => {
     });
 });
 
+describe('toContainEqual()', () => {
+    it('should pass', () => {
+        const instance = { a: 'something', b: 'else' };
+        const clonedInstance = Object.assign({}, instance);
+
+        unexpected(
+            () =>
+                expect([
+                    { foo: 'bar' },
+                    instance,
+                    { quux: 'xuuq' }
+                ]).toContainEqual(clonedInstance),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () =>
+                expect([
+                    { foo: 'bar' },
+                    { a: 'something' },
+                    { quux: 'xuuq' }
+                ]).toContain({ a: 'something', b: 'else' }),
+            'to throw',
+            [
+                "expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]",
+                "to contain { a: 'something', b: 'else' }"
+            ].join('\n')
+        );
+    });
+});
+
 describe('toEqual()', () => {
     it('should compare strings failing', () => {
         unexpected(
