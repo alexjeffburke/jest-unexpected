@@ -264,6 +264,47 @@ describe('toMatch()', () => {
     });
 });
 
+describe('toMatchObject()', () => {
+    it('should pass', () => {
+        return unexpected(() => {
+            expect({
+                a: 'foo',
+                b: 'bar',
+                c: 'baz'
+            }).toMatchObject({
+                a: 'foo',
+                b: 'bar'
+            });
+        }, 'not to error');
+    });
+
+    it('should fail', () => {
+        return unexpected(
+            () => {
+                expect({
+                    a: 'foo',
+                    b: 'baz'
+                }).toMatchObject({
+                    a: 'foo',
+                    b: 'bar'
+                });
+            },
+            'to error',
+            [
+                "expected { a: 'foo', b: 'baz' } to satisfy { a: 'foo', b: 'bar' }",
+                '',
+                '{',
+                "  a: 'foo',",
+                "  b: 'baz' // should equal 'bar'",
+                '           //',
+                '           // -baz',
+                '           // +bar',
+                '}'
+            ].join('\n')
+        );
+    });
+});
+
 describe('toThrow()', () => {
     it('should pass on throw', () => {
         return unexpected(() => {
