@@ -74,6 +74,44 @@ describe('toBeFalsy()', () => {
     });
 });
 
+describe('toBeTruthy()', () => {
+    it('should pass', () => {
+        unexpected(() => expect({}).toBeTruthy(), 'not to throw');
+    });
+
+    it('should fail undefined', () => {
+        unexpected(
+            () => expect(undefined).toBeTruthy(),
+            'to throw',
+            'expected undefined to be truthy'
+        );
+    });
+
+    it('should fail null', () => {
+        unexpected(
+            () => expect(null).toBeTruthy(),
+            'to throw',
+            'expected null to be truthy'
+        );
+    });
+
+    it('should fail empty string', () => {
+        unexpected(
+            () => expect('').toBeTruthy(),
+            'to throw',
+            "expected '' to be truthy"
+        );
+    });
+
+    it('should fail 0', () => {
+        unexpected(
+            () => expect(0).toBeTruthy(),
+            'to throw',
+            'expected 0 to be truthy'
+        );
+    });
+});
+
 describe('toContain()', () => {
     it('should pass', () => {
         const instance = { a: 'something' };
