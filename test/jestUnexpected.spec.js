@@ -280,3 +280,36 @@ describe('.rejects', () => {
         );
     });
 });
+
+describe('expect.objectContaining', () => {
+    it('should pass', () => {
+        unexpected(
+            () =>
+                expect({ foo: 'bar', baz: 'qux' }).toEqual(
+                    expect.objectContaining({ foo: 'bar' })
+                ),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () =>
+                expect({ foo: 'barbar', baz: 'qux' }).toEqual(
+                    expect.objectContaining({ foo: 'bar' })
+                ),
+            'to error',
+            [
+                "expected { foo: 'barbar', baz: 'qux' } to equal ObjectContainingSpec({ foo: 'bar' })",
+                '',
+                '{',
+                "  foo: 'barbar', // should equal 'bar'",
+                '                 //',
+                '                 // -barbar',
+                '                 // +bar',
+                "  baz: 'qux'",
+                '}'
+            ].join('\n')
+        );
+    });
+});
