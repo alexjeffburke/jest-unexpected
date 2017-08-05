@@ -195,7 +195,7 @@ describe('toEqual()', () => {
         unexpected(
             () => expect('foo').toEqual('bar'),
             'to throw',
-            "expected 'foo' to equal 'bar'\n" + '\n' + '-foo\n' + '+bar'
+            ["expected 'foo' to equal 'bar'", '', '-foo', '+bar'].join('\n')
         );
     });
 
@@ -229,9 +229,12 @@ describe('toHaveLength()', () => {
 
     it('should fail', () => {
         unexpected(
-            () => expect('123').toHaveLength(4),
+            () => expect('1234567').toHaveLength(8),
             'to throw',
-            "expected '123' to have length 4" + '\n' + '  expected 3 to be 4'
+            [
+                "expected '1234567' to have length 8",
+                '  expected 7 to be 8'
+            ].join('\n')
         );
     });
 });
@@ -343,7 +346,7 @@ describe('toMatch()', () => {
                 unexpected(
                     () => expect('foo').toMatch('bar'),
                     'to throw',
-                    "expected 'foo' to contain 'bar'\n" + '\n' + 'foo'
+                    ["expected 'foo' to contain 'bar'", '', 'foo'].join('\n')
                 );
             });
         });
@@ -472,7 +475,7 @@ describe('toThrow()', () => {
                 expect(() => {}).toThrow();
             },
             'to error',
-            'expected () => {} to throw' + '\n' + '  did not throw'
+            ['expected () => {} to throw', '  did not throw'].join('\n')
         );
     });
 
@@ -484,11 +487,13 @@ describe('toThrow()', () => {
                 }).toThrow('ba');
             },
             'to error',
-            "expected () => { throw new Error('baz'); } to throw 'ba'\n" +
-                "  expected Error('baz') to satisfy 'ba'\n" +
-                '\n' +
-                '  -baz\n' +
+            [
+                "expected () => { throw new Error('baz'); } to throw 'ba'",
+                "  expected Error('baz') to satisfy 'ba'",
+                '',
+                '  -baz',
                 '  +ba'
+            ].join('\n')
         );
     });
 
