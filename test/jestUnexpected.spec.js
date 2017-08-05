@@ -300,7 +300,11 @@ describe('expect.arrayContaining', () => {
                 ),
             'to error',
             [
-                "expected [ 'foo', 'bar' ] to equal ArrayContainingSpec([ 'barbar' ])"
+                "expected [ 'foo', 'bar' ] to equal ArrayContainingSpec([ 'barbar' ])",
+                '',
+                '[',
+                "  // missing 'barbar'",
+                ']'
             ].join('\n')
         );
     });
