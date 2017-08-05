@@ -236,6 +236,102 @@ describe('toHaveLength()', () => {
     });
 });
 
+describe('toHaveProperty()', () => {
+    it('should pass on property', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: 'bar',
+                    baz: null
+                }).toHaveProperty('foo'),
+            'not to throw'
+        );
+    });
+
+    it('should pass on deep property', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: {
+                        bar: {
+                            quux: 'baz',
+                            xuuq: 'baz'
+                        }
+                    }
+                }).toHaveProperty('foo.bar'),
+            'not to throw'
+        );
+    });
+
+    it('should fail on deep property 1', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: 1,
+                    baz: {
+                        baz: null
+                    }
+                }).toHaveProperty('foo.bar'),
+            'to throw',
+            [
+                "expected { foo: 1, baz: { baz: null } } to have property 'foo.bar'",
+                '',
+                '{',
+                "  foo: 1, // should equal { bar: expect.it('to be defined') }",
+                '  baz: { baz: null }',
+                '}'
+            ].join('\n')
+        );
+    });
+
+    it('should fail on deep property 2', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: 1,
+                    baz: {
+                        baz: null
+                    }
+                }).toHaveProperty('bar.baz'),
+            'to throw',
+            [
+                "expected { foo: 1, baz: { baz: null } } to have property 'bar.baz'",
+                '',
+                '{',
+                '  foo: 1,',
+                '  baz: { baz: null }',
+                "  // missing bar: { baz: expect.it('to be defined') }",
+                '}'
+            ].join('\n')
+        );
+    });
+
+    it('should fail on value', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: 1,
+                    bar: {
+                        baz: null
+                    }
+                }).toHaveProperty('bar.baz', {
+                    a: 1
+                }),
+            'to throw',
+            [
+                "expected { foo: 1, bar: { baz: null } } to have property 'bar.baz'",
+                '',
+                '{',
+                '  foo: 1,',
+                '  bar: {',
+                '    baz: null // should equal { a: 1 }',
+                '  }',
+                '}'
+            ].join('\n')
+        );
+    });
+});
+
 describe('toMatch()', () => {
     describe('with string subject', () => {
         describe('string', () => {
