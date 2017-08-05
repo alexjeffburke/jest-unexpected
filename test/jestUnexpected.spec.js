@@ -204,6 +204,24 @@ describe('toEqual()', () => {
     });
 });
 
+describe('toHaveLength()', () => {
+    it('should pass array', () => {
+        unexpected(() => expect([1, 2, 3]).toHaveLength(3), 'not to throw');
+    });
+
+    it('should pass string', () => {
+        unexpected(() => expect('123').toHaveLength(3), 'not to throw');
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect('123').toHaveLength(4),
+            'to throw',
+            "expected '123' to have length 4" + '\n' + '  expected 3 to be 4'
+        );
+    });
+});
+
 describe('toMatch()', () => {
     describe('with string subject', () => {
         describe('string', () => {
