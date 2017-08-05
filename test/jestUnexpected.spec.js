@@ -645,3 +645,25 @@ describe('expect.objectContaining', () => {
         );
     });
 });
+
+describe('expect.stringContaining', () => {
+    it('should pass', () => {
+        unexpected(
+            () => expect('foobarbaz').toEqual(expect.stringContaining('bar')),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect('foobarbar').toEqual(expect.stringContaining('baz')),
+            'to error',
+            [
+                "expected 'foobarbar' to equal StringContainingSpec('baz')",
+                '',
+                'foobarbar',
+                '   ^^ ^^'
+            ].join('\n')
+        );
+    });
+});
