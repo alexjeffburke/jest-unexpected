@@ -849,4 +849,47 @@ describe('expect.stringMatching', () => {
             );
         });
     });
+
+    describe('within expect.objectContaining', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect({
+                        a: 'foobar',
+                        b: 'foobaz'
+                    }).toEqual(
+                        expect.objectContaining({
+                            a: expect.stringMatching(/bar/),
+                            b: expect.stringMatching(/baz/)
+                        })
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect({
+                        a: 'foobaz',
+                        b: 'foobaz'
+                    }).toEqual(
+                        expect.objectContaining({
+                            a: expect.stringMatching(/bar/),
+                            b: expect.stringMatching(/baz/)
+                        })
+                    ),
+                'to throw',
+                [
+                    "expected { a: 'foobaz', b: 'foobaz' }",
+                    'to equal ObjectContainingSpec({ a: StringMatchingSpec(/bar/), b: StringMatchingSpec(/baz/) })',
+                    '',
+                    '{',
+                    "  a: 'foobaz', // should match /bar/",
+                    "  b: 'foobaz'",
+                    '}'
+                ].join('\n')
+            );
+        });
+    });
 });
