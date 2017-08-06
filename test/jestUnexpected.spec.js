@@ -102,6 +102,23 @@ describe('toBeGreaterThanOrEqual()', () => {
     });
 });
 
+describe('toBeInstanceOf()', () => {
+    it('should pass', () => {
+        unexpected(
+            () => expect(() => {}).toBeInstanceOf(Function),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect({}).toBeInstanceOf(Function),
+            'to throw',
+            'expected {} to be a Function'
+        );
+    });
+});
+
 describe('toBeLessThan()', () => {
     it('should pass', () => {
         unexpected(() => expect(10).toBeLessThan(11), 'not to throw');
