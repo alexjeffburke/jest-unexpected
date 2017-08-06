@@ -116,6 +116,20 @@ describe('toBeLessThan()', () => {
     });
 });
 
+describe('toBeLessThanOrEqual()', () => {
+    it('should pass', () => {
+        unexpected(() => expect(10).toBeLessThanOrEqual(10), 'not to throw');
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect(11).toBeLessThanOrEqual(10),
+            'to throw',
+            'expected 11 to be less than or equal to 10'
+        );
+    });
+});
+
 describe('toBeNull()', () => {
     it('should pass', () => {
         unexpected(() => expect(null).toBeNull(), 'not to throw');
