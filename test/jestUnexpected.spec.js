@@ -929,3 +929,53 @@ describe('expect.stringMatching', () => {
         });
     });
 });
+
+describe('with deeply nested containing declarations', () => {
+    it('should pass', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: ['foobar', 'foobaz'],
+                    b: 'foobaz'
+                }).toMatchObject(
+                    expect.objectContaining({
+                        foo: expect.arrayContaining([
+                            expect.stringMatching(/bar/),
+                            expect.any(String)
+                        ])
+                    })
+                ),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: ['foobaz', 'foobaz'],
+                    b: 'foobaz'
+                }).toMatchObject(
+                    expect.objectContaining({
+                        foo: expect.arrayContaining([
+                            expect.stringMatching(/bar/),
+                            expect.any(String)
+                        ])
+                    })
+                ),
+            'to throw',
+            [
+                "expected { foo: [ 'foobaz', 'foobaz' ], b: 'foobaz' }",
+                "to satisfy { foo: [ /bar/, expect.it('to be a string') ] }",
+                '',
+                '{',
+                '  foo: [',
+                "    'foobaz', // should match /bar/",
+                "    'foobaz'",
+                '  ],',
+                "  b: 'foobaz'",
+                '}'
+            ].join('\n')
+        );
+    });
+});
