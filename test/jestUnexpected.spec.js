@@ -88,6 +88,20 @@ describe('toBeGreaterThan()', () => {
     });
 });
 
+describe('toBeGreaterThanOrEqual()', () => {
+    it('should pass', () => {
+        unexpected(() => expect(10).toBeGreaterThanOrEqual(10), 'not to throw');
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect(9).toBeGreaterThanOrEqual(10),
+            'to throw',
+            'expected 9 to be greater than or equal to 10'
+        );
+    });
+});
+
 describe('toBeNull()', () => {
     it('should pass', () => {
         unexpected(() => expect(null).toBeNull(), 'not to throw');
