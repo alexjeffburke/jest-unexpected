@@ -667,3 +667,57 @@ describe('expect.stringContaining', () => {
         );
     });
 });
+
+describe('expect.stringMatching', () => {
+    it('should pass', () => {
+        unexpected(
+            () => expect('foobarbaz').toEqual(expect.stringMatching(/bar/)),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect('foobarbar').toEqual(expect.stringMatching(/baz/)),
+            'to error',
+            "expected 'foobarbar' to equal StringMatchingSpec(/baz/)"
+        );
+    });
+
+    describe('within expect.arrayContaining', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect(['foobar', 'foobaz']).toEqual(
+                        expect.arrayContaining([
+                            expect.stringMatching(/bar/),
+                            expect.stringMatching(/baz/)
+                        ])
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect(['foobaz', 'foobaz']).toEqual(
+                        expect.arrayContaining([
+                            expect.stringMatching(/bar/),
+                            expect.stringMatching(/baz/)
+                        ])
+                    ),
+                'to throw',
+                [
+                    "expected [ 'foobaz', 'foobaz' ]",
+                    'to equal ArrayContainingSpec([ StringMatchingSpec(/bar/), StringMatchingSpec(/baz/) ])',
+                    '',
+                    '[',
+                    "  'foobaz', // should match /bar/",
+                    "  'foobaz'",
+                    ']'
+                ].join('\n')
+            );
+        });
+    });
+});
