@@ -656,6 +656,62 @@ describe('.rejects', () => {
     });
 });
 
+describe('expect.any', () => {
+    it('should pass on Array', () => {
+        unexpected(() => expect([]).toEqual(expect.any(Array)), 'not to throw');
+    });
+
+    it('should pass on Function', () => {
+        unexpected(
+            () => expect(() => {}).toEqual(expect.any(Function)),
+            'not to throw'
+        );
+    });
+
+    it('should pass on Number', () => {
+        unexpected(() => expect(1).toEqual(expect.any(Number)), 'not to throw');
+    });
+
+    it('should pass on String', () => {
+        unexpected(
+            () => expect('').toEqual(expect.any(String)),
+            'not to throw'
+        );
+    });
+
+    it('should fail on Array', () => {
+        unexpected(
+            () => expect({}).toEqual(expect.any(Array)),
+            'to throw',
+            'expected {} to be an array'
+        );
+    });
+
+    it('should pass on Function', () => {
+        unexpected(
+            () => expect({}).toEqual(expect.any(Function)),
+            'to throw',
+            'expected {} to be a function'
+        );
+    });
+
+    it('should fail on Number', () => {
+        unexpected(
+            () => expect({}).toEqual(expect.any(Number)),
+            'to throw',
+            'expected {} to be a number'
+        );
+    });
+
+    it('should fail on String', () => {
+        unexpected(
+            () => expect({}).toEqual(expect.any(String)),
+            'to throw',
+            'expected {} to be a string'
+        );
+    });
+});
+
 describe('expect.arrayContaining', () => {
     it('should pass', () => {
         unexpected(
