@@ -74,6 +74,20 @@ describe('toBeFalsy()', () => {
     });
 });
 
+describe('toBeGreaterThan()', () => {
+    it('should pass', () => {
+        unexpected(() => expect(11).toBeGreaterThan(10), 'not to throw');
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect(10).toBeGreaterThan(10),
+            'to throw',
+            'expected 10 to be greater than 10'
+        );
+    });
+});
+
 describe('toBeNull()', () => {
     it('should pass', () => {
         unexpected(() => expect(null).toBeNull(), 'not to throw');
