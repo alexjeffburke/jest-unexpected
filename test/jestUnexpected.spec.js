@@ -1,5 +1,6 @@
 const jestExpect = global.expect;
 const expect = require('../lib/jestUnexpected');
+const trim = require('./utils/trim');
 const unexpected = require('unexpected');
 
 describe('toBe()', () => {
@@ -222,10 +223,10 @@ describe('toContain()', () => {
                     clonedInstance
                 ),
             'to throw',
-            [
-                "expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]",
-                "to contain { a: 'something' }"
-            ].join('\n')
+            trim`
+                expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]
+                to contain { a: 'something' }
+            `
         );
     });
 });
@@ -255,10 +256,10 @@ describe('toContainEqual()', () => {
                     { quux: 'xuuq' }
                 ]).toContain({ a: 'something', b: 'else' }),
             'to throw',
-            [
-                "expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]",
-                "to contain { a: 'something', b: 'else' }"
-            ].join('\n')
+            trim`
+                expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]
+                to contain { a: 'something', b: 'else' }
+            `
         );
     });
 });
@@ -268,7 +269,12 @@ describe('toEqual()', () => {
         unexpected(
             () => expect('foo').toEqual('bar'),
             'to throw',
-            ["expected 'foo' to equal 'bar'", '', '-foo', '+bar'].join('\n')
+            trim`
+                expected 'foo' to equal 'bar'
+
+                -foo
+                +bar
+            `
         );
     });
 
@@ -304,10 +310,10 @@ describe('toHaveLength()', () => {
         unexpected(
             () => expect('1234567').toHaveLength(8),
             'to throw',
-            [
-                "expected '1234567' to have length 8",
-                '  expected 7 to be 8'
-            ].join('\n')
+            trim`
+                expected '1234567' to have length 8
+                  expected 7 to be 8
+            `
         );
     });
 });
@@ -349,14 +355,14 @@ describe('toHaveProperty()', () => {
                     }
                 }).toHaveProperty('foo.bar'),
             'to throw',
-            [
-                "expected { foo: 1, baz: { baz: null } } to have property 'foo.bar'",
-                '',
-                '{',
-                "  foo: 1, // should equal { bar: expect.it('to be defined') }",
-                '  baz: { baz: null }',
-                '}'
-            ].join('\n')
+            trim`
+                expected { foo: 1, baz: { baz: null } } to have property 'foo.bar'
+
+                {
+                  foo: 1, // should equal { bar: expect.it('to be defined') }
+                  baz: { baz: null }
+                }
+            `
         );
     });
 
@@ -370,15 +376,15 @@ describe('toHaveProperty()', () => {
                     }
                 }).toHaveProperty('bar.baz'),
             'to throw',
-            [
-                "expected { foo: 1, baz: { baz: null } } to have property 'bar.baz'",
-                '',
-                '{',
-                '  foo: 1,',
-                '  baz: { baz: null }',
-                "  // missing bar: { baz: expect.it('to be defined') }",
-                '}'
-            ].join('\n')
+            trim`
+                expected { foo: 1, baz: { baz: null } } to have property 'bar.baz'
+
+                {
+                  foo: 1,
+                  baz: { baz: null }
+                  // missing bar: { baz: expect.it('to be defined') }
+                }
+            `
         );
     });
 
@@ -394,16 +400,16 @@ describe('toHaveProperty()', () => {
                     a: 1
                 }),
             'to throw',
-            [
-                "expected { foo: 1, bar: { baz: null } } to have property 'bar.baz'",
-                '',
-                '{',
-                '  foo: 1,',
-                '  bar: {',
-                '    baz: null // should equal { a: 1 }',
-                '  }',
-                '}'
-            ].join('\n')
+            trim`
+                expected { foo: 1, bar: { baz: null } } to have property 'bar.baz'
+
+                {
+                  foo: 1,
+                  bar: {
+                    baz: null // should equal { a: 1 }
+                  }
+                }
+            `
         );
     });
 });
@@ -419,7 +425,11 @@ describe('toMatch()', () => {
                 unexpected(
                     () => expect('foo').toMatch('bar'),
                     'to throw',
-                    ["expected 'foo' to contain 'bar'", '', 'foo'].join('\n')
+                    trim`
+                        expected 'foo' to contain 'bar'
+
+                        foo
+                    `
                 );
             });
         });
@@ -494,17 +504,17 @@ describe('toMatchObject()', () => {
                 });
             },
             'to error',
-            [
-                "expected { a: 'foo', b: 'baz' } to satisfy { a: 'foo', b: 'bar' }",
-                '',
-                '{',
-                "  a: 'foo',",
-                "  b: 'baz' // should equal 'bar'",
-                '           //',
-                '           // -baz',
-                '           // +bar',
-                '}'
-            ].join('\n')
+            trim`
+                expected { a: 'foo', b: 'baz' } to satisfy { a: 'foo', b: 'bar' }
+
+                {
+                  a: 'foo',
+                  b: 'baz' // should equal 'bar'
+                           //
+                           // -baz
+                           // +bar
+                }
+            `
         );
     });
 });
@@ -548,7 +558,10 @@ describe('toThrow()', () => {
                 expect(() => {}).toThrow();
             },
             'to error',
-            ['expected () => {} to throw', '  did not throw'].join('\n')
+            trim`
+                expected () => {} to throw
+                  did not throw
+            `
         );
     });
 
@@ -560,13 +573,13 @@ describe('toThrow()', () => {
                 }).toThrow('ba');
             },
             'to error',
-            [
-                "expected () => { throw new Error('baz'); } to throw 'ba'",
-                "  expected Error('baz') to satisfy 'ba'",
-                '',
-                '  -baz',
-                '  +ba'
-            ].join('\n')
+            trim`
+                expected () => { throw new Error('baz'); } to throw 'ba'
+                  expected Error('baz') to satisfy 'ba'
+
+                  -baz
+                  +ba
+            `
         );
     });
 
@@ -578,8 +591,10 @@ describe('toThrow()', () => {
                 }).toThrow(/bar/);
             },
             'to error',
-            "expected () => { throw new Error('baz'); } to throw /bar/\n" +
-                "  expected Error('baz') to satisfy /bar/"
+            trim`
+                expected () => { throw new Error('baz'); } to throw /bar/
+                  expected Error('baz') to satisfy /bar/
+            `
         );
     });
 
@@ -591,15 +606,17 @@ describe('toThrow()', () => {
                 }).toThrow(new Error('bar'));
             },
             'to error',
-            "expected () => { throw new Error('baz'); } to throw Error('bar')\n" +
-                "  expected Error('baz') to satisfy Error('bar')\n" +
-                '\n' +
-                '  Error({\n' +
-                "    message: 'baz' // should equal 'bar'\n" +
-                '                   //\n' +
-                '                   // -baz\n' +
-                '                   // +bar\n' +
-                '  })'
+            trim`
+                expected () => { throw new Error('baz'); } to throw Error('bar')
+                  expected Error('baz') to satisfy Error('bar')
+
+                  Error({
+                    message: 'baz' // should equal 'bar'
+                                   //
+                                   // -baz
+                                   // +bar
+                  })
+            `
         );
     });
 });
@@ -735,14 +752,14 @@ describe('expect.any', () => {
                         foo: expect.any(String)
                     }),
                 'to throw',
-                [
-                    "expected { foo: 1, bar: null } to satisfy { foo: expect.it('to be a string') }",
-                    '',
-                    '{',
-                    '  foo: 1, // should be a string',
-                    '  bar: null',
-                    '}'
-                ].join('\n')
+                trim`
+                    expected { foo: 1, bar: null } to satisfy { foo: expect.it('to be a string') }
+
+                    {
+                      foo: 1, // should be a string
+                      bar: null
+                    }
+                `
             );
         });
     });
@@ -766,13 +783,13 @@ describe('expect.arrayContaining', () => {
                     expect.arrayContaining(['barbar'])
                 ),
             'to error',
-            [
-                "expected [ 'foo', 'bar' ] to equal ArrayContainingSpec([ 'barbar' ])",
-                '',
-                '[',
-                "  // missing 'barbar'",
-                ']'
-            ].join('\n')
+            trim`
+                expected [ 'foo', 'bar' ] to equal ArrayContainingSpec([ 'barbar' ])
+
+                [
+                  // missing 'barbar'
+                ]
+            `
         );
     });
 });
@@ -795,18 +812,18 @@ describe('expect.objectContaining', () => {
                     expect.objectContaining({ foo: 'bar' })
                 ),
             'to error',
-            [
-                "expected { foo: 'barbar', baz: 'qux' }",
-                "to equal ObjectContainingSpec({ foo: 'bar' })",
-                '',
-                '{',
-                "  foo: 'barbar', // should equal 'bar'",
-                '                 //',
-                '                 // -barbar',
-                '                 // +bar',
-                "  baz: 'qux'",
-                '}'
-            ].join('\n')
+            trim`
+                expected { foo: 'barbar', baz: 'qux' }
+                to equal ObjectContainingSpec({ foo: 'bar' })
+
+                {
+                  foo: 'barbar', // should equal 'bar'
+                                 //
+                                 // -barbar
+                                 // +bar
+                  baz: 'qux'
+                }
+            `
         );
     });
 });
@@ -823,12 +840,12 @@ describe('expect.stringContaining', () => {
         unexpected(
             () => expect('foobarbar').toEqual(expect.stringContaining('baz')),
             'to error',
-            [
-                "expected 'foobarbar' to equal StringContainingSpec('baz')",
-                '',
-                'foobarbar',
-                '   ^^ ^^'
-            ].join('\n')
+            trim`
+                expected 'foobarbar' to equal StringContainingSpec('baz')
+
+                foobarbar
+                   ^^ ^^
+            `
         );
     });
 });
@@ -873,15 +890,15 @@ describe('expect.stringMatching', () => {
                         ])
                     ),
                 'to throw',
-                [
-                    "expected [ 'foobaz', 'foobaz' ]",
-                    'to equal ArrayContainingSpec([ StringMatchingSpec(/bar/), StringMatchingSpec(/baz/) ])',
-                    '',
-                    '[',
-                    "  'foobaz', // should match /bar/",
-                    "  'foobaz'",
-                    ']'
-                ].join('\n')
+                trim`
+                    expected [ 'foobaz', 'foobaz' ]
+                    to equal ArrayContainingSpec([ StringMatchingSpec(/bar/), StringMatchingSpec(/baz/) ])
+
+                    [
+                      'foobaz', // should match /bar/
+                      'foobaz'
+                    ]
+                `
             );
         });
     });
@@ -916,15 +933,15 @@ describe('expect.stringMatching', () => {
                         })
                     ),
                 'to throw',
-                [
-                    "expected { a: 'foobaz', b: 'foobaz' }",
-                    'to equal ObjectContainingSpec({ a: StringMatchingSpec(/bar/), b: StringMatchingSpec(/baz/) })',
-                    '',
-                    '{',
-                    "  a: 'foobaz', // should match /bar/",
-                    "  b: 'foobaz'",
-                    '}'
-                ].join('\n')
+                trim`
+                    expected { a: 'foobaz', b: 'foobaz' }
+                    to equal ObjectContainingSpec({ a: StringMatchingSpec(/bar/), b: StringMatchingSpec(/baz/) })
+
+                    {
+                      a: 'foobaz', // should match /bar/
+                      b: 'foobaz'
+                    }
+                `
             );
         });
     });
@@ -964,18 +981,18 @@ describe('with deeply nested containing declarations', () => {
                     })
                 ),
             'to throw',
-            [
-                "expected { foo: [ 'foobaz', 'foobaz' ], b: 'foobaz' }",
-                "to satisfy { foo: [ /bar/, expect.it('to be a string') ] }",
-                '',
-                '{',
-                '  foo: [',
-                "    'foobaz', // should match /bar/",
-                "    'foobaz'",
-                '  ],',
-                "  b: 'foobaz'",
-                '}'
-            ].join('\n')
+            trim`
+                expected { foo: [ 'foobaz', 'foobaz' ], b: 'foobaz' }
+                to satisfy { foo: [ /bar/, expect.it('to be a string') ] }
+
+                {
+                  foo: [
+                    'foobaz', // should match /bar/
+                    'foobaz'
+                  ],
+                  b: 'foobaz'
+                }
+            `
         );
     });
 });
