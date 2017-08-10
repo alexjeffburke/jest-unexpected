@@ -710,6 +710,42 @@ describe('expect.any', () => {
             'expected {} to be a string'
         );
     });
+
+    describe('within toMatchObject()', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect({
+                        foo: 1,
+                        bar: null
+                    }).toMatchObject({
+                        foo: expect.any(Number)
+                    }),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect({
+                        foo: 1,
+                        bar: null
+                    }).toMatchObject({
+                        foo: expect.any(String)
+                    }),
+                'to throw',
+                [
+                    "expected { foo: 1, bar: null } to satisfy { foo: expect.it('to be a string') }",
+                    '',
+                    '{',
+                    '  foo: 1, // should be a string',
+                    '  bar: null',
+                    '}'
+                ].join('\n')
+            );
+        });
+    });
 });
 
 describe('expect.arrayContaining', () => {
