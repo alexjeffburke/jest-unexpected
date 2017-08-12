@@ -322,6 +322,40 @@ describe('toHaveBeenCalled()', () => {
     });
 });
 
+describe('toHaveBeenCalledTimes()', () => {
+    it('should pass', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback();
+        theObj.callback();
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledTimes(2),
+            'not to error'
+        );
+    });
+
+    it('should fail', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback();
+        theObj.callback();
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledTimes(3),
+            'to error',
+            trim`
+                expected callback was called times 3
+                  expected
+                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:341:16)
+                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:342:16)
+                  to have length 3
+                    expected 2 to be 3
+            `
+        );
+    });
+});
+
 describe('toHaveLength()', () => {
     it('should pass array', () => {
         unexpected(() => expect([1, 2, 3]).toHaveLength(3), 'not to throw');
