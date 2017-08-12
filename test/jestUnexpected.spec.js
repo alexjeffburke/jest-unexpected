@@ -1,5 +1,6 @@
 const jestExpect = global.expect;
 const expect = require('../lib/jestUnexpected');
+const sinon = require('sinon');
 const trim = require('./utils/trim');
 const unexpected = require('unexpected');
 
@@ -294,6 +295,30 @@ describe('toEqual()', () => {
         it('should compare strings', () => {
             unexpected(() => expect('foo').not.toEqual('bar'), 'not to throw');
         });
+    });
+});
+
+describe('toHaveBeenCalled()', () => {
+    it('should pass', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback();
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalled(),
+            'not to error'
+        );
+    });
+
+    it('should fail', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalled(),
+            'to error',
+            'expected callback was called'
+        );
     });
 });
 

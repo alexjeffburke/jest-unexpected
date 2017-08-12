@@ -10,11 +10,13 @@
   "author": "Alex J Burke <alex@alexjeffburke.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "unexpected": "^10.33.1"
+    "unexpected": "^10.33.1",
+    "unexpected-sinon": "^10.8.2"
   },
   "devDependencies": {
     "eslint": "^4.3.0",
     "eslint-config-pretty-standard": "0.2.2",
-    "jest": "20.0.4"
+    "jest": "20.0.4",
+    "sinon": "3.2.0"
   }
 }
