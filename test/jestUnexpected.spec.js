@@ -822,6 +822,49 @@ describe('expect.any', () => {
         );
     });
 
+    describe('within toHaveBeenCalledWith()', () => {
+        it('should pass', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback('foobar');
+
+            unexpected(
+                () =>
+                    expect(theObj.callback).toHaveBeenCalledWith(
+                        expect.any(String)
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback('foobar');
+
+            unexpected(
+                () =>
+                    expect(theObj.callback).toHaveBeenCalledWith(
+                        expect.any(String),
+                        expect.any(String)
+                    ),
+                'to throw',
+                trim`
+                    expected callback to have been called with
+                    [
+                      AnySpec(function String() { /* native code */ }),
+                      AnySpec(function String() { /* native code */ })
+                    ]
+
+                    callback(
+                      'foobar'
+                      // missing: should be a string
+                    ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:843:20)
+                `
+            );
+        });
+    });
+
     describe('within toMatchObject()', () => {
         it('should pass', () => {
             unexpected(
