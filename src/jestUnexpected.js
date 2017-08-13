@@ -66,16 +66,21 @@ function buildCustomSpecWrapper(Type) {
     };
 }
 
-function registerUnexpectedTypeForCustomSpec(Type) {
+function registerUnexpectedTypeForCustomSpec(Type, options = {}) {
     baseExpect.addType({
         name: Type.name,
         base: 'object',
         identify: value => value instanceof Type,
-        inspect: ({ spec, nested }, depth, output, inspect) => {
-            if (nested) output.text(`${Type.name}(`);
-            if (spec !== undefined) output.append(inspect(spec, depth));
-            if (nested) output.text(')');
-        }
+        inspect:
+            options.inspect !== undefined
+                ? options.inspect
+                : ({ spec, nested }, depth, output, inspect) => {
+                      if (nested) output.text(`${Type.name}(`);
+                      if (spec !== undefined) {
+                          output.append(inspect(spec, depth));
+                      }
+                      if (nested) output.text(')');
+                  }
     });
 }
 
@@ -127,6 +132,15 @@ function anyTypeToString(type) {
     }
 }
 
+function inspectWithNativeConstructor(spec, depth, inspect) {
+    const anyTypeString = anyTypeToString(spec);
+    if (anyTypeString !== null) {
+        return spec.name;
+    } else {
+        return inspect(spec, depth);
+    }
+}
+
 class AnySpec extends CustomSpec {
     get args() {
         const { spec } = this;
@@ -139,7 +153,13 @@ class AnySpec extends CustomSpec {
         }
     }
 }
-registerUnexpectedTypeForCustomSpec(AnySpec);
+registerUnexpectedTypeForCustomSpec(AnySpec, {
+    inspect: ({ spec, nested }, depth, output, inspect) => {
+        if (nested) output.text(`AnySpec(`);
+        output.append(inspectWithNativeConstructor(spec, depth, inspect));
+        if (nested) output.text(')');
+    }
+});
 
 baseExpect.addAssertion(
     '<any> to equal <AnySpec>',

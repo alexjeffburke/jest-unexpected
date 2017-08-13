@@ -932,11 +932,7 @@ describe('expect.any', () => {
                     ),
                 'to error outputting',
                 trim`
-                    expected callback to have been called with
-                    [
-                      AnySpec(function String() { /* native code */ }),
-                      AnySpec(function String() { /* native code */ })
-                    ]
+                    expected callback to have been called with [ AnySpec(String), AnySpec(String) ]
 
                     callback(
                       'foobar'
