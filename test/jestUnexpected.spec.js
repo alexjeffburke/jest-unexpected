@@ -1,5 +1,6 @@
 const jestExpect = global.expect;
 const expect = require('../lib/jestUnexpected');
+const sinon = require('sinon');
 const trim = require('./utils/trim');
 const unexpected = require('unexpected');
 
@@ -294,6 +295,99 @@ describe('toEqual()', () => {
         it('should compare strings', () => {
             unexpected(() => expect('foo').not.toEqual('bar'), 'not to throw');
         });
+    });
+});
+
+describe('toHaveBeenCalled()', () => {
+    it('should pass', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback();
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalled(),
+            'not to error'
+        );
+    });
+
+    it('should fail', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalled(),
+            'to error',
+            'expected callback was called'
+        );
+    });
+});
+
+describe('toHaveBeenCalledTimes()', () => {
+    it('should pass', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback();
+        theObj.callback();
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledTimes(2),
+            'not to error'
+        );
+    });
+
+    it('should fail', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback();
+        theObj.callback();
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledTimes(3),
+            'to error',
+            trim`
+                expected callback was called times 3
+                  expected
+                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:341:16)
+                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:342:16)
+                  to have length 3
+                    expected 2 to be 3
+            `
+        );
+    });
+});
+
+describe('toHaveBeenCalledWith()', () => {
+    it('should pass', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback('a', 'b');
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
+            'not to error'
+        );
+    });
+
+    it('should fail', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback('a', 'a');
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
+            'to error',
+            trim`
+                expected callback to have been called with [ 'a', 'b' ]
+
+                callback(
+                  'a',
+                  'a' // should equal 'b'
+                      //
+                      // -a
+                      // +b
+                ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:374:16)
+            `
+        );
     });
 });
 
@@ -726,6 +820,49 @@ describe('expect.any', () => {
             'to throw',
             'expected {} to be a string'
         );
+    });
+
+    describe('within toHaveBeenCalledWith()', () => {
+        it('should pass', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback('foobar');
+
+            unexpected(
+                () =>
+                    expect(theObj.callback).toHaveBeenCalledWith(
+                        expect.any(String)
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback('foobar');
+
+            unexpected(
+                () =>
+                    expect(theObj.callback).toHaveBeenCalledWith(
+                        expect.any(String),
+                        expect.any(String)
+                    ),
+                'to throw',
+                trim`
+                    expected callback to have been called with
+                    [
+                      AnySpec(function String() { /* native code */ }),
+                      AnySpec(function String() { /* native code */ })
+                    ]
+
+                    callback(
+                      'foobar'
+                      // missing: should be a string
+                    ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:843:20)
+                `
+            );
+        });
     });
 
     describe('within toMatchObject()', () => {
