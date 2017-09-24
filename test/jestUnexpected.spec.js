@@ -798,7 +798,7 @@ describe('expect.any', () => {
         );
     });
 
-    it('should pass on Function', () => {
+    it('should fail on Function', () => {
         unexpected(
             () => expect({}).toEqual(expect.any(Function)),
             'to throw',
