@@ -4,6 +4,8 @@ const sinon = require('sinon');
 const trim = require('./utils/trim');
 const unexpected = require('unexpected');
 
+expect.output.preferredWidth = 80;
+
 describe('toBe()', () => {
     it('should compare instances failing', () => {
         unexpected(
@@ -347,8 +349,8 @@ describe('toHaveBeenCalledTimes()', () => {
             trim`
                 expected callback was called times 3
                   expected
-                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:341:16)
-                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:342:16)
+                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:343:16)
+                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:344:16)
                   to have length 3
                     expected 2 to be 3
             `
@@ -385,7 +387,7 @@ describe('toHaveBeenCalledWith()', () => {
                       //
                       // -a
                       // +b
-                ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:374:16)
+                ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:376:16)
             `
         );
     });
@@ -859,7 +861,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a string
-                    ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:843:20)
+                    ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:845:20)
                 `
             );
         });
