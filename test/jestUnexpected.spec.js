@@ -941,6 +941,54 @@ describe('expect.any', () => {
                 `
             );
         });
+
+        it('should fail and correctly treat a custom constructor', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback('foobar');
+
+            class SomeClass {}
+
+            unexpected(
+                () =>
+                    expect(theObj.callback).toHaveBeenCalledWith(
+                        expect.any(String),
+                        expect.any(SomeClass)
+                    ),
+                'to error outputting',
+                trim`
+                    expected callback to have been called with [ AnySpec(String), AnySpec(SomeClass) ]
+
+                    callback(
+                      'foobar'
+                      // missing: should be a SomeClass
+                    ); at ${outputObjectIt} (<path>:*:*)
+                `
+            );
+        });
+
+        it('should fail and correctly treat a function', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback('foobar');
+
+            unexpected(
+                () =>
+                    expect(theObj.callback).toHaveBeenCalledWith(
+                        expect.any(String),
+                        expect.any(() => {})
+                    ),
+                'to error outputting',
+                trim`
+                    expected callback to have been called with [ AnySpec(String), AnySpec(() => {}) ]
+
+                    callback(
+                      'foobar'
+                      // missing: should be a () => {}
+                    ); at ${outputObjectIt} (<path>:*:*)
+                `
+            );
+        });
     });
 
     describe('within toMatchObject()', () => {

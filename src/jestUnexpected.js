@@ -134,7 +134,7 @@ function anyTypeToString(type) {
 
 function inspectWithNativeConstructor(spec, depth, inspect) {
     const anyTypeString = anyTypeToString(spec);
-    if (anyTypeString !== null) {
+    if (anyTypeString !== null || (typeof spec === 'function' && spec.name)) {
         return spec.name;
     } else {
         return inspect(spec, depth);
