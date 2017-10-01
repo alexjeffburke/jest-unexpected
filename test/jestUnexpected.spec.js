@@ -2,9 +2,20 @@ const jestExpect = global.expect;
 const expect = require('../lib/jestUnexpected');
 const sinon = require('sinon');
 const trim = require('./utils/trim');
-const unexpected = require('unexpected');
+const truncate = require('./utils/truncate');
+const unexpected = require('unexpected').clone();
 
 expect.output.preferredWidth = 80;
+
+unexpected.addAssertion('<function> to error outputting <string>', (expect, subject, expected) => {
+    return expect(subject, 'to error', (unexpectedError) => {
+        expect.errorMode = 'bubble';
+
+        const errorMessage = unexpectedError.getErrorMessage('text').toString();
+
+        expect(truncate(errorMessage), 'to equal', expected);
+    });
+});
 
 describe('toBe()', () => {
     it('should compare instances failing', () => {
@@ -345,12 +356,12 @@ describe('toHaveBeenCalledTimes()', () => {
 
         unexpected(
             () => expect(theObj.callback).toHaveBeenCalledTimes(3),
-            'to error',
+            'to error outputting',
             trim`
                 expected callback was called times 3
                   expected
-                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:343:16)
-                  callback(); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:344:16)
+                  callback(); at Object.it (<path>:*:*)
+                  callback(); at Object.it (<path>:*:*)
                   to have length 3
                     expected 2 to be 3
             `
@@ -377,7 +388,7 @@ describe('toHaveBeenCalledWith()', () => {
 
         unexpected(
             () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
-            'to error',
+            'to error outputting',
             trim`
                 expected callback to have been called with [ 'a', 'b' ]
 
@@ -387,7 +398,7 @@ describe('toHaveBeenCalledWith()', () => {
                       //
                       // -a
                       // +b
-                ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:376:16)
+                ); at Object.it (<path>:*:*)
             `
         );
     });
@@ -850,7 +861,7 @@ describe('expect.any', () => {
                         expect.any(String),
                         expect.any(String)
                     ),
-                'to throw',
+                'to error outputting',
                 trim`
                     expected callback to have been called with
                     [
@@ -861,7 +872,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a string
-                    ); at Object.it (Users/alex/Documents/projects/jest-unexpected/test/jestUnexpected.spec.js:845:20)
+                    ); at Object.it (<path>:*:*)
                 `
             );
         });
