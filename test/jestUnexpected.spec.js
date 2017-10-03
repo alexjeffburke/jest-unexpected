@@ -1,11 +1,15 @@
 const jestExpect = global.expect;
-const expect = require('../lib/jestUnexpected');
+const expect = require('../src/jestUnexpected');
 const sinon = require('sinon');
 const trim = require('./utils/trim');
 const truncate = require('./utils/truncate');
 const unexpected = require('unexpected').clone();
 
 expect.output.preferredWidth = 80;
+
+const isTranspiled = !!process.version.match(/v4/);
+// adjust the error messages from relevant changes
+const outputObjectIt = isTranspiled ? 'Object.<anonymous>' : 'Object.it';
 
 unexpected.addAssertion('<function> to error outputting <string>', (expect, subject, expected) => {
     return expect(subject, 'to error', (unexpectedError) => {
@@ -360,8 +364,8 @@ describe('toHaveBeenCalledTimes()', () => {
             trim`
                 expected callback was called times 3
                   expected
-                  callback(); at Object.it (<path>:*:*)
-                  callback(); at Object.it (<path>:*:*)
+                  callback(); at ${outputObjectIt} (<path>:*:*)
+                  callback(); at ${outputObjectIt} (<path>:*:*)
                   to have length 3
                     expected 2 to be 3
             `
@@ -398,7 +402,7 @@ describe('toHaveBeenCalledWith()', () => {
                       //
                       // -a
                       // +b
-                ); at Object.it (<path>:*:*)
+                ); at ${outputObjectIt} (<path>:*:*)
             `
         );
     });
@@ -872,7 +876,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a string
-                    ); at Object.it (<path>:*:*)
+                    ); at ${outputObjectIt} (<path>:*:*)
                 `
             );
         });
