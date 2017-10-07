@@ -21,6 +21,14 @@ unexpected.addAssertion('<function> to error outputting <string>', (expect, subj
     });
 });
 
+describe('expect', () => {
+    it('should only acceept a single argument', () => {
+        unexpected(() => {
+            expect("subject", "other");
+        }, 'to throw', 'Expect takes at most one argument.');
+    });
+});
+
 describe('toBe()', () => {
     it('should compare instances failing', () => {
         unexpected(
@@ -740,7 +748,7 @@ describe('.resolves', () => {
             expect(Promise.resolve(resolutionValue)).resolves,
             'to be fulfilled with',
             result => {
-                expect(result, 'not to be', resolutionValue);
+                unexpected(result, 'not to be', resolutionValue);
 
                 return unexpected(() => {
                     result.toEqual(resolutionValue);
@@ -767,7 +775,7 @@ describe('.rejects', () => {
             expect(Promise.reject(rejectionValue)).rejects,
             'to be fulfilled with',
             result => {
-                expect(result, 'not to be', rejectionValue);
+                unexpected(result, 'not to be', rejectionValue);
 
                 return unexpected(() => {
                     result.toMatch('and bar');

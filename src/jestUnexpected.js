@@ -264,7 +264,11 @@ function withFlags(assertion, flags) {
     return flags.not ? `not ${assertion}` : assertion;
 }
 
-module.exports = function expect(subject) {
+module.exports = function expect(subject, ...rest) {
+    if (rest.length > 0) {
+        throw new Error('Expect takes at most one argument.');
+    }
+
     const expect = baseExpect;
     const flags = {
         not: false
