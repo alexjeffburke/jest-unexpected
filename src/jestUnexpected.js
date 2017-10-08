@@ -371,7 +371,17 @@ module.exports = function expect(subject, ...rest) {
         toMatchObject: buildAssertion('to equal', {
             wrapValue: value => new ObjectContainingSpec(value)
         }),
+        toMatchSnapshot: () => {
+            throw new Error(
+                'jest-unexpected: toMatchSnapshot() is not supported.'
+            );
+        },
         toThrow: buildAssertionSomeArgs('to throw'),
+        toThrowErrorMatchingSnapshot: () => {
+            throw new Error(
+                'jest-unexpected: toThrowErrorMatchingSnapshot() is not supported.'
+            );
+        },
         get not() {
             flags.not = true;
             return this;
@@ -389,6 +399,11 @@ module.exports = function expect(subject, ...rest) {
     };
 };
 
+module.exports.addSnapshotSerializer = () => {
+    throw new Error(
+        'jest-unexpected: expect.addSnapshotSerializer() is not supported.'
+    );
+};
 module.exports.any = buildCustomSpecWrapper(AnySpec);
 module.exports.anything = buildCustomSpecWrapper(AnythingSpec);
 module.exports.arrayContaining = buildCustomSpecWrapper(ArrayContainingSpec);

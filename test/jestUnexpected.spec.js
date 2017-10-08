@@ -659,6 +659,18 @@ describe('toMatchObject()', () => {
     });
 });
 
+describe('toMatchSnapshot()', () => {
+    it('should error that it is not supported', () => {
+        unexpected(
+            () => {
+                expect({}).toMatchSnapshot();
+            },
+            'to throw',
+            'jest-unexpected: toMatchSnapshot() is not supported.'
+        );
+    });
+});
+
 describe('toThrow()', () => {
     it('should pass on throw', () => {
         return unexpected(() => {
@@ -761,6 +773,18 @@ describe('toThrow()', () => {
     });
 });
 
+describe('toThrowErrorMatchingSnapshot()', () => {
+    it('should error that it is not supported', () => {
+        unexpected(
+            () => {
+                expect({}).toThrowErrorMatchingSnapshot();
+            },
+            'to throw',
+            'jest-unexpected: toThrowErrorMatchingSnapshot() is not supported.'
+        );
+    });
+});
+
 describe('.resolves', () => {
     it('should pass on resolved promise and allow further assertions', () => {
         const resolutionValue = ['foo', 'bar'];
@@ -809,6 +833,18 @@ describe('.rejects', () => {
         return unexpected(
             expect(Promise.resolve({})).rejects,
             'to be rejected'
+        );
+    });
+});
+
+describe('expect.addSnapshotSerializer', () => {
+    it('should error that it is not supported', () => {
+        unexpected(
+            () => {
+                expect.addSnapshotSerializer();
+            },
+            'to throw',
+            'jest-unexpected: expect.addSnapshotSerializer() is not supported.'
         );
     });
 });
