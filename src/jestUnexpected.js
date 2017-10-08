@@ -407,6 +407,11 @@ module.exports.addSnapshotSerializer = () => {
 module.exports.any = buildCustomSpecWrapper(AnySpec);
 module.exports.anything = buildCustomSpecWrapper(AnythingSpec);
 module.exports.arrayContaining = buildCustomSpecWrapper(ArrayContainingSpec);
+module.exports.extend = () => {
+    throw new Error(
+        'jest-unexpected: expect.extend() is not supported.'
+    );
+};
 module.exports.objectContaining = buildCustomSpecWrapper(ObjectContainingSpec);
 module.exports.stringContaining = buildCustomSpecWrapper(StringContainingSpec);
 module.exports.stringMatching = buildCustomSpecWrapper(StringMatchingSpec);

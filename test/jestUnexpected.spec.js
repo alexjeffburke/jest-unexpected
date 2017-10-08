@@ -1065,6 +1065,18 @@ describe('expect.arrayContaining', () => {
     });
 });
 
+describe('expect.extend', () => {
+    it('should error that it is not supported', () => {
+        unexpected(
+            () => {
+                expect.extend({});
+            },
+            'to throw',
+            'jest-unexpected: expect.extend() is not supported.'
+        );
+    });
+});
+
 describe('expect.objectContaining', () => {
     it('should pass', () => {
         unexpected(
