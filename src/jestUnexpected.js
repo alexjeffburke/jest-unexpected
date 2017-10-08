@@ -20,6 +20,38 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<any> not to be null or undefined',
+    (expect, subject) => {
+        expect.errorMode = 'bubble';
+
+        return expect.promise
+            .props({
+                null: expect(subject, 'not to be null')
+                    .catch(e => e)
+                    .then(() => null),
+                undefined: expect(subject, 'not to be undefined')
+                    .catch(e => e)
+                    .then(() => null)
+            })
+            .then(results => {
+                var passNull = results.null === null;
+                var passUndefined = results.undefined === null;
+
+                if (passNull && passUndefined) {
+                    // neither failed so we succeed
+                    return;
+                }
+
+                if (!passNull && !passUndefined) {
+                    throw results.null;
+                }
+
+                throw results.undefined;
+            });
+    }
+);
+
 class CustomSpec {
     constructor(spec, value, isTopLevel = true) {
         this.spec = spec;
@@ -41,7 +73,7 @@ function registerUnexpectedTypeForCustomSpec(Type) {
         identify: value => value instanceof Type,
         inspect: ({ spec, nested }, depth, output, inspect) => {
             if (nested) output.text(`${Type.name}(`);
-            output.append(inspect(spec, depth));
+            if (spec !== undefined) output.append(inspect(spec, depth));
             if (nested) output.text(')');
         }
     });
@@ -116,6 +148,13 @@ baseExpect.addAssertion(
         return expect(subject, ...anySpec.args);
     }
 );
+
+class AnythingSpec extends CustomSpec {
+    get args() {
+        return ['not to be null or undefined'];
+    }
+}
+registerUnexpectedTypeForCustomSpec(AnythingSpec);
 
 class ArrayContainingSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(ArrayContainingSpec);
@@ -351,6 +390,7 @@ module.exports = function expect(subject, ...rest) {
 };
 
 module.exports.any = buildCustomSpecWrapper(AnySpec);
+module.exports.anything = buildCustomSpecWrapper(AnythingSpec);
 module.exports.arrayContaining = buildCustomSpecWrapper(ArrayContainingSpec);
 module.exports.objectContaining = buildCustomSpecWrapper(ObjectContainingSpec);
 module.exports.stringContaining = buildCustomSpecWrapper(StringContainingSpec);

@@ -11,21 +11,30 @@ const isTranspiled = !!process.version.match(/v4/);
 // adjust the error messages from relevant changes
 const outputObjectIt = isTranspiled ? 'Object.<anonymous>' : 'Object.it';
 
-unexpected.addAssertion('<function> to error outputting <string>', (expect, subject, expected) => {
-    return expect(subject, 'to error', (unexpectedError) => {
-        expect.errorMode = 'bubble';
+unexpected.addAssertion(
+    '<function> to error outputting <string>',
+    (expect, subject, expected) => {
+        return expect(subject, 'to error', unexpectedError => {
+            expect.errorMode = 'bubble';
 
-        const errorMessage = unexpectedError.getErrorMessage('text').toString();
+            const errorMessage = unexpectedError
+                .getErrorMessage('text')
+                .toString();
 
-        expect(truncate(errorMessage), 'to equal', expected);
-    });
-});
+            expect(truncate(errorMessage), 'to equal', expected);
+        });
+    }
+);
 
 describe('expect', () => {
     it('should only acceept a single argument', () => {
-        unexpected(() => {
-            expect("subject", "other");
-        }, 'to throw', 'Expect takes at most one argument.');
+        unexpected(
+            () => {
+                expect('subject', 'other');
+            },
+            'to throw',
+            'Expect takes at most one argument.'
+        );
     });
 });
 
@@ -63,9 +72,13 @@ describe('toBe()', () => {
 
 describe('toBeCloseTo()', () => {
     it('should error that it is not supported', () => {
-        unexpected(() => {
-            expect(0.2 + 0.1).toBeCloseTo(0.3, 5);
-        }, 'to throw', 'jest-unexpected: toBeCloseTo() is not supported.');
+        unexpected(
+            () => {
+                expect(0.2 + 0.1).toBeCloseTo(0.3, 5);
+            },
+            'to throw',
+            'jest-unexpected: toBeCloseTo() is not supported.'
+        );
     });
 });
 
@@ -932,6 +945,58 @@ describe('expect.any', () => {
                 `
             );
         });
+    });
+});
+
+describe('expect.anything', () => {
+    it('should pass', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback('');
+
+        unexpected(
+            () =>
+                expect(theObj.callback).toHaveBeenCalledWith(expect.anything()),
+            'not to error'
+        );
+    });
+
+    it('should fail on null', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback(null);
+
+        unexpected(
+            () =>
+                expect(theObj.callback).toHaveBeenCalledWith(expect.anything()),
+            'to error outputting',
+            trim`
+                expected callback to have been called with [ AnythingSpec() ]
+
+                callback(
+                  null // should not be null
+                ); at ${outputObjectIt} (<path>:*:*)
+            `
+        );
+    });
+
+    it('should fail on null', () => {
+        var theObj = { callback: () => {} };
+        sinon.spy(theObj, 'callback');
+        theObj.callback(undefined);
+
+        unexpected(
+            () =>
+                expect(theObj.callback).toHaveBeenCalledWith(expect.anything()),
+            'to error outputting',
+            trim`
+                expected callback to have been called with [ AnythingSpec() ]
+
+                callback(
+                  undefined // should not be undefined
+                ); at ${outputObjectIt} (<path>:*:*)
+            `
+        );
     });
 });
 
