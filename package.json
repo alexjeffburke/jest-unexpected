@@ -1,7 +1,7 @@
 {
   "name": "jest-unexpected",
   "version": "0.0.0",
-  "description": "",
+  "description": "Use the power of Unexpected in Jest assertions",
   "main": "lib/jestUnexpected.js",
   "scripts": {
     "lint": "eslint src/",
@@ -10,6 +10,10 @@
   },
   "keywords": [],
   "author": "Alex J Burke <alex@alexjeffburke.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexjeffburke/jest-unexpected.git"
+  },
   "license": "BSD-3-Clause",
   "dependencies": {
     "unexpected": "^10.33.1",
