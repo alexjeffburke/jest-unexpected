@@ -61,6 +61,14 @@ describe('toBe()', () => {
     });
 });
 
+describe('toBeCloseTo()', () => {
+    it('should error that it is not supported', () => {
+        unexpected(() => {
+            expect(0.2 + 0.1).toBeCloseTo(0.3, 5);
+        }, 'to throw', 'jest-unexpected: toBeCloseTo() is not supported.');
+    });
+});
+
 describe('toBeDefined()', () => {
     it('should check defined failing', () => {
         unexpected(
