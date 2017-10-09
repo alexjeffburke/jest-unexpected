@@ -32,3 +32,17 @@ will be thrown with a clear message indicating the method name):
     - expect.extend()
 
 This library supports and is tested against node version **4** and above.
+
+## Output
+
+Unexpected has very powerful output capabilities with features such as inline
+diff rendering for complex objects and an emphasis on being able to rapidly
+locate issues and provide hints as to corrections.
+
+The examples included here showcase some of these differences via comparisons.
+
+### Array containing string and regex members
+
+![jestExpect match](./images/match.jestExpect.jpg "jestExpect match")
+
+![jestUnexpected match](./images/match.jestUnexpected.jpg "jestUnexpected match")
