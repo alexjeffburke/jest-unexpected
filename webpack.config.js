@@ -26,6 +26,9 @@ module.exports = {
         ]
     },
     externals: {
+        sinon: {
+            commonjs2: 'sinon'
+        },
         unexpected: {
             commonjs2: 'unexpected'
         },
