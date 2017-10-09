@@ -1,16 +1,25 @@
-const TRACE_IT_REGEX = /^(.*?at Object\..+?\()(.*?)(:\d+)(:\d+)?(\))/;
+const TRACE_IT_REGEX = /^(.*?at [a-zA-Z]+\..+?)\((.*?)(:\d+)(:\d+)?\)/;
+const TRACE_IT_REGEX_NODE_4 = /^(.*?at )(.*?)(:\d+)(:\d+)/;
 
-function matchAndTransfromItTrace(line) {
-    const match = line.match(TRACE_IT_REGEX);
+function matchAndTransfromItTrace(line, isTranspiled = false) {
+    let match = line.match(TRACE_IT_REGEX);
 
-    if (match === null) return line;
+    if (match === null) {
+        if (isTranspiled) {
+            match = line.match(TRACE_IT_REGEX_NODE_4);
+            if (match === null) return line;
+        } else {
+            return line;
+        }
+    }
 
     return [
         match[1],
+        '(',
         '<path>',
         match[3].replace(/\d+/, '*'),
         match[4].replace(/\d+/, '*'),
-        match[5]
+        ')'
     ].join('');
 }
 

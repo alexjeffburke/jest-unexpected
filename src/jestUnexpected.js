@@ -1,8 +1,15 @@
+const sinon = require('sinon');
 const unexpected = require('unexpected');
 const baseExpect = unexpected.clone();
 
 // pull in plugin for -sinon assertions
 baseExpect.use(require('unexpected-sinon'));
+
+baseExpect.addType({
+    name: 'jestMock',
+    base: 'function',
+    identify: value => typeof value === 'function' && value._isMockFunction
+});
 
 baseExpect.addAssertion(
     '<string> to jest match <string>',
@@ -214,6 +221,21 @@ baseExpect.addAssertion(
 
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
+
+baseExpect.addAssertion(
+    '<jestMock> to have been called with <CalledWithSpec>',
+    (expect, subject, calledWithSpec) => {
+        const jestMock = subject.mock;
+        const sinonSpy = sinon.spy();
+
+        jestMock.calls.forEach(callArgs => {
+            sinonSpy(...callArgs);
+        });
+
+        expect.errorMode = 'bubble';
+        expect(sinonSpy, 'to have been called with', calledWithSpec);
+    }
+);
 
 baseExpect.addAssertion(
     '<spy> to have been called with <CalledWithSpec>',

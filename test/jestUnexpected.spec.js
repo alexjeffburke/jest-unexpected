@@ -1,3 +1,4 @@
+/*globals jest: true*/
 const jestExpect = global.expect;
 const expect = require('../src/jestUnexpected');
 const sinon = require('sinon');
@@ -9,6 +10,7 @@ expect.output.preferredWidth = 80;
 
 const isTranspiled = !!process.version.match(/v4/);
 // adjust the error messages from relevant changes
+const outputJestMocks = isTranspiled ? '' : 'jestMock.calls.forEach.callArgs ';
 const outputObjectIt = isTranspiled ? 'Object.<anonymous>' : 'Object.it';
 
 unexpected.addAssertion(
@@ -21,7 +23,7 @@ unexpected.addAssertion(
                 .getErrorMessage('text')
                 .toString();
 
-            expect(truncate(errorMessage), 'to equal', expected);
+            expect(truncate(errorMessage, isTranspiled), 'to equal', expected);
         });
     }
 );
@@ -414,6 +416,16 @@ describe('toHaveBeenCalledWith()', () => {
         );
     });
 
+    it('should pass using jest mocks', () => {
+        var theObj = { callback: jest.fn() };
+        theObj.callback('a', 'b');
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
+            'not to error'
+        );
+    });
+
     it('should fail', () => {
         var theObj = { callback: () => {} };
         sinon.spy(theObj, 'callback');
@@ -432,6 +444,27 @@ describe('toHaveBeenCalledWith()', () => {
                       // -a
                       // +b
                 ); at ${outputObjectIt} (<path>:*:*)
+            `
+        );
+    });
+
+    it('should fail using jest mocks', () => {
+        var theObj = { callback: jest.fn() };
+        theObj.callback('a', 'a');
+
+        unexpected(
+            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
+            'to error outputting',
+            trim`
+                expected spy7 to have been called with [ 'a', 'b' ]
+
+                spy7(
+                  'a',
+                  'a' // should equal 'b'
+                      //
+                      // -a
+                      // +b
+                ); at ${outputJestMocks}(<path>:*:*)
             `
         );
     });
