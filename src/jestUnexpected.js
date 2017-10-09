@@ -341,7 +341,7 @@ baseExpect.addAssertion(
     }
 );
 
-function withFlags(assertion, flags) {
+function defaultFlags(assertion, flags) {
     return flags.not ? `not ${assertion}` : assertion;
 }
 
@@ -356,7 +356,11 @@ module.exports = function expect(subject, ...rest) {
     };
 
     const buildAssertion = (assertion, options = {}) => {
-        const { numberOfArgs = 1, wrapValue = v => v } = options;
+        const {
+            numberOfArgs = 1,
+            withFlags = defaultFlags,
+            wrapValue = v => v
+        } = options;
 
         if (numberOfArgs === 0) {
             return () => expect(subject, withFlags(assertion, flags));
@@ -398,7 +402,12 @@ module.exports = function expect(subject, ...rest) {
         }),
         toContainEqual: buildAssertion('to contain'),
         toEqual: buildAssertion('to equal'),
-        toHaveBeenCalled: buildAssertion('was called', { numberOfArgs: 0 }),
+        toHaveBeenCalled: buildAssertion('was called', {
+            numberOfArgs: 0,
+            withFlags: assertion => {
+                return flags.not ? 'was not called' : assertion;
+            }
+        }),
         toHaveBeenCalledTimes: buildAssertion('was called times'),
         toHaveBeenCalledWith: buildAssertion('to have been called with', {
             numberOfArgs: Infinity,

@@ -368,6 +368,34 @@ describe('toHaveBeenCalled()', () => {
             'expected callback was called'
         );
     });
+
+    describe('.not', () => {
+        it('should pass', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+
+            unexpected(
+                () => expect(theObj.callback).not.toHaveBeenCalled(),
+                'not to error'
+            );
+        });
+
+        it('should fail', () => {
+            var theObj = { callback: () => {} };
+            sinon.spy(theObj, 'callback');
+            theObj.callback(null);
+
+            unexpected(
+                () => expect(theObj.callback).not.toHaveBeenCalled(),
+                'to error outputting',
+                trim`
+                    expected callback was not called
+
+                    callback( null ); at Object.it (<path>:*:*)
+                `
+            );
+        });
+    });
 });
 
 describe('toHaveBeenCalledTimes()', () => {
@@ -456,9 +484,9 @@ describe('toHaveBeenCalledWith()', () => {
             () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
             'to error outputting',
             trim`
-                expected spy7 to have been called with [ 'a', 'b' ]
+                expected spy9 to have been called with [ 'a', 'b' ]
 
-                spy7(
+                spy9(
                   'a',
                   'a' // should equal 'b'
                       //
