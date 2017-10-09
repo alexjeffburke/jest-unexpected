@@ -391,7 +391,7 @@ describe('toHaveBeenCalled()', () => {
                 trim`
                     expected callback was not called
 
-                    callback( null ); at Object.it (<path>:*:*)
+                    callback( null ); at ${outputObjectIt} (<path>:*:*)
                 `
             );
         });
