@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint src/",
     "prepublish": "webpack",
-    "test": "jest"
+    "test": "mocha --require babel-register"
   },
   "keywords": [],
   "author": "Alex J Burke <alex@alexjeffburke.com>",
@@ -28,13 +28,16 @@
     "babel-plugin-transform-es2015-destructuring": "6.23.0",
     "babel-plugin-transform-es2015-parameters": "6.24.1",
     "babel-plugin-transform-es2015-spread": "6.22.0",
+    "babel-register": "^6.26.0",
     "eslint": "^3.17.1",
     "eslint-config-pretty-standard": "0.3.0",
     "eslint-plugin-flowtype": "^2.30.3",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^6.10.0",
     "eslint-plugin-standard": "^2.1.1",
-    "jest": "20.0.4",
+    "expect": "21.0.2",
+    "jest-mock": "21.0.2",
+    "mocha": "5.2.0",
     "webpack": "3.6.0"
   }
 }

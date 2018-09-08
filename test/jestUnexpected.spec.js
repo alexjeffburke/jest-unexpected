@@ -1,5 +1,6 @@
 /*globals jest: true*/
-const jestExpect = global.expect;
+const jestExpect = require('expect');
+const jestMock = require('jest-mock');
 const expect = require('../src/jestUnexpected');
 const sinon = require('sinon');
 const trim = require('./utils/trim');
@@ -11,7 +12,7 @@ expect.output.preferredWidth = 80;
 const isTranspiled = !!process.version.match(/v4/);
 // adjust the error messages from relevant changes
 const outputJestMocks = isTranspiled ? '' : 'jestMock.calls.forEach.callArgs ';
-const outputObjectIt = isTranspiled ? 'Object.<anonymous>' : 'Object.it';
+const outputObjectIt = isTranspiled ? 'Context.<anonymous>' : 'Context.it';
 
 unexpected.addAssertion(
     '<function> to error outputting <string>',
@@ -445,7 +446,7 @@ describe('toHaveBeenCalledWith()', () => {
     });
 
     it('should pass using jest mocks', () => {
-        var theObj = { callback: jest.fn() };
+        var theObj = { callback: jestMock.fn() };
         theObj.callback('a', 'b');
 
         unexpected(
@@ -477,7 +478,7 @@ describe('toHaveBeenCalledWith()', () => {
     });
 
     it('should fail using jest mocks', () => {
-        var theObj = { callback: jest.fn() };
+        var theObj = { callback: jestMock.fn() };
         theObj.callback('a', 'a');
 
         unexpected(
