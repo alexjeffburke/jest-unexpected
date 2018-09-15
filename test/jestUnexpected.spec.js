@@ -1,4 +1,3 @@
-/*globals jest: true*/
 const jestExpect = require('expect');
 const jestMock = require('jest-mock');
 const expect = require('../src/jestUnexpected');
