@@ -354,8 +354,9 @@ module.exports = function expect(subject, ...rest) {
     const flags = {
         not: false
     };
+    let _promise = null;
 
-    const buildAssertion = (assertion, options = {}) => {
+    const _buildAssertion = (assertion, options = {}) => {
         const {
             numberOfArgs = 1,
             withFlags = defaultFlags,
@@ -374,6 +375,18 @@ module.exports = function expect(subject, ...rest) {
             expect(subject, withFlags(assertion, flags), wrapValue(value));
     };
 
+    const buildAssertion = (assertion, options) => {
+        const assertionFunction = _buildAssertion(assertion, options);
+
+        return (...args) => {
+            if (_promise !== null) {
+                return _promise.then(() => assertionFunction(...args));
+            } else {
+                return assertionFunction(...args);
+            }
+        }
+    };
+
     const buildAssertionSomeArgs = assertion => {
         const oneArg = buildAssertion(assertion);
         const noArgs = buildAssertion(assertion, { numberOfArgs: 0 });
@@ -381,7 +394,7 @@ module.exports = function expect(subject, ...rest) {
         return value => (value === undefined ? noArgs() : oneArg(value));
     };
 
-    return {
+    const assertions = {
         toBe: buildAssertion('to be'),
         toBeCloseTo: () => {
             throw new Error('jest-unexpected: toBeCloseTo() is not supported.');
@@ -432,22 +445,39 @@ module.exports = function expect(subject, ...rest) {
             throw new Error(
                 'jest-unexpected: toThrowErrorMatchingSnapshot() is not supported.'
             );
-        },
+        }
+    };
+
+    return Object.assign({
         get not() {
             flags.not = true;
             return this;
         },
         get resolves() {
-            return expect(subject, 'to be fulfilled with', result => {
-                subject = result;
-            }).then(() => this);
+            // create a promise that defeats oathbreaker
+            _promise = expect.promise(() => {
+                return expect(subject, 'to be fulfilled with', result => {
+                    subject = result;
+                });
+            });
+            // attach the assertion methods to allow chaining the resolution value
+            Object.assign(_promise, assertions);
+            // return the promise so these calls can be awaited
+            return _promise;
         },
         get rejects() {
-            return expect(subject, 'to be rejected with', result => {
-                subject = result !== undefined ? result.message : undefined;
-            }).then(() => this);
+            // create a promise that defeats oathbreaker
+            _promise = expect.promise(() => {
+                return expect(subject, 'to be rejected with', result => {
+                    subject = result !== undefined ? result.message : undefined;
+                });
+            });
+            // attach the assertion methods to allow chaining the rejection value
+            Object.assign(_promise, assertions);
+            // return the promise so these calls can be awaited
+            return _promise;
         }
-    };
+    }, assertions);
 };
 
 module.exports.addSnapshotSerializer = () => {

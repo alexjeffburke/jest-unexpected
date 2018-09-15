@@ -847,23 +847,19 @@ describe('toThrowErrorMatchingSnapshot()', () => {
 });
 
 describe('.resolves', () => {
-    it('should pass on resolved promise and allow further assertions', () => {
+    it('should resolve with the correct value', () => {
         const resolutionValue = ['foo', 'bar'];
 
         return unexpected(
             expect(Promise.resolve(resolutionValue)).resolves,
             'to be fulfilled with',
             result => {
-                unexpected(result, 'not to be', resolutionValue);
-
-                return unexpected(() => {
-                    result.toEqual(resolutionValue);
-                }, 'not to error');
+                return unexpected(result, 'to equal', resolutionValue);
             }
         );
     });
 
-    it('should fail on rejected promised and allow further assertions', () => {
+    it('should reject', () => {
         const rejectionValue = new Error('foobar');
 
         return unexpected(
@@ -871,30 +867,61 @@ describe('.resolves', () => {
             'to be rejected'
         );
     });
+
+    describe('with chained calls on the resolution value', () => {
+        it('should pass on valid .toEqual()', () => {
+            const resolutionValue = ['foo', 'bar'];
+
+            return unexpected(
+                expect(Promise.resolve(resolutionValue)).resolves.toEqual(resolutionValue),
+                'to be fulfilled'
+            );
+        });
+
+        it('should fail on invalid .toBe()', () => {
+            return unexpected(
+                expect(Promise.resolve(4)).resolves.toBe(5),
+                'to be rejected'
+            );
+        });
+    });
 });
 
 describe('.rejects', () => {
-    it('should pass on resolved promise and allow further assertions', () => {
-        const rejectionValue = new Error('foo and bar');
+    it('should resolve with the correct value', () => {
+        const rejectionValue = new Error('foobar');
 
         return unexpected(
             expect(Promise.reject(rejectionValue)).rejects,
-            'to be fulfilled with',
-            result => {
-                unexpected(result, 'not to be', rejectionValue);
-
-                return unexpected(() => {
-                    result.toMatch('and bar');
-                }, 'not to error');
-            }
+            'to be fulfilled'
         );
     });
 
-    it('should fail on rejected promised and allow further assertions', () => {
+    it('should reject', () => {
         return unexpected(
             expect(Promise.resolve({})).rejects,
             'to be rejected'
         );
+    });
+
+    describe('with chained calls on the resolution value', () => {
+        it('should pass on valid .toMatch()', () => {
+            const rejectionValue = new Error('foobar');
+
+            return unexpected(
+                expect(Promise.reject(rejectionValue)).rejects.toMatch('bar'),
+                'to be fulfilled'
+            );
+        });
+
+        it('should fail on invalid .toBe()', () => {
+            const rejectionValue = new Error('foobar');
+
+            return unexpected(
+                expect(Promise.reject(rejectionValue)).rejects.toEqual('and bar'),
+                'to be rejected'
+            );
+        });
     });
 });
 
