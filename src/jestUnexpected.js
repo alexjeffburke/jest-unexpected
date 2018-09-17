@@ -448,34 +448,34 @@ module.exports = function expect(subject, ...rest) {
         }
     };
 
+    const createChainedAssertionPromiseForState = (promiseState, toSubject) => {
+        _promise = expect.promise(() => {
+            return expect(subject, `to be ${promiseState} with`, result => {
+                subject = toSubject(result);
+            });
+        });
+        // attach the assertion methods to allow chaining on the output value
+        Object.assign(_promise, assertions);
+        // return the promise so these calls can be awaited
+        return _promise;
+    };
+
     return Object.assign({
         get not() {
             flags.not = true;
             return this;
         },
         get resolves() {
-            // create a promise that defeats oathbreaker
-            _promise = expect.promise(() => {
-                return expect(subject, 'to be fulfilled with', result => {
-                    subject = result;
-                });
-            });
-            // attach the assertion methods to allow chaining the resolution value
-            Object.assign(_promise, assertions);
-            // return the promise so these calls can be awaited
-            return _promise;
+            return createChainedAssertionPromiseForState(
+                "fulfilled",
+                result => result
+            );
         },
         get rejects() {
-            // create a promise that defeats oathbreaker
-            _promise = expect.promise(() => {
-                return expect(subject, 'to be rejected with', result => {
-                    subject = result !== undefined ? result.message : undefined;
-                });
-            });
-            // attach the assertion methods to allow chaining the rejection value
-            Object.assign(_promise, assertions);
-            // return the promise so these calls can be awaited
-            return _promise;
+            return createChainedAssertionPromiseForState(
+                "rejected",
+                result => result !== undefined ? result.message : undefined
+            );
         }
     }, assertions);
 };
