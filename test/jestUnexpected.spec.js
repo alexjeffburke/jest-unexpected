@@ -884,6 +884,13 @@ describe('.resolves', () => {
                 'to be rejected'
             );
         });
+
+        it('should allow the use of "not"', () => {
+            return unexpected(
+                expect(Promise.resolve(4)).resolves.not.toBe(5),
+                'to be fulfilled'
+            );
+        });
     });
 });
 
@@ -919,6 +926,15 @@ describe('.rejects', () => {
 
             return unexpected(
                 expect(Promise.reject(rejectionValue)).rejects.toEqual('and bar'),
+                'to be rejected'
+            );
+        });
+
+        it('should allow the use of "not"', () => {
+            const rejectionValue = new Error('other');
+
+            return unexpected(
+                expect(Promise.reject(rejectionValue)).rejects.not.toEqual('other'),
                 'to be rejected'
             );
         });

@@ -456,6 +456,13 @@ module.exports = function expect(subject, ...rest) {
         });
         // attach the assertion methods to allow chaining on the output value
         Object.assign(_promise, assertions);
+        // attach the negation operator
+        Object.defineProperty(_promise, 'not', {
+            get: () => {
+                flags.not = true;
+                return _promise;
+            }
+        });
         // return the promise so these calls can be awaited
         return _promise;
     };
