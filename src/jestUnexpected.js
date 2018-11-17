@@ -12,18 +12,20 @@ baseExpect.addType({
 });
 
 baseExpect.addAssertion(
-    '<string> to jest match <string>',
+    '<Error|string> to jest match <string>',
     (expect, subject, value) => {
         expect.errorMode = 'bubble';
-        return expect(subject, 'to contain', value);
+        let _subject = subject instanceof Error ? subject.message : subject;
+        return expect(_subject, 'to contain', value);
     }
 );
 
 baseExpect.addAssertion(
-    '<string> to jest match <regexp>',
+    '<Error|string> to jest match <regexp>',
     (expect, subject, value) => {
         expect.errorMode = 'bubble';
-        return expect(subject, 'to match', value);
+        let _subject = subject instanceof Error ? subject.message : subject;
+        return expect(_subject, 'to match', value);
     }
 );
 
@@ -482,7 +484,7 @@ module.exports = function expect(subject, ...rest) {
         get rejects() {
             return createChainedAssertionPromiseForState(
                 "rejected",
-                result => result !== undefined ? result.message : undefined
+                result => result
             );
         }
     }, assertions);

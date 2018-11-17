@@ -912,7 +912,7 @@ describe('.resolves', () => {
 });
 
 describe('.rejects', () => {
-    it('should resolve with the correct value', () => {
+    it('should pass', () => {
         const rejectionValue = new Error('foobar');
 
         return unexpected(
@@ -921,7 +921,7 @@ describe('.rejects', () => {
         );
     });
 
-    it('should reject', () => {
+    it('should fail', () => {
         return unexpected(
             expect(Promise.resolve({})).rejects,
             'to be rejected'
@@ -934,6 +934,15 @@ describe('.rejects', () => {
 
             return unexpected(
                 expect(Promise.reject(rejectionValue)).rejects.toMatch('bar'),
+                'to be fulfilled'
+            );
+        });
+
+        it('should fail on valid .toBe()', () => {
+            const rejectionValue = 4;
+
+            return unexpected(
+                expect(Promise.reject(rejectionValue)).rejects.toBe(4),
                 'to be fulfilled'
             );
         });
@@ -951,7 +960,7 @@ describe('.rejects', () => {
             const rejectionValue = new Error('other');
 
             return unexpected(
-                expect(Promise.reject(rejectionValue)).rejects.not.toEqual('other'),
+                expect(Promise.reject(rejectionValue)).rejects.not.toMatch('other'),
                 'to be rejected'
             );
         });
