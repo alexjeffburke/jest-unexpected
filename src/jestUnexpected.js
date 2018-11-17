@@ -471,10 +471,13 @@ module.exports = function expect(subject, ...rest) {
             return this;
         },
         get resolves() {
-            return createChainedAssertionPromiseForState(
+            const resolves = createChainedAssertionPromiseForState(
                 "fulfilled",
                 result => result
             );
+            // override "to throw" using "to error" to allow .resolves.toThrow()
+            resolves.toThrow = () => expect(() => resolves, 'to error');
+            return resolves;
         },
         get rejects() {
             return createChainedAssertionPromiseForState(
