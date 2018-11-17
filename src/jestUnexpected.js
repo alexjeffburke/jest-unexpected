@@ -396,9 +396,7 @@ module.exports = function expect(subject, ...rest) {
 
     const assertions = {
         toBe: buildAssertion('to be'),
-        toBeCloseTo: () => {
-            throw new Error('jest-unexpected: toBeCloseTo() is not supported.');
-        },
+        toBeCloseTo: buildAssertion('to be close to'),
         toBeDefined: buildAssertion('to be defined', { numberOfArgs: 0 }),
         toBeFalsy: buildAssertion('to be falsy', { numberOfArgs: 0 }),
         toBeGreaterThan: buildAssertion('to be greater than'),

@@ -73,13 +73,18 @@ describe('toBe()', () => {
 });
 
 describe('toBeCloseTo()', () => {
-    it('should error that it is not supported', () => {
+    it('should pass', () => {
         unexpected(
-            () => {
-                expect(0.2 + 0.1).toBeCloseTo(0.3, 5);
-            },
+            () => expect(0.2 + 0.1).toBeCloseTo(0.3, 5),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect(0.2 + 0.1).toBeCloseTo(0.4, 5),
             'to throw',
-            'jest-unexpected: toBeCloseTo() is not supported.'
+            'expected 0.30000000000000004 to be close to 0.4 (epsilon: 1e-9)'
         );
     });
 });
@@ -831,6 +836,18 @@ describe('toThrow()', () => {
                   })
             `
         );
+    });
+
+    describe('when chained onto a promise assertion', ()=> {
+        it('should pass', () => {
+            return unexpected(() => {
+                return expect(
+                    Promise.resolve(() => {
+                        throw new Error();
+                    })
+                ).resolves.toThrow();
+            }, 'not to error');
+        })
     });
 });
 
