@@ -688,6 +688,30 @@ describe('toHaveProperty()', () => {
             );
         });
     });
+
+    describe('with a key path string that is a subject property', () => {
+        it('should pass', () => {
+            unexpected(
+                () => expect({ 'a.b.c.d': 1 }).toHaveProperty(['a.b.c.d'], 1),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () => expect({ 'a.b.c.d': 1 }).toHaveProperty(['a.b.c.d'], 2),
+                'to throw'
+            );
+        });
+
+        it('should allow the use of "not"', () => {
+            unexpected(
+                () =>
+                    expect({ 'a.b.c.d': 1 }).not.toHaveProperty(['a.b.c.d'], 1),
+                'to throw'
+            );
+        });
+    });
 });
 
 describe('toMatch()', () => {
