@@ -294,7 +294,7 @@ registerUnexpectedTypeForCustomSpec(KeyPathSpec);
 
 function keyPathToNestedObjects(keyPathOrString, keyPathValue) {
     const keyPath = Array.isArray(keyPathOrString)
-        ? keyPathOrString
+        ? keyPathOrString.slice(0)
         : keyPathOrString.split('.');
     // the innermost property will point to a value
     let nestedObjects = keyPathValue;

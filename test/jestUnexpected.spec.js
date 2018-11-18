@@ -711,6 +711,15 @@ describe('toHaveProperty()', () => {
                 'to throw'
             );
         });
+
+        it('should not clobber the input key path array', () => {
+            const keyPath = ['a.b.c.d'];
+
+            unexpected(() => {
+                expect({ 'a.b.c.d': 1 }).toHaveProperty(keyPath, 1);
+                expect({ 'a.b.c.d': 1 }).not.toHaveProperty(keyPath, 1);
+            }, 'to throw');
+        });
     });
 });
 
