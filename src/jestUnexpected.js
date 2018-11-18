@@ -482,10 +482,13 @@ module.exports = function expect(subject, ...rest) {
             return resolves;
         },
         get rejects() {
-            return createChainedAssertionPromiseForState(
+            const rejects = createChainedAssertionPromiseForState(
                 "rejected",
                 result => result
             );
+            // override "to throw" using "to error" to allow .rejects.toThrow()
+            rejects.toThrow = () => expect(() => rejects, 'not to error');
+            return rejects;
         }
     }, assertions);
 };

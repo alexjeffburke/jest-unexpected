@@ -956,6 +956,15 @@ describe('.rejects', () => {
             );
         });
 
+        it('should allow checking rejection with .toThrow()', () => {
+            const rejectionValue = new Error('other');
+
+            return unexpected(
+                expect(Promise.reject(rejectionValue)).rejects.toThrow(),
+                'to be fulfilled'
+            );
+        });
+
         it('should allow the use of "not"', () => {
             const rejectionValue = new Error('other');
 
