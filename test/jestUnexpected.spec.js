@@ -643,6 +643,18 @@ describe('toHaveProperty()', () => {
             `
         );
     });
+
+    describe('.not', () => {
+        it('should pass on deep property', () => {
+            unexpected(
+                () =>
+                    expect({
+                        a: { b: { c: { d: 1 } } }
+                    }).not.toHaveProperty('a.b.ttt.d', 1),
+                'not to throw'
+            );
+        });
+    });
 });
 
 describe('toMatch()', () => {

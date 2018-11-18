@@ -302,7 +302,7 @@ function keyPathToNestedObjects(keyPathString, keyPathValue) {
 }
 
 baseExpect.addAssertion(
-    '<object> to have property <KeyPathSpec>',
+    '<object> [not] to have property <KeyPathSpec>',
     (expect, subject, { spec, value }) => {
         if (value === undefined) {
             value = expect.it('to be defined');
@@ -311,7 +311,7 @@ baseExpect.addAssertion(
         expect.errorMode = 'default';
         return expect(
             subject,
-            'to satisfy',
+            '[not] to satisfy',
             keyPathToNestedObjects(spec, value)
         );
     }
