@@ -555,7 +555,7 @@ describe('toHaveProperty()', () => {
         );
     });
 
-    it('should pass on deep property', () => {
+    it('should pass on deep property specified as a string', () => {
         unexpected(
             () =>
                 expect({
@@ -566,6 +566,21 @@ describe('toHaveProperty()', () => {
                         }
                     }
                 }).toHaveProperty('foo.bar'),
+            'not to throw'
+        );
+    });
+
+    it('should pass on deep property specified as an array', () => {
+        unexpected(
+            () =>
+                expect({
+                    foo: {
+                        bar: {
+                            quux: 'baz',
+                            xuuq: 'baz'
+                        }
+                    }
+                }).toHaveProperty(['foo', 'bar', 'quux'], 'baz'),
             'not to throw'
         );
     });

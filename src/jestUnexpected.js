@@ -285,8 +285,10 @@ baseExpect.addAssertion(
 class KeyPathSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(KeyPathSpec);
 
-function keyPathToNestedObjects(keyPathString, keyPathValue) {
-    const keyPath = keyPathString.split('.');
+function keyPathToNestedObjects(keyPathOrString, keyPathValue) {
+    const keyPath = Array.isArray(keyPathOrString)
+        ? keyPathOrString
+        : keyPathOrString.split('.');
     // the innermost property will point to a value
     let nestedObjects = keyPathValue;
 
