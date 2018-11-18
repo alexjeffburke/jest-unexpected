@@ -282,7 +282,14 @@ baseExpect.addAssertion(
     }
 );
 
-class KeyPathSpec extends CustomSpec {}
+class KeyPathSpec extends CustomSpec {
+    constructor(args) {
+        const isValueExplicit = args.length === 2;
+        const value = isValueExplicit ? args[1] : undefined;
+        super(args[0], value, true);
+        this.isValueExplicit = isValueExplicit;
+    }
+}
 registerUnexpectedTypeForCustomSpec(KeyPathSpec);
 
 function keyPathToNestedObjects(keyPathOrString, keyPathValue) {
@@ -305,9 +312,11 @@ function keyPathToNestedObjects(keyPathOrString, keyPathValue) {
 
 baseExpect.addAssertion(
     '<any> [not] to have property <KeyPathSpec>',
-    (expect, subject, { spec, value }) => {
+    (expect, subject, { spec, value, isValueExplicit }) => {
         if (value === undefined) {
-            value = expect.it('to be defined');
+            value = isValueExplicit
+                ? expect.it('to be undefined')
+                : expect.it('to be defined');
         }
 
         expect.errorMode = 'default';
@@ -437,7 +446,7 @@ module.exports = function expect(subject, ...rest) {
         toHaveLength: buildAssertion('to have length'),
         toHaveProperty: buildAssertion('to have property', {
             numberOfArgs: 2,
-            wrapValue: args => new KeyPathSpec(args[0], args[1])
+            wrapValue: args => new KeyPathSpec(args)
         }),
         toMatch: buildAssertion('to jest match'),
         toMatchObject: buildAssertion('to equal', {

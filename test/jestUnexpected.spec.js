@@ -653,6 +653,22 @@ describe('toHaveProperty()', () => {
         );
     });
 
+    it('should fail on an explicit undefined value', () => {
+        unexpected(
+            () => expect({ a: { b: 3 } }).toHaveProperty('a.b', undefined),
+            'to throw',
+            trim`
+                expected { a: { b: 3 } } to have property 'a.b'
+
+                {
+                  a: {
+                    b: 3 // should be undefined
+                  }
+                }
+            `
+        );
+    });
+
     it('should fail on subject of any type', () => {
         unexpected(
             () => expect(1).toHaveProperty('a.b.c', 'test'),
