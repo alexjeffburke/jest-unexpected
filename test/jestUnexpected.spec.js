@@ -653,6 +653,14 @@ describe('toHaveProperty()', () => {
         );
     });
 
+    it('should fail on subject of any type', () => {
+        unexpected(
+            () => expect(1).toHaveProperty('a.b.c', 'test'),
+            'to throw',
+            "expected 1 to have property 'a.b.c'"
+        );
+    });
+
     describe('.not', () => {
         it('should pass on deep property', () => {
             unexpected(
