@@ -74,10 +74,7 @@ describe('toBe()', () => {
 
 describe('toBeCloseTo()', () => {
     it('should pass', () => {
-        unexpected(
-            () => expect(0.2 + 0.1).toBeCloseTo(0.3, 5),
-            'not to throw'
-        );
+        unexpected(() => expect(0.2 + 0.1).toBeCloseTo(0.3, 5), 'not to throw');
     });
 
     it('should fail', () => {
@@ -256,10 +253,7 @@ describe('toBeTruthy()', () => {
 
 describe('toBeUndefined()', () => {
     it('should pass', () => {
-        unexpected(
-            () => expect(undefined).toBeUndefined(),
-            'not to throw'
-        );
+        unexpected(() => expect(undefined).toBeUndefined(), 'not to throw');
     });
 
     it('should fail', () => {
@@ -875,7 +869,7 @@ describe('toThrow()', () => {
         );
     });
 
-    describe('when chained onto a promise assertion', ()=> {
+    describe('when chained onto a promise assertion', () => {
         it('should pass', () => {
             return unexpected(() => {
                 return expect(
@@ -884,7 +878,7 @@ describe('toThrow()', () => {
                     })
                 ).resolves.toThrow();
             }, 'not to error');
-        })
+        });
     });
 });
 
@@ -927,7 +921,9 @@ describe('.resolves', () => {
             const resolutionValue = ['foo', 'bar'];
 
             return unexpected(
-                expect(Promise.resolve(resolutionValue)).resolves.toEqual(resolutionValue),
+                expect(Promise.resolve(resolutionValue)).resolves.toEqual(
+                    resolutionValue
+                ),
                 'to be fulfilled'
             );
         });
@@ -988,7 +984,9 @@ describe('.rejects', () => {
             const rejectionValue = new Error('foobar');
 
             return unexpected(
-                expect(Promise.reject(rejectionValue)).rejects.toEqual('and bar'),
+                expect(Promise.reject(rejectionValue)).rejects.toEqual(
+                    'and bar'
+                ),
                 'to be rejected'
             );
         });
@@ -1006,7 +1004,9 @@ describe('.rejects', () => {
             const rejectionValue = new Error('other');
 
             return unexpected(
-                expect(Promise.reject(rejectionValue)).rejects.not.toMatch('other'),
+                expect(Promise.reject(rejectionValue)).rejects.not.toMatch(
+                    'other'
+                ),
                 'to be rejected'
             );
         });

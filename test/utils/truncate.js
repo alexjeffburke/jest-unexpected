@@ -24,8 +24,10 @@ function matchAndTransfromItTrace(line, isTranspiled = false) {
 }
 
 function truncate(output) {
-    return output.split('\n').map(matchAndTransfromItTrace).join('\n');
+    return output
+        .split('\n')
+        .map(matchAndTransfromItTrace)
+        .join('\n');
 }
 
 module.exports = truncate;
-
