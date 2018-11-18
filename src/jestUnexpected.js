@@ -328,22 +328,6 @@ baseExpect.addAssertion(
     }
 );
 
-baseExpect.addAssertion(
-    '<object> to satisfy <KeyPathSpec>',
-    (expect, subject, { spec, value }) => {
-        if (value === undefined) {
-            value = expect.it('to be defined');
-        }
-
-        expect.errorMode = 'default';
-        return expect(
-            subject,
-            'to satisfy',
-            keyPathToNestedObjects(spec, value)
-        );
-    }
-);
-
 class StringMatchingSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(StringMatchingSpec);
 
