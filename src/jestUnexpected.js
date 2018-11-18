@@ -386,7 +386,7 @@ module.exports = function expect(subject, ...rest) {
             } else {
                 return assertionFunction(...args);
             }
-        }
+        };
     };
 
     const buildAssertionSomeArgs = assertion => {
@@ -413,7 +413,7 @@ module.exports = function expect(subject, ...rest) {
         toBeUndefined: buildAssertion('to be undefined', {
             numberOfArgs: 0,
             withArgs: assertion => {
-                return flags.not ? 'to be defined' : assertion
+                return flags.not ? 'to be defined' : assertion;
             }
         }),
         toContain: buildAssertion('to contain', {
@@ -473,30 +473,33 @@ module.exports = function expect(subject, ...rest) {
         return _promise;
     };
 
-    return Object.assign({
-        get not() {
-            flags.not = true;
-            return this;
+    return Object.assign(
+        {
+            get not() {
+                flags.not = true;
+                return this;
+            },
+            get resolves() {
+                const resolves = createChainedAssertionPromiseForState(
+                    'fulfilled',
+                    result => result
+                );
+                // override "to throw" using "to error" to allow .resolves.toThrow()
+                resolves.toThrow = () => expect(() => resolves, 'to error');
+                return resolves;
+            },
+            get rejects() {
+                const rejects = createChainedAssertionPromiseForState(
+                    'rejected',
+                    result => result
+                );
+                // override "to throw" using "to error" to allow .rejects.toThrow()
+                rejects.toThrow = () => expect(() => rejects, 'not to error');
+                return rejects;
+            }
         },
-        get resolves() {
-            const resolves = createChainedAssertionPromiseForState(
-                "fulfilled",
-                result => result
-            );
-            // override "to throw" using "to error" to allow .resolves.toThrow()
-            resolves.toThrow = () => expect(() => resolves, 'to error');
-            return resolves;
-        },
-        get rejects() {
-            const rejects = createChainedAssertionPromiseForState(
-                "rejected",
-                result => result
-            );
-            // override "to throw" using "to error" to allow .rejects.toThrow()
-            rejects.toThrow = () => expect(() => rejects, 'not to error');
-            return rejects;
-        }
-    }, assertions);
+        assertions
+    );
 };
 
 module.exports.addSnapshotSerializer = () => {
