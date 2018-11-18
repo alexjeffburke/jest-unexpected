@@ -585,6 +585,13 @@ describe('toHaveProperty()', () => {
         );
     });
 
+    it('should pass on an explicit undefined value on the left', () => {
+        unexpected(
+            () => expect({ a: { b: undefined } }).toHaveProperty('a.b'),
+            'not to throw'
+        );
+    });
+
     it('should fail on deep property 1', () => {
         unexpected(
             () =>
@@ -599,7 +606,8 @@ describe('toHaveProperty()', () => {
                 expected { foo: 1, baz: { baz: null } } to have property 'foo.bar'
 
                 {
-                  foo: 1, // should equal { bar: expect.it('to be defined') }
+                  foo: 1, // ⨯ should be an object and
+                          // ⨯ should have property 'bar'
                   baz: { baz: null }
                 }
             `
@@ -622,7 +630,8 @@ describe('toHaveProperty()', () => {
                 {
                   foo: 1,
                   baz: { baz: null }
-                  // missing bar: { baz: expect.it('to be defined') }
+                  // missing: bar: ⨯ should be an object and
+                              ⨯ should have property 'baz'
                 }
             `
         );
@@ -653,7 +662,7 @@ describe('toHaveProperty()', () => {
         );
     });
 
-    it('should fail on an explicit undefined value', () => {
+    it('should fail on an explicit undefined value on the right', () => {
         unexpected(
             () => expect({ a: { b: 3 } }).toHaveProperty('a.b', undefined),
             'to throw',

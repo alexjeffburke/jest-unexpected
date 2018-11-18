@@ -292,12 +292,46 @@ class KeyPathSpec extends CustomSpec {
 }
 registerUnexpectedTypeForCustomSpec(KeyPathSpec);
 
-function keyPathToNestedObjects(keyPathOrString, keyPathValue) {
+class PropOrUndefined {
+    constructor(value) {
+        this.value = value;
+    }
+}
+registerUnexpectedTypeForCustomSpec(PropOrUndefined, {
+    inspect: (subject, depth, output, inspect) =>
+        output.append(inspect(subject.value))
+});
+
+function keyPathToSatisfySpec(
+    expect,
+    keyPathOrString,
+    keyPathValue,
+    isValueExplicit
+) {
     const keyPath = Array.isArray(keyPathOrString)
         ? keyPathOrString.slice(0)
         : keyPathOrString.split('.');
-    // the innermost property will point to a value
-    let nestedObjects = keyPathValue;
+
+    let nestedObjects;
+    if (keyPath.length > 0) {
+        const lastKeyPathPart = keyPath.pop();
+        if (isValueExplicit) {
+            const value =
+                keyPathValue === undefined
+                    ? expect.it('to be undefined')
+                    : keyPathValue;
+
+            // the innermost property will point to a value
+            nestedObjects = { [lastKeyPathPart]: value };
+        } else {
+            // the innermost property need only to exist in the subject
+            nestedObjects = expect
+                .it('to be an object')
+                .and('to have property', new PropOrUndefined(lastKeyPathPart));
+        }
+    } else {
+        nestedObjects = keyPathValue;
+    }
 
     while (keyPath.length > 0) {
         const property = keyPath.pop();
@@ -313,18 +347,27 @@ function keyPathToNestedObjects(keyPathOrString, keyPathValue) {
 baseExpect.addAssertion(
     '<any> [not] to have property <KeyPathSpec>',
     (expect, subject, { spec, value, isValueExplicit }) => {
-        if (value === undefined) {
-            value = isValueExplicit
-                ? expect.it('to be undefined')
-                : expect.it('to be defined');
-        }
-
         expect.errorMode = 'default';
         return expect(
             subject,
             '[not] to satisfy',
-            keyPathToNestedObjects(spec, value)
+            keyPathToSatisfySpec(expect, spec, value, isValueExplicit)
         );
+    }
+);
+
+baseExpect.addAssertion(
+    '<object> to have property <PropOrUndefined>',
+    (expect, subject, { value }) => {
+        if (
+            subject.hasOwnProperty &&
+            subject.hasOwnProperty(value) &&
+            subject[value] === undefined
+        ) {
+            return expect(subject[value], 'to be undefined');
+        } else {
+            return expect(subject, 'to have property', value);
+        }
     }
 );
 
