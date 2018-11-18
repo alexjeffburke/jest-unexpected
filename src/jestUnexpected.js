@@ -410,6 +410,12 @@ module.exports = function expect(subject, ...rest) {
         toBeLessThanOrEqual: buildAssertion('to be less than or equal to'),
         toBeNull: buildAssertion('to be null', { numberOfArgs: 0 }),
         toBeTruthy: buildAssertion('to be truthy', { numberOfArgs: 0 }),
+        toBeUndefined: buildAssertion('to be undefined', {
+            numberOfArgs: 0,
+            withArgs: assertion => {
+                return flags.not ? 'to be defined' : assertion
+            }
+        }),
         toContain: buildAssertion('to contain', {
             wrapValue: value => new IdentitySpec(value)
         }),

@@ -254,6 +254,31 @@ describe('toBeTruthy()', () => {
     });
 });
 
+describe('toBeUndefined()', () => {
+    it('should pass', () => {
+        unexpected(
+            () => expect(undefined).toBeUndefined(),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        unexpected(
+            () => expect({}).toBeUndefined(),
+            'to throw',
+            'expected {} to be undefined'
+        );
+    });
+
+    it('should allow the use of "not"', () => {
+        return unexpected(
+            () => expect(undefined).not.toBeUndefined(),
+            'to throw',
+            'expected undefined not to be undefined'
+        );
+    });
+});
+
 describe('toContain()', () => {
     it('should pass', () => {
         const instance = { a: 'something' };
