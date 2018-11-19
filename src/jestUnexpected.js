@@ -12,20 +12,15 @@ baseExpect.addType({
 });
 
 baseExpect.addAssertion(
-    '<Error|string> to jest match <string>',
+    '<Error|string> to jest match <string|regexp>',
     (expect, subject, value) => {
         expect.errorMode = 'bubble';
-        let _subject = subject instanceof Error ? subject.message : subject;
-        return expect(_subject, 'to contain', value);
-    }
-);
-
-baseExpect.addAssertion(
-    '<Error|string> to jest match <regexp>',
-    (expect, subject, value) => {
-        expect.errorMode = 'bubble';
-        let _subject = subject instanceof Error ? subject.message : subject;
-        return expect(_subject, 'to match', value);
+        const _subject = subject instanceof Error ? subject.message : subject;
+        return expect(
+            _subject,
+            isRegExp(value) ? 'to match' : 'to contain',
+            value
+        );
     }
 );
 
