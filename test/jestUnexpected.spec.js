@@ -286,6 +286,14 @@ describe('toContain()', () => {
         );
     });
 
+    it('should pass with arrays', () => {
+        unexpected(() => expect([1, 2, 3, 4]).toContain(1), 'not to throw');
+    });
+
+    it('should pass with strings', () => {
+        unexpected(() => expect('abcdef').toContain('abc'), 'not to throw');
+    });
+
     it('should fail', () => {
         const instance = { a: 'something' };
         const clonedInstance = Object.assign({}, instance);
@@ -301,6 +309,14 @@ describe('toContain()', () => {
                 to contain { a: 'something' }
             `
         );
+    });
+
+    it('should fail with arrays', () => {
+        unexpected(() => expect([1, 2, 3, 4]).not.toContain(1), 'to throw');
+    });
+
+    it('should fail with strings', () => {
+        unexpected(() => expect('abcdef').not.toContain('abc'), 'to throw');
     });
 
     it('should allow the use of "not"', () => {
@@ -347,6 +363,29 @@ describe('toContainEqual()', () => {
                 expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]
                 to contain { a: 'something', b: 'else' }
             `
+        );
+    });
+
+    it('should allow the use of "not"', () => {
+        const instance = { a: 'something' };
+        const clonedInstance = Object.assign({}, instance);
+
+        unexpected(
+            () =>
+                expect([
+                    { foo: 'bar' },
+                    instance,
+                    { quux: 'xuuq' }
+                ]).not.toContainEqual(clonedInstance),
+            'to throw'
+        );
+    });
+
+    it('should be safe when used with nonsense types', () => {
+        unexpected(
+            () => expect({}).toContainEqual(''),
+            'to throw',
+            /^expected {} to contain ''/
         );
     });
 });

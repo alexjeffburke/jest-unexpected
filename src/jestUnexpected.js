@@ -270,9 +270,18 @@ class IdentitySpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(IdentitySpec);
 
 baseExpect.addAssertion(
-    '<array> [not] to contain <IdentitySpec>',
+    '<array|string> [not] to contain <IdentitySpec>',
     (expect, subject, { spec }) => {
         expect.errorMode = 'diff';
+
+        if (typeof subject === 'string') {
+            if (typeof spec === 'string') {
+                return expect(subject, '[not] to contain', spec);
+            } else {
+                return expect.fail({ message: '' });
+            }
+        }
+
         return expect(subject, '[not] to have an item satisfying to be', spec);
     }
 );
