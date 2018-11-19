@@ -730,6 +730,58 @@ describe('toHaveProperty()', () => {
             }, 'to throw');
         });
     });
+
+    describe('with a key path string containing an array element', () => {
+        it('should pass on presence check', () => {
+            unexpected(() => {
+                expect({ a: { b: [1, 2, 3] } }).toHaveProperty(['a', 'b', 1]);
+            }, 'not to throw');
+        });
+
+        it('should pass on value check', () => {
+            unexpected(() => {
+                expect({ a: { b: [4, 2, 3] } }).toHaveProperty(
+                    ['a', 'b', 1],
+                    2
+                );
+            }, 'not to throw');
+        });
+
+        it('should fail on value check', () => {
+            unexpected(
+                () => {
+                    expect({ a: { b: [4, 2, 3] } }).toHaveProperty(
+                        ['a', 'b', 0],
+                        2
+                    );
+                },
+                'to throw',
+                trim`
+                    expected { a: { b: [ 4, 2, 3 ] } } to have property [ 'a', 'b', 0 ]
+
+                    {
+                      a: {
+                        b: [
+                          4, // should equal 2
+                          2,
+                          3
+                        ]
+                      }
+                    }
+                `
+            );
+        });
+
+        it('should allow the use of "not"', () => {
+            unexpected(() => {
+                expect({ a: { b: [1, 2, 3] } }).not.toHaveProperty([
+                    'a',
+                    'b',
+                    4
+                ]);
+            }, 'not to throw');
+        });
+    });
 });
 
 describe('toMatch()', () => {

@@ -359,7 +359,9 @@ baseExpect.addAssertion(
 baseExpect.addAssertion(
     '<object> to have property <PropOrUndefined>',
     (expect, subject, { value }) => {
-        if (
+        if (Array.isArray(subject)) {
+            return expect(subject, 'to contain', value);
+        } else if (
             subject.hasOwnProperty &&
             subject.hasOwnProperty(value) &&
             subject[value] === undefined
