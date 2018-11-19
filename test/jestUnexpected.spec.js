@@ -302,6 +302,20 @@ describe('toContain()', () => {
             `
         );
     });
+
+    it('should allow the use of "not"', () => {
+        const instance = { a: 'something' };
+
+        unexpected(
+            () =>
+                expect([
+                    { foo: 'bar' },
+                    instance,
+                    { quux: 'xuuq' }
+                ]).not.toContain(instance),
+            'to throw'
+        );
+    });
 });
 
 describe('toContainEqual()', () => {
