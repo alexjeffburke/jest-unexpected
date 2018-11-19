@@ -887,6 +887,14 @@ describe('toMatchObject()', () => {
             `
         );
     });
+
+    describe('should allow the use of "not"', () => {
+        it('should pass', () => {
+            return unexpected(() => {
+                expect({ a: 'b', c: 'd' }).not.toMatchObject({ a: 'b' });
+            }, 'to throw');
+        });
+    });
 });
 
 describe('toMatchSnapshot()', () => {

@@ -247,12 +247,12 @@ class ObjectContainingSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(ObjectContainingSpec);
 
 baseExpect.addAssertion(
-    '<object> to equal <ObjectContainingSpec>',
+    '<object> [not] to equal <ObjectContainingSpec>',
     (expect, subject, { spec, nested }) => {
         spec = unpackNestedSpecs(expect, spec);
 
         if (!nested) expect.errorMode = 'bubble';
-        return expect(subject, 'to satisfy', spec);
+        return expect(subject, '[not] to satisfy', spec);
     }
 );
 
