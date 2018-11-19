@@ -87,7 +87,11 @@ describe('toBeCloseTo()', () => {
 });
 
 describe('toBeDefined()', () => {
-    it('should check defined failing', () => {
+    it('should pass', () => {
+        unexpected(() => expect({}).toBeDefined(), 'not to throw');
+    });
+
+    it('should fail', () => {
         unexpected(
             () => expect(undefined).toBeDefined(),
             'to throw',
@@ -95,8 +99,12 @@ describe('toBeDefined()', () => {
         );
     });
 
-    it('should check defined', () => {
-        unexpected(() => expect({}).toBeDefined(), 'not to throw');
+    it('should allow the use of "not"', () => {
+        unexpected(
+            () => expect({}).not.toBeDefined(),
+            'to throw',
+            'expected {} to be undefined'
+        );
     });
 });
 
@@ -268,7 +276,7 @@ describe('toBeUndefined()', () => {
         return unexpected(
             () => expect(undefined).not.toBeUndefined(),
             'to throw',
-            'expected undefined not to be undefined'
+            'expected undefined to be defined'
         );
     });
 });

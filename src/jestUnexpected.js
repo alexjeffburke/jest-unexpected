@@ -410,7 +410,9 @@ module.exports = function expect(subject, ...rest) {
         } = options;
 
         if (numberOfArgs === 0) {
-            return () => expect(subject, withFlags(assertion, flags));
+            return () => {
+                expect(subject, withFlags(assertion, flags));
+            };
         } else if (numberOfArgs > 1) {
             return (...args) =>
                 expect(subject, withFlags(assertion, flags), wrapValue(args));
@@ -443,7 +445,12 @@ module.exports = function expect(subject, ...rest) {
     const assertions = {
         toBe: buildAssertion('to be'),
         toBeCloseTo: buildAssertion('to be close to'),
-        toBeDefined: buildAssertion('to be defined', { numberOfArgs: 0 }),
+        toBeDefined: buildAssertion('to be defined', {
+            numberOfArgs: 0,
+            withFlags: assertion => {
+                return flags.not ? 'to be undefined' : assertion;
+            }
+        }),
         toBeFalsy: buildAssertion('to be falsy', { numberOfArgs: 0 }),
         toBeGreaterThan: buildAssertion('to be greater than'),
         toBeGreaterThanOrEqual: buildAssertion(
@@ -456,7 +463,7 @@ module.exports = function expect(subject, ...rest) {
         toBeTruthy: buildAssertion('to be truthy', { numberOfArgs: 0 }),
         toBeUndefined: buildAssertion('to be undefined', {
             numberOfArgs: 0,
-            withArgs: assertion => {
+            withFlags: assertion => {
                 return flags.not ? 'to be defined' : assertion;
             }
         }),
