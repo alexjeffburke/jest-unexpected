@@ -442,6 +442,14 @@ module.exports = function expect(subject, ...rest) {
         return value => (value === undefined ? noArgs() : oneArg(value));
     };
 
+    const banVal = fn => (...args) => {
+        if (args.length === 0) {
+            return fn();
+        } else {
+            expect.fail({ message: 'No values expected for assertion.' });
+        }
+    };
+
     const assertions = {
         toBe: buildAssertion('to be'),
         toBeCloseTo: buildAssertion('to be close to'),
@@ -451,7 +459,7 @@ module.exports = function expect(subject, ...rest) {
                 return flags.not ? 'to be undefined' : assertion;
             }
         }),
-        toBeFalsy: buildAssertion('to be falsy', { numberOfArgs: 0 }),
+        toBeFalsy: banVal(buildAssertion('to be falsy', { numberOfArgs: 0 })),
         toBeGreaterThan: buildAssertion('to be greater than'),
         toBeGreaterThanOrEqual: buildAssertion(
             'to be greater than or equal to'
@@ -460,7 +468,7 @@ module.exports = function expect(subject, ...rest) {
         toBeLessThan: buildAssertion('to be less than'),
         toBeLessThanOrEqual: buildAssertion('to be less than or equal to'),
         toBeNull: buildAssertion('to be null', { numberOfArgs: 0 }),
-        toBeTruthy: buildAssertion('to be truthy', { numberOfArgs: 0 }),
+        toBeTruthy: banVal(buildAssertion('to be truthy', { numberOfArgs: 0 })),
         toBeUndefined: buildAssertion('to be undefined', {
             numberOfArgs: 0,
             withFlags: assertion => {

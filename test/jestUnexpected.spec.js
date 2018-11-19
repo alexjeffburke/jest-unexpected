@@ -109,6 +109,14 @@ describe('toBeDefined()', () => {
 });
 
 describe('toBeFalsy()', () => {
+    it('should accept no argument', () => {
+        unexpected(
+            () => expect(true).toBeFalsy(false),
+            'to throw',
+            'No values expected for assertion.'
+        );
+    });
+
     it('should pass undefined', () => {
         unexpected(() => expect(undefined).toBeFalsy(), 'not to throw');
     });
@@ -222,6 +230,14 @@ describe('toBeNull()', () => {
 });
 
 describe('toBeTruthy()', () => {
+    it('should accept no argument', () => {
+        unexpected(
+            () => expect(false).toBeTruthy(true),
+            'to throw',
+            'No values expected for assertion.'
+        );
+    });
+
     it('should pass', () => {
         unexpected(() => expect({}).toBeTruthy(), 'not to throw');
     });
