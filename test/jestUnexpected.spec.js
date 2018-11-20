@@ -937,7 +937,7 @@ describe('toMatch()', () => {
                     () => expect('foo').toMatch('bar'),
                     'to throw',
                     trim`
-                        expected 'foo' to contain 'bar'
+                        expected 'foo' to match 'bar'
 
                         foo
                     `

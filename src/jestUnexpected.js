@@ -12,19 +12,6 @@ baseExpect.addType({
 });
 
 baseExpect.addAssertion(
-    '<Error|string> to jest match <string|regexp>',
-    (expect, subject, value) => {
-        expect.errorMode = 'bubble';
-        const _subject = subject instanceof Error ? subject.message : subject;
-        return expect(
-            _subject,
-            isRegExp(value) ? 'to match' : 'to contain',
-            value
-        );
-    }
-);
-
-baseExpect.addAssertion(
     '<any> not to be null or undefined',
     (expect, subject) => {
         expect.errorMode = 'bubble';
@@ -295,6 +282,21 @@ baseExpect.addAssertion(
     }
 );
 
+class MatchSpec extends CustomSpec {}
+registerUnexpectedTypeForCustomSpec(MatchSpec);
+
+baseExpect.addAssertion(
+    '<Error|string> to match <MatchSpec>',
+    (expect, subject, { spec }) => {
+        const _subject = subject instanceof Error ? subject.message : subject;
+        return expect(
+            _subject,
+            isRegExp(spec) ? 'to match' : 'to contain',
+            spec
+        );
+    }
+);
+
 class KeyPathSpec extends CustomSpec {
     constructor(args) {
         const isValueExplicit = args.length === 2;
@@ -507,7 +509,9 @@ module.exports = function expect(subject, ...rest) {
             numberOfArgs: 2,
             wrapValue: args => new KeyPathSpec(args)
         }),
-        toMatch: buildAssertion('to jest match'),
+        toMatch: buildAssertion('to match', {
+            wrapValue: value => new MatchSpec(value)
+        }),
         toMatchObject: buildAssertion('to equal', {
             wrapValue: value => new ObjectContainingSpec(value)
         }),
