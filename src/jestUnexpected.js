@@ -266,23 +266,32 @@ baseExpect.addAssertion(
     }
 );
 
-class IdentitySpec extends CustomSpec {}
-registerUnexpectedTypeForCustomSpec(IdentitySpec);
+class ContainSpec extends CustomSpec {}
+registerUnexpectedTypeForCustomSpec(ContainSpec);
 
 baseExpect.addAssertion(
-    '<array|string> [not] to contain <IdentitySpec>',
+    '<any|array|string> [not] to contain (|equal) <ContainSpec>',
     (expect, subject, { spec }) => {
+        const isIdentity = expect.alternations[0] !== 'equal';
         expect.errorMode = 'diff';
 
-        if (typeof subject === 'string') {
-            if (typeof spec === 'string') {
-                return expect(subject, '[not] to contain', spec);
-            } else {
-                return expect.fail({ message: '' });
-            }
+        const subjectIsArray = Array.isArray(subject);
+        if (subjectIsArray && isIdentity) {
+            return expect(
+                subject,
+                '[not] to have an item satisfying to be',
+                spec
+            );
+        } else if (
+            (typeof subject === 'string' && typeof spec !== 'string') ||
+            (!subjectIsArray &&
+                typeof subject === 'object' &&
+                typeof spec === 'string')
+        ) {
+            expect.fail({ message: '' });
+        } else {
+            return expect(subject, '[not] to contain', spec);
         }
-
-        return expect(subject, '[not] to have an item satisfying to be', spec);
     }
 );
 
@@ -476,9 +485,11 @@ module.exports = function expect(subject, ...rest) {
             }
         }),
         toContain: buildAssertion('to contain', {
-            wrapValue: value => new IdentitySpec(value)
+            wrapValue: value => new ContainSpec(value)
         }),
-        toContainEqual: buildAssertion('to contain'),
+        toContainEqual: buildAssertion('to contain equal', {
+            wrapValue: value => new ContainSpec(value)
+        }),
         toEqual: buildAssertion('to equal'),
         toHaveBeenCalled: buildAssertion('was called', {
             numberOfArgs: 0,

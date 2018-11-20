@@ -310,8 +310,15 @@ describe('toContain()', () => {
         );
     });
 
-    it('should pass with arrays', () => {
+    it('should pass with arrays of integers', () => {
         unexpected(() => expect([1, 2, 3, 4]).toContain(1), 'not to throw');
+    });
+
+    it('should fail with arrays of strings', () => {
+        unexpected(
+            () => expect(['a', 'b', 'c', 'd']).toContain('a'),
+            'not to throw'
+        );
     });
 
     it('should pass with strings', () => {
@@ -335,8 +342,15 @@ describe('toContain()', () => {
         );
     });
 
-    it('should fail with arrays', () => {
+    it('should fail with arrays of integers', () => {
         unexpected(() => expect([1, 2, 3, 4]).not.toContain(1), 'to throw');
+    });
+
+    it('should fail with arrays of strings', () => {
+        unexpected(
+            () => expect(['a', 'b', 'c', 'd']).not.toContain('a'),
+            'to throw'
+        );
     });
 
     it('should fail with strings', () => {
@@ -354,6 +368,14 @@ describe('toContain()', () => {
                     { quux: 'xuuq' }
                 ]).not.toContain(instance),
             'to throw'
+        );
+    });
+
+    it('should be safe when used with nonsense types', () => {
+        unexpected(
+            () => expect({}).toContain(''),
+            'to throw',
+            "expected {} to contain ''"
         );
     });
 });
@@ -374,6 +396,27 @@ describe('toContainEqual()', () => {
         );
     });
 
+    it('should pass with arrays of integers', () => {
+        unexpected(
+            () => expect([1, 2, 3, 4]).toContainEqual(1),
+            'not to throw'
+        );
+    });
+
+    it('should pass with arrays of strings', () => {
+        unexpected(
+            () => expect(['a', 'b', 'c', 'd']).toContainEqual('a'),
+            'not to throw'
+        );
+    });
+
+    it('should pass with strings', () => {
+        unexpected(
+            () => expect('abcdef').toContainEqual('abc'),
+            'not to throw'
+        );
+    });
+
     it('should fail', () => {
         unexpected(
             () =>
@@ -387,6 +430,27 @@ describe('toContainEqual()', () => {
                 expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]
                 to contain { a: 'something', b: 'else' }
             `
+        );
+    });
+
+    it('should fail with arrays of integers', () => {
+        unexpected(
+            () => expect([1, 2, 3, 4]).not.toContainEqual(1),
+            'to throw'
+        );
+    });
+
+    it('should fail with arrays of strings', () => {
+        unexpected(
+            () => expect(['a', 'b', 'c', 'd']).not.toContainEqual('a'),
+            'to throw'
+        );
+    });
+
+    it('should fail with strings', () => {
+        unexpected(
+            () => expect('abcdef').not.toContainEqual('abc'),
+            'to throw'
         );
     });
 
@@ -409,7 +473,7 @@ describe('toContainEqual()', () => {
         unexpected(
             () => expect({}).toContainEqual(''),
             'to throw',
-            /^expected {} to contain ''/
+            "expected {} to contain equal ''"
         );
     });
 });
