@@ -36,7 +36,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.6.1",
     "expect": "21.0.2",
-    "jest-mock": "21.0.2",
+    "jest-mock": "23.2.0",
     "mocha": "5.2.0",
     "prettier": "1.15.2",
     "webpack": "3.6.0"
