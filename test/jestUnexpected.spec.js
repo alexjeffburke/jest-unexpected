@@ -561,6 +561,33 @@ describe('toHaveBeenCalled()', () => {
             );
         });
     });
+
+    describe('with jest mocks', () => {
+        it('should pass', () => {
+            var theObj = { callback: jestMock.fn() };
+            theObj.callback();
+
+            unexpected(
+                () => expect(theObj.callback).toHaveBeenCalled(),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            var theObj = { callback: jestMock.fn() };
+            theObj.callback();
+
+            unexpected(
+                () => expect(theObj.callback).not.toHaveBeenCalled(),
+                'to error outputting',
+                trim`
+                    expected spy5 was not called
+
+                    spy5(); at ${outputJestMocks}(<path>:*:*)
+                `
+            );
+        });
+    });
 });
 
 describe('toHaveBeenCalledTimes()', () => {
@@ -649,9 +676,9 @@ describe('toHaveBeenCalledWith()', () => {
             () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
             'to error outputting',
             trim`
-                expected spy9 to have been called with [ 'a', 'b' ]
+                expected spy11 to have been called with [ 'a', 'b' ]
 
-                spy9(
+                spy11(
                   'a',
                   'a' // should equal 'b'
                       //

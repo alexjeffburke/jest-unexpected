@@ -203,21 +203,33 @@ baseExpect.addAssertion(
     }
 );
 
+function jestMockToSinon(jestMock) {
+    const sinonSpy = sinon.spy();
+
+    jestMock.calls.forEach(callArgs => {
+        sinonSpy(...callArgs);
+    });
+
+    return sinonSpy;
+}
+
+baseExpect.addAssertion('<jestMock> was [not] called', (expect, subject) => {
+    expect.errorMode = 'bubble';
+    expect(jestMockToSinon(subject.mock), 'was [not] called');
+});
+
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
 baseExpect.addAssertion(
     '<jestMock> to have been called with <CalledWithSpec>',
     (expect, subject, calledWithSpec) => {
-        const jestMock = subject.mock;
-        const sinonSpy = sinon.spy();
-
-        jestMock.calls.forEach(callArgs => {
-            sinonSpy(...callArgs);
-        });
-
         expect.errorMode = 'bubble';
-        expect(sinonSpy, 'to have been called with', calledWithSpec);
+        expect(
+            jestMockToSinon(subject.mock),
+            'to have been called with',
+            calledWithSpec
+        );
     }
 );
 
