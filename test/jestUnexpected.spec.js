@@ -556,7 +556,7 @@ describe('toHaveBeenCalled()', () => {
                 trim`
                     expected callback was not called
 
-                    callback( null ); at ${outputObjectIt} (<path>:*:*)
+                    callback( null ); at ${outputObjectIt} (<path>:*:*) // should be removed
                 `
             );
         });
@@ -583,7 +583,7 @@ describe('toHaveBeenCalled()', () => {
                 trim`
                     expected spy5 was not called
 
-                    spy5(); at ${outputJestMocks}(<path>:*:*)
+                    spy5(); at ${outputJestMocks}(<path>:*:*) // should be removed
                 `
             );
         });
