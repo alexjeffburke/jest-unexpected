@@ -354,7 +354,16 @@ describe('toContain()', () => {
     });
 
     it('should fail with strings', () => {
-        unexpected(() => expect('abcdef').not.toContain('abc'), 'to throw');
+        unexpected(
+            () => expect('abcdef').not.toContain('abc'),
+            'to throw',
+            trim`
+                expected 'abcdef' not to contain 'abc'
+
+                abcdef
+                ^^^
+            `
+        );
     });
 
     it('should allow the use of "not"', () => {

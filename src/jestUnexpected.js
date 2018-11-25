@@ -272,10 +272,10 @@ baseExpect.addAssertion(
     '<any|array|string> [not] to contain (|equal) <ContainSpec>',
     (expect, subject, { spec }) => {
         const isIdentity = expect.alternations[0] !== 'equal';
-        expect.errorMode = 'diff';
 
         const subjectIsArray = Array.isArray(subject);
         if (subjectIsArray && isIdentity) {
+            expect.errorMode = 'diff';
             return expect(
                 subject,
                 '[not] to have an item satisfying to be',
@@ -289,6 +289,7 @@ baseExpect.addAssertion(
         ) {
             expect.fail({ message: '' });
         } else {
+            expect.errorMode = 'bubble';
             return expect(subject, '[not] to contain', spec);
         }
     }
