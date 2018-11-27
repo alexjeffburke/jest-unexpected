@@ -275,7 +275,6 @@ baseExpect.addAssertion(
 
         const subjectIsArray = Array.isArray(subject);
         if (subjectIsArray && isIdentity) {
-            expect.errorMode = 'diff';
             return expect(
                 subject,
                 '[not] to have an item satisfying to be',
@@ -289,7 +288,6 @@ baseExpect.addAssertion(
         ) {
             expect.fail({ message: '' });
         } else {
-            expect.errorMode = 'bubble';
             return expect(subject, '[not] to contain', spec);
         }
     }
