@@ -947,6 +947,78 @@ describe('toHaveLastReturnedWith()', () => {
     });
 });
 
+describe('toHaveNthReturnedWith()', () => {
+    let mock;
+
+    beforeEach(() => {
+        let callCount = 0;
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            callCount += 1;
+            if (callCount === 2) {
+                return { foo: 'bar' };
+            }
+        });
+    });
+
+    it('should pass', () => {
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).toHaveNthReturnedWith(2, { foo: 'bar' }),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        mock();
+
+        unexpected(
+            () => expect(mock).toHaveNthReturnedWith(1, { foo: 'bar' }),
+            'to throw'
+        );
+    });
+
+    it('should fail when the nth call failed', () => {
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            throw new Error();
+        });
+
+        try {
+            mock();
+        } catch (e) {}
+
+        unexpected(
+            () => expect(mock).toHaveNthReturnedWith(1, { foo: 'bar' }),
+            'to throw'
+        );
+    });
+
+    it('should allow the use of "not', () => {
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            return { foo: 'bar' };
+        });
+
+        mock();
+
+        unexpected(
+            () => expect(mock).not.toHaveNthReturnedWith(1, { foo: 'bar' }),
+            'to throw',
+            trim`
+                expected
+                function mockConstructor() {
+                  return fn.apply(this, arguments);
+                }
+                not to have nth returned with 1, { foo: 'bar' }
+                  expected { foo: 'bar' } not to equal { foo: 'bar' }
+            `
+        );
+    });
+});
+
 describe('toHaveProperty()', () => {
     it('should pass on property', () => {
         unexpected(

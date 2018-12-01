@@ -281,16 +281,29 @@ baseExpect.addAssertion(
     '<jestMock> [not] to have last returned with <any>',
     (expect, subject, value) => {
         const { results } = subject.mock;
-        const lastResult =
-            results.length > 0
-                ? results[results.length - 1]
-                : { isThrow: true };
+
+        expect(
+            subject,
+            '[not] to have nth returned with',
+            results.length,
+            value
+        );
+    }
+);
+
+baseExpect.addAssertion(
+    '<jestMock> [not] to have nth returned with <number> <any>',
+    (expect, subject, n, value) => {
+        const { results } = subject.mock;
+        const index = n - 1;
+        const nthResult =
+            results.length >= index ? results[index] : { isThrow: true };
 
         expect.errorMode = 'bubble';
-        expect(lastResult.isThrow, 'to be false');
+        expect(nthResult.isThrow, 'to be false');
 
         expect.errorMode = 'nested';
-        expect(lastResult.value, '[not] to equal', value);
+        expect(nthResult.value, '[not] to equal', value);
     }
 );
 
@@ -504,6 +517,7 @@ module.exports = function expect(subject, ...rest) {
         const {
             numberOfArgs = 1,
             withFlags = defaultFlags,
+            noWrapArgs = false,
             wrapValue = v => v
         } = options;
 
@@ -511,6 +525,9 @@ module.exports = function expect(subject, ...rest) {
             return () => {
                 expect(subject, withFlags(assertion, flags));
             };
+        } else if (numberOfArgs > 1 && noWrapArgs) {
+            return (...args) =>
+                expect(subject, withFlags(assertion, flags), ...args);
         } else if (numberOfArgs > 1) {
             return (...args) =>
                 expect(subject, withFlags(assertion, flags), wrapValue(args));
@@ -602,6 +619,10 @@ module.exports = function expect(subject, ...rest) {
         toHaveReturnedTimes: buildAssertion('to have returned times'),
         toHaveReturnedWith: buildAssertion('to have returned with'),
         toHaveLastReturnedWith: buildAssertion('to have last returned with'),
+        toHaveNthReturnedWith: buildAssertion('to have nth returned with', {
+            numberOfArgs: 2,
+            noWrapArgs: true
+        }),
         toMatch: buildAssertion('to match', {
             wrapValue: value => new MatchSpec(value)
         }),
