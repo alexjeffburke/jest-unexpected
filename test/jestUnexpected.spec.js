@@ -720,6 +720,56 @@ describe('toHaveLength()', () => {
     });
 });
 
+describe('toHaveReturned()', () => {
+    let mock;
+
+    beforeEach(() => {
+        let callCount = 0;
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            callCount += 1;
+            if (callCount < 2) {
+                throw new Error();
+            }
+        });
+    });
+
+    it('should pass', () => {
+        try {
+            mock();
+        } catch (e) {}
+        mock();
+
+        unexpected(() => expect(mock).toHaveReturned(), 'not to throw');
+    });
+
+    it('should fail', () => {
+        try {
+            mock();
+        } catch (e) {}
+
+        unexpected(() => expect(mock).toHaveReturned(), 'not to throw');
+    });
+
+    it('should allow the use of "not"', () => {
+        try {
+            mock();
+        } catch (e) {}
+
+        unexpected(
+            () => expect(mock).not.toHaveReturned(),
+            'to throw',
+            trim`
+                expected
+                function mockConstructor() {
+                  return fn.apply(this, arguments);
+                }
+                not to have returned
+  `
+        );
+    });
+});
+
 describe('toHaveProperty()', () => {
     it('should pass on property', () => {
         unexpected(

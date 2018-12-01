@@ -218,6 +218,23 @@ baseExpect.addAssertion('<jestMock> was [not] called', (expect, subject) => {
     expect(jestMockToSinon(subject.mock), 'was [not] called');
 });
 
+baseExpect.addAssertion(
+    '<jestMock> [not] to have returned',
+    (expect, subject) => {
+        const { results } = subject.mock;
+
+        let isValid = true;
+        results.some(result => {
+            if (!result.isThrow) {
+                isValid = true;
+                return true;
+            }
+        });
+
+        expect(isValid, expect.flags.not ? 'to be false' : 'to be true');
+    }
+);
+
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
@@ -519,6 +536,9 @@ module.exports = function expect(subject, ...rest) {
         toHaveProperty: buildAssertion('to have property', {
             numberOfArgs: 2,
             wrapValue: args => new KeyPathSpec(args)
+        }),
+        toHaveReturned: buildAssertion('to have returned', {
+            numberOfArgs: 0
         }),
         toMatch: buildAssertion('to match', {
             wrapValue: value => new MatchSpec(value)
