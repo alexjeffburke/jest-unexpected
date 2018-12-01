@@ -765,7 +765,60 @@ describe('toHaveReturned()', () => {
                   return fn.apply(this, arguments);
                 }
                 not to have returned
-  `
+            `
+        );
+    });
+});
+
+describe('toHaveReturnedTimes()', () => {
+    let mock;
+
+    beforeEach(() => {
+        let callCount = 0;
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            callCount += 1;
+            if (callCount < 2) {
+                throw new Error();
+            }
+        });
+    });
+
+    it('should pass', () => {
+        try {
+            mock();
+        } catch (e) {}
+        mock();
+        mock();
+
+        unexpected(() => expect(mock).toHaveReturnedTimes(2), 'not to throw');
+    });
+
+    it('should fail', () => {
+        try {
+            mock();
+        } catch (e) {}
+
+        unexpected(() => expect(mock).toHaveReturnedTimes(2), 'to throw');
+    });
+
+    it('should allow the use of "not"', () => {
+        try {
+            mock();
+        } catch (e) {}
+        mock();
+
+        unexpected(
+            () => expect(mock).not.toHaveReturnedTimes(1),
+            'to throw',
+            trim`
+                expected
+                function mockConstructor() {
+                  return fn.apply(this, arguments);
+                }
+                not to have returned times 1
+                  expected 1 to be less than 1
+            `
         );
     });
 });

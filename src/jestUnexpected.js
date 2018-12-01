@@ -235,6 +235,29 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<jestMock> [not] to have returned times <number>',
+    (expect, subject, value) => {
+        const { results } = subject.mock;
+
+        let timesCount = 0;
+        results.forEach(result => {
+            if (!result.isThrow) {
+                timesCount += 1;
+            }
+        });
+
+        expect.errorMode = 'nested';
+        expect(
+            timesCount,
+            expect.flags.not
+                ? 'to be less than'
+                : 'to be greater than or equal to',
+            value
+        );
+    }
+);
+
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
@@ -540,6 +563,7 @@ module.exports = function expect(subject, ...rest) {
         toHaveReturned: buildAssertion('to have returned', {
             numberOfArgs: 0
         }),
+        toHaveReturnedTimes: buildAssertion('to have returned times'),
         toMatch: buildAssertion('to match', {
             wrapValue: value => new MatchSpec(value)
         }),
