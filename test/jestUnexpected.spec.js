@@ -1,7 +1,6 @@
 const jestExpect = require('expect');
 const jestMock = require('jest-mock');
 const expect = require('../src/jestUnexpected');
-const sinon = require('sinon');
 const trim = require('./utils/trim');
 const truncate = require('./utils/truncate');
 const unexpected = require('unexpected').clone();
@@ -10,8 +9,7 @@ expect.output.preferredWidth = 80;
 
 const isTranspiled = !!process.version.match(/v4/);
 // adjust the error messages from relevant changes
-const outputJestMocks = isTranspiled ? '' : 'jestMock.calls.forEach.callArgs ';
-const outputObjectIt = isTranspiled ? 'Context.<anonymous>' : 'Context.it';
+const outputJestMocks = isTranspiled ? '' : 'fn.mock.calls.forEach.callArgs ';
 
 unexpected.addAssertion(
     '<function> to error outputting <string>',
@@ -522,77 +520,46 @@ describe('toEqual()', () => {
 
 describe('toHaveBeenCalled()', () => {
     it('should pass', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback();
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction();
 
         unexpected(
-            () => expect(theObj.callback).toHaveBeenCalled(),
-            'not to error'
+            () => expect(mockFunction).toHaveBeenCalled(),
+            'not to throw'
         );
     });
 
     it('should fail', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
+        const mockFunction = jestMock.fn().mockName('callback');
 
         unexpected(
-            () => expect(theObj.callback).toHaveBeenCalled(),
-            'to error',
+            () => expect(mockFunction).toHaveBeenCalled(),
+            'to throw',
             'expected callback was called'
         );
     });
 
     describe('.not', () => {
         it('should pass', () => {
-            var theObj = { callback: () => {} };
-            sinon.spy(theObj, 'callback');
+            const mockFunction = jestMock.fn().mockName('callback');
 
             unexpected(
-                () => expect(theObj.callback).not.toHaveBeenCalled(),
-                'not to error'
-            );
-        });
-
-        it('should fail', () => {
-            var theObj = { callback: () => {} };
-            sinon.spy(theObj, 'callback');
-            theObj.callback(null);
-
-            unexpected(
-                () => expect(theObj.callback).not.toHaveBeenCalled(),
-                'to error outputting',
-                trim`
-                    expected callback was not called
-
-                    callback( null ); at ${outputObjectIt} (<path>:*:*) // should be removed
-                `
-            );
-        });
-    });
-
-    describe('with jest mocks', () => {
-        it('should pass', () => {
-            var theObj = { callback: jestMock.fn() };
-            theObj.callback();
-
-            unexpected(
-                () => expect(theObj.callback).toHaveBeenCalled(),
+                () => expect(mockFunction).not.toHaveBeenCalled(),
                 'not to throw'
             );
         });
 
         it('should fail', () => {
-            var theObj = { callback: jestMock.fn() };
-            theObj.callback();
+            const mockFunction = jestMock.fn().mockName('callback');
+            mockFunction(null);
 
             unexpected(
-                () => expect(theObj.callback).not.toHaveBeenCalled(),
+                () => expect(mockFunction).not.toHaveBeenCalled(),
                 'to error outputting',
                 trim`
-                    expected spy5 was not called
+                    expected callback was not called
 
-                    spy5(); at ${outputJestMocks}(<path>:*:*) // should be removed
+                    callback( null ); at ${outputJestMocks}(<path>:*:*) // should be removed
                 `
             );
         });
@@ -601,31 +568,29 @@ describe('toHaveBeenCalled()', () => {
 
 describe('toHaveBeenCalledTimes()', () => {
     it('should pass', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback();
-        theObj.callback();
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction();
+        mockFunction();
 
         unexpected(
-            () => expect(theObj.callback).toHaveBeenCalledTimes(2),
-            'not to error'
+            () => expect(mockFunction).toHaveBeenCalledTimes(2),
+            'not to throw'
         );
     });
 
     it('should fail', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback();
-        theObj.callback();
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction();
+        mockFunction();
 
         unexpected(
-            () => expect(theObj.callback).toHaveBeenCalledTimes(3),
+            () => expect(mockFunction).toHaveBeenCalledTimes(3),
             'to error outputting',
             trim`
                 expected callback was called times 3
                   expected
-                  callback(); at ${outputObjectIt} (<path>:*:*)
-                  callback(); at ${outputObjectIt} (<path>:*:*)
+                  callback(); at ${outputJestMocks}(<path>:*:*)
+                  callback(); at ${outputJestMocks}(<path>:*:*)
                   to have length 3
                     expected 2 to be 3
             `
@@ -635,59 +600,26 @@ describe('toHaveBeenCalledTimes()', () => {
 
 describe('toHaveBeenCalledWith()', () => {
     it('should pass', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback('a', 'b');
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'b');
 
         unexpected(
-            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
-            'not to error'
-        );
-    });
-
-    it('should pass using jest mocks', () => {
-        var theObj = { callback: jestMock.fn() };
-        theObj.callback('a', 'b');
-
-        unexpected(
-            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
-            'not to error'
+            () => expect(mockFunction).toHaveBeenCalledWith('a', 'b'),
+            'not to throw'
         );
     });
 
     it('should fail', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback('a', 'a');
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
 
         unexpected(
-            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
+            () => expect(mockFunction).toHaveBeenCalledWith('a', 'b'),
             'to error outputting',
             trim`
                 expected callback to have been called with [ 'a', 'b' ]
 
                 callback(
-                  'a',
-                  'a' // should equal 'b'
-                      //
-                      // -a
-                      // +b
-                ); at ${outputObjectIt} (<path>:*:*)
-            `
-        );
-    });
-
-    it('should fail using jest mocks', () => {
-        var theObj = { callback: jestMock.fn() };
-        theObj.callback('a', 'a');
-
-        unexpected(
-            () => expect(theObj.callback).toHaveBeenCalledWith('a', 'b'),
-            'to error outputting',
-            trim`
-                expected spy11 to have been called with [ 'a', 'b' ]
-
-                spy11(
                   'a',
                   'a' // should equal 'b'
                       //
@@ -1699,13 +1631,12 @@ describe('expect.any', () => {
 
     describe('within toHaveBeenCalledWith()', () => {
         it('should pass', () => {
-            var theObj = { callback: () => {} };
-            sinon.spy(theObj, 'callback');
-            theObj.callback('foobar');
+            const mockFunction = jestMock.fn().mockName('callback');
+            mockFunction('foobar');
 
             unexpected(
                 () =>
-                    expect(theObj.callback).toHaveBeenCalledWith(
+                    expect(mockFunction).toHaveBeenCalledWith(
                         expect.any(String)
                     ),
                 'not to throw'
@@ -1713,13 +1644,12 @@ describe('expect.any', () => {
         });
 
         it('should fail', () => {
-            var theObj = { callback: () => {} };
-            sinon.spy(theObj, 'callback');
-            theObj.callback('foobar');
+            const mockFunction = jestMock.fn().mockName('callback');
+            mockFunction('foobar');
 
             unexpected(
                 () =>
-                    expect(theObj.callback).toHaveBeenCalledWith(
+                    expect(mockFunction).toHaveBeenCalledWith(
                         expect.any(String),
                         expect.any(String)
                     ),
@@ -1730,21 +1660,20 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a string
-                    ); at ${outputObjectIt} (<path>:*:*)
+                    ); at ${outputJestMocks}(<path>:*:*)
                 `
             );
         });
 
         it('should fail and correctly treat a custom constructor', () => {
-            var theObj = { callback: () => {} };
-            sinon.spy(theObj, 'callback');
-            theObj.callback('foobar');
+            const mockFunction = jestMock.fn().mockName('callback');
+            mockFunction('foobar');
 
             class SomeClass {}
 
             unexpected(
                 () =>
-                    expect(theObj.callback).toHaveBeenCalledWith(
+                    expect(mockFunction).toHaveBeenCalledWith(
                         expect.any(String),
                         expect.any(SomeClass)
                     ),
@@ -1755,19 +1684,18 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a SomeClass
-                    ); at ${outputObjectIt} (<path>:*:*)
+                    ); at ${outputJestMocks}(<path>:*:*)
                 `
             );
         });
 
         it('should fail and correctly treat a function', () => {
-            var theObj = { callback: () => {} };
-            sinon.spy(theObj, 'callback');
-            theObj.callback('foobar');
+            const mockFunction = jestMock.fn().mockName('callback');
+            mockFunction('foobar');
 
             unexpected(
                 () =>
-                    expect(theObj.callback).toHaveBeenCalledWith(
+                    expect(mockFunction).toHaveBeenCalledWith(
                         expect.any(String),
                         expect.any(() => {})
                     ),
@@ -1778,7 +1706,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a () => {}
-                    ); at ${outputObjectIt} (<path>:*:*)
+                    ); at ${outputJestMocks}(<path>:*:*)
                 `
             );
         });
@@ -1823,51 +1751,45 @@ describe('expect.any', () => {
 
 describe('expect.anything', () => {
     it('should pass', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback('');
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('');
 
         unexpected(
-            () =>
-                expect(theObj.callback).toHaveBeenCalledWith(expect.anything()),
+            () => expect(mockFunction).toHaveBeenCalledWith(expect.anything()),
             'not to error'
         );
     });
 
     it('should fail on null', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback(null);
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction(null);
 
         unexpected(
-            () =>
-                expect(theObj.callback).toHaveBeenCalledWith(expect.anything()),
+            () => expect(mockFunction).toHaveBeenCalledWith(expect.anything()),
             'to error outputting',
             trim`
                 expected callback to have been called with [ AnythingSpec() ]
 
                 callback(
                   null // should not be null
-                ); at ${outputObjectIt} (<path>:*:*)
+                ); at ${outputJestMocks}(<path>:*:*)
             `
         );
     });
 
     it('should fail on null', () => {
-        var theObj = { callback: () => {} };
-        sinon.spy(theObj, 'callback');
-        theObj.callback(undefined);
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction(undefined);
 
         unexpected(
-            () =>
-                expect(theObj.callback).toHaveBeenCalledWith(expect.anything()),
+            () => expect(mockFunction).toHaveBeenCalledWith(expect.anything()),
             'to error outputting',
             trim`
                 expected callback to have been called with [ AnythingSpec() ]
 
                 callback(
                   undefined // should not be undefined
-                ); at ${outputObjectIt} (<path>:*:*)
+                ); at ${outputJestMocks}(<path>:*:*)
             `
         );
     });
