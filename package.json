@@ -10,7 +10,10 @@
     "prepublishOnly": "npm run build",
     "test": "npm run test-src",
     "test-lib": "npm run build && CI_TEST_LIB=true mocha",
-    "test-src": "mocha --require babel-register"
+    "test-src": "mocha --require babel-register",
+    "deploy-site": "deploy-site",
+    "generate-site": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js",
+    "update-examples": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js --update-examples"
   },
   "keywords": [],
   "author": "Alex J Burke <alex@alexjeffburke.com>",
@@ -47,6 +50,8 @@
     "rollup-plugin-babel": "^3.0.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-globals": "^1.4.0",
-    "rollup-plugin-node-resolve": "^4.0.0"
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "unexpected-documentation-site-generator": "^5.0.0",
+    "unexpected-markdown": "^2.0.0"
   }
 }
