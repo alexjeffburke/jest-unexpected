@@ -881,6 +881,72 @@ describe('toHaveReturnedWith()', () => {
     });
 });
 
+describe('toHaveLastReturnedWith()', () => {
+    let mock;
+
+    beforeEach(() => {
+        let callCount = 0;
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            callCount += 1;
+            if (callCount === 2) {
+                return { foo: 'bar' };
+            }
+        });
+    });
+
+    it('should pass', () => {
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).toHaveLastReturnedWith({ foo: 'bar' }),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        mock();
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).toHaveLastReturnedWith({ foo: 'bar' }),
+            'to throw'
+        );
+    });
+
+    it('should fail when the last call failed', () => {
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            throw new Error();
+        });
+
+        try {
+            mock();
+        } catch (e) {}
+
+        unexpected(
+            () => expect(mock).toHaveLastReturnedWith({ foo: 'bar' }),
+            'to throw'
+        );
+    });
+
+    it('should allow the use of "not', () => {
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            return { foo: 'bar' };
+        });
+
+        mock();
+
+        unexpected(
+            () => expect(mock).not.toHaveLastReturnedWith({ foo: 'bar' }),
+            'to throw'
+        );
+    });
+});
+
 describe('toHaveProperty()', () => {
     it('should pass on property', () => {
         unexpected(

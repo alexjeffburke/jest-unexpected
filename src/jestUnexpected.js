@@ -277,6 +277,23 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<jestMock> [not] to have last returned with <any>',
+    (expect, subject, value) => {
+        const { results } = subject.mock;
+        const lastResult =
+            results.length > 0
+                ? results[results.length - 1]
+                : { isThrow: true };
+
+        expect.errorMode = 'bubble';
+        expect(lastResult.isThrow, 'to be false');
+
+        expect.errorMode = 'nested';
+        expect(lastResult.value, '[not] to equal', value);
+    }
+);
+
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
@@ -584,6 +601,7 @@ module.exports = function expect(subject, ...rest) {
         }),
         toHaveReturnedTimes: buildAssertion('to have returned times'),
         toHaveReturnedWith: buildAssertion('to have returned with'),
+        toHaveLastReturnedWith: buildAssertion('to have last returned with'),
         toMatch: buildAssertion('to match', {
             wrapValue: value => new MatchSpec(value)
         }),
