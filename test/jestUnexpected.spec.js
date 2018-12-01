@@ -823,6 +823,64 @@ describe('toHaveReturnedTimes()', () => {
     });
 });
 
+describe('toHaveReturnedWith()', () => {
+    let mock;
+
+    beforeEach(() => {
+        let callCount = 0;
+        mock = jestMock.fn();
+        mock.mockImplementation(() => {
+            callCount += 1;
+            if (callCount === 2) {
+                return { foo: 'bar' };
+            }
+        });
+    });
+
+    it('should pass', () => {
+        mock();
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).toHaveReturnedWith({ foo: 'bar' }),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        mock();
+
+        unexpected(
+            () => expect(mock).toHaveReturnedWith({ foo: 'bar' }),
+            'to throw'
+        );
+    });
+
+    it('should allow the use of "not', () => {
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).not.toHaveReturnedWith({ foo: 'bar' }),
+            'to throw',
+            trim`
+                expected
+                function mockConstructor() {
+                  return fn.apply(this, arguments);
+                }
+                not to have returned with { foo: 'bar' }
+                  expected [ undefined, { foo: 'bar' } ] not to contain { foo: 'bar' }
+
+                  [
+                    undefined,
+                    { foo: 'bar' } // should be removed
+                  ]
+            `
+        );
+    });
+});
+
 describe('toHaveProperty()', () => {
     it('should pass on property', () => {
         unexpected(

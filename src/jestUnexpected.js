@@ -258,6 +258,25 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<jestMock> [not] to have returned with <any>',
+    (expect, subject, value) => {
+        expect.errorMode = 'nested';
+        expect(subject, 'to have returned');
+
+        const validResultValues = [];
+        const { results } = subject.mock;
+        results.forEach(call => {
+            if (!call.isThrow) {
+                validResultValues.push(call.value);
+            }
+        });
+
+        expect.errorMode = 'nested';
+        expect(validResultValues, '[not] to contain', value);
+    }
+);
+
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
@@ -564,6 +583,7 @@ module.exports = function expect(subject, ...rest) {
             numberOfArgs: 0
         }),
         toHaveReturnedTimes: buildAssertion('to have returned times'),
+        toHaveReturnedWith: buildAssertion('to have returned with'),
         toMatch: buildAssertion('to match', {
             wrapValue: value => new MatchSpec(value)
         }),
