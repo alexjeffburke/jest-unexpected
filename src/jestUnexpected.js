@@ -533,10 +533,11 @@ module.exports = function expect(subject, ...rest) {
             wrapValue = v => v
         } = options;
 
-        if (numberOfArgs === 0) {
-            return () => {
-                expect(subject, withFlags(assertion, flags));
-            };
+        if (numberOfArgs === 1) {
+            return value =>
+                expect(subject, withFlags(assertion, flags), wrapValue(value));
+        } else if (numberOfArgs === 0) {
+            return () => expect(subject, withFlags(assertion, flags));
         } else if (numberOfArgs > 1 && noWrapArgs) {
             return (...args) =>
                 expect(subject, withFlags(assertion, flags), ...args);
@@ -544,10 +545,6 @@ module.exports = function expect(subject, ...rest) {
             return (...args) =>
                 expect(subject, withFlags(assertion, flags), wrapValue(args));
         }
-
-        // single argument case (most common)
-        return value =>
-            expect(subject, withFlags(assertion, flags), wrapValue(value));
     };
 
     const buildAssertion = (assertion, options) => {
