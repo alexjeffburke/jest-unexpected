@@ -307,6 +307,18 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<jestMock> [not] to have been called times <number>',
+    (expect, subject, value) => {
+        if (expect.flags.not) {
+            expect.errorMode = 'nested';
+            expect(jestMockToSinon(subject).callCount, 'not to be', value);
+        }
+        expect.errorMode = 'bubble';
+        expect(jestMockToSinon(subject), 'was [not] called times', value);
+    }
+);
+
 class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
@@ -603,7 +615,7 @@ module.exports = function expect(subject, ...rest) {
                 return flags.not ? 'was not called' : assertion;
             }
         }),
-        toHaveBeenCalledTimes: buildAssertion('was called times'),
+        toHaveBeenCalledTimes: buildAssertion('to have been called times'),
         toHaveBeenCalledWith: buildAssertion('to have been called with', {
             numberOfArgs: Infinity,
             wrapValue: args => new CalledWithSpec(args)

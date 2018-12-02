@@ -596,6 +596,25 @@ describe('toHaveBeenCalledTimes()', () => {
             `
         );
     });
+
+    it('should alow the use of "not"', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction();
+        mockFunction();
+
+        unexpected(
+            () => expect(mockFunction).not.toHaveBeenCalledTimes(2),
+            'to throw',
+            trim`
+                expected
+                function mockConstructor() {
+                  return fn.apply(this, arguments);
+                }
+                not to have been called times 2
+                  expected 2 not to be 2
+            `
+        );
+    });
 });
 
 describe('toHaveBeenCalledWith()', () => {
