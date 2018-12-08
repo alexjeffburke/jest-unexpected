@@ -4,9 +4,12 @@
   "description": "Use the power of Unexpected in Jest assertions",
   "main": "lib/jestUnexpected.js",
   "scripts": {
+    "build": "webpack",
     "lint": "eslint src/ test/",
-    "prepublish": "webpack",
-    "test": "mocha --require babel-register"
+    "prepublish": "npm run build",
+    "test": "npm run test-src",
+    "test-lib": "npm run build && CI_TEST_LIB=true mocha --require babel-register",
+    "test-src": "mocha --require babel-register"
   },
   "keywords": [],
   "author": "Alex J Burke <alex@alexjeffburke.com>",
