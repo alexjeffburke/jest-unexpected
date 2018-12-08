@@ -666,10 +666,20 @@ module.exports = function expect(subject, ...rest) {
                 'jest-unexpected: toMatchSnapshot() is not supported.'
             );
         },
+        toMatchInlineSnapshot: () => {
+            throw new Error(
+                'jest-unexpected: toMatchInlineSnapshot() is not supported.'
+            );
+        },
         toThrow: buildAssertionSomeArgs('to throw'),
         toThrowErrorMatchingSnapshot: () => {
             throw new Error(
                 'jest-unexpected: toThrowErrorMatchingSnapshot() is not supported.'
+            );
+        },
+        toThrowErrorMatchingInlineSnapshot: () => {
+            throw new Error(
+                'jest-unexpected: toThrowErrorMatchingInlineSnapshot() is not supported.'
             );
         }
     };

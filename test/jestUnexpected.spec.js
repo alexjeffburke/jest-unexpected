@@ -1387,6 +1387,18 @@ describe('toMatchSnapshot()', () => {
     });
 });
 
+describe('toMatchInlineSnapshot()', () => {
+    it('should error that it is not supported', () => {
+        unexpected(
+            () => {
+                expect({}).toMatchInlineSnapshot();
+            },
+            'to throw',
+            'jest-unexpected: toMatchInlineSnapshot() is not supported.'
+        );
+    });
+});
+
 describe('toThrow()', () => {
     it('should pass on throw', () => {
         return unexpected(() => {
@@ -1509,6 +1521,18 @@ describe('toThrowErrorMatchingSnapshot()', () => {
             },
             'to throw',
             'jest-unexpected: toThrowErrorMatchingSnapshot() is not supported.'
+        );
+    });
+});
+
+describe('toThrowErrorMatchingInlineSnapshot()', () => {
+    it('should error that it is not supported', () => {
+        unexpected(
+            () => {
+                expect({}).toThrowErrorMatchingInlineSnapshot();
+            },
+            'to throw',
+            'jest-unexpected: toThrowErrorMatchingInlineSnapshot() is not supported.'
         );
     });
 });
