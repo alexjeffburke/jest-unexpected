@@ -326,6 +326,32 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<jestMock> [not] to have been last called with <CalledWithSpec>',
+    (expect, subject, calledWithSpec) => {
+        calledWithSpec.value = calledWithSpec.spec.length;
+        expect(subject, 'to have been nth called with', calledWithSpec);
+    }
+);
+
+baseExpect.addAssertion(
+    '<jestMock> [not] to have been nth called with <CalledWithSpec>',
+    (expect, subject, { spec, value: n }) => {
+        const { calls, results } = subject.mock;
+        const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
+        const index = n - 1;
+        const nthResult =
+            results.length >= index ? results[index] : { isThrow: true };
+
+        expect.errorMode = 'bubble';
+        expect(nthResult.isThrow, 'to be false');
+
+        const nthCallArgs = calls[index];
+        expect.errorMode = 'nested';
+        expect(nthCallArgs, '[not] to equal', callArgs);
+    }
+);
+
 class ObjectContainingSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(ObjectContainingSpec);
 
@@ -600,6 +626,20 @@ module.exports = function expect(subject, ...rest) {
             numberOfArgs: Infinity,
             wrapValue: args => new CalledWithSpec(args)
         }),
+        toHaveBeenLastCalledWith: buildAssertion(
+            'to have been last called with',
+            {
+                numberOfArgs: Infinity,
+                wrapValue: args => new CalledWithSpec(args)
+            }
+        ),
+        toHaveBeenNthCalledWith: buildAssertion(
+            'to have been nth called with',
+            {
+                numberOfArgs: Infinity,
+                wrapValue: ([value, ...args]) => new CalledWithSpec(args, value)
+            }
+        ),
         toHaveLength: buildAssertion('to have length'),
         toHaveProperty: buildAssertion('to have property', {
             numberOfArgs: 2,

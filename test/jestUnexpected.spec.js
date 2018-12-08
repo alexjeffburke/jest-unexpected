@@ -644,6 +644,79 @@ describe('toHaveBeenCalledWith()', () => {
     });
 });
 
+describe('toHaveBeenLastCalledWith()', () => {
+    it('should pass', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'b');
+
+        unexpected(
+            () => expect(mockFunction).toHaveBeenLastCalledWith('a', 'b'),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'a');
+
+        unexpected(
+            () => expect(mockFunction).toHaveBeenLastCalledWith('a', 'b'),
+            'to error outputting',
+            trim`
+                expected callback to have been last called with [ 'a', 'b' ]
+
+                [
+                  'a',
+                  'a' // should equal 'b'
+                      //
+                      // -a
+                      // +b
+                ]
+            `
+        );
+    });
+});
+
+describe('toHaveBeenNthCalledWith()', () => {
+    it('should pass', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'b');
+        mockFunction('a', 'c');
+
+        unexpected(
+            () => expect(mockFunction).toHaveBeenNthCalledWith(2, 'a', 'b'),
+            'not to throw'
+        );
+    });
+
+    it('should fail', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'a');
+        mockFunction('a', 'c');
+
+        unexpected(
+            () => expect(mockFunction).toHaveBeenNthCalledWith(2, 'a', 'b'),
+            'to error outputting',
+            trim`
+                expected callback to have been nth called with [ 'a', 'b' ]
+                  expected [ 'a', 'a' ] to equal [ 'a', 'b' ]
+
+                  [
+                    'a',
+                    'a' // should equal 'b'
+                        //
+                        // -a
+                        // +b
+                  ]
+            `
+        );
+    });
+});
+
 describe('toHaveLength()', () => {
     it('should pass array', () => {
         unexpected(() => expect([1, 2, 3]).toHaveLength(3), 'not to throw');
