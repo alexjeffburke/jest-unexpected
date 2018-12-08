@@ -8,7 +8,10 @@ baseExpect.use(require('unexpected-sinon'));
 
 baseExpect.addType({
     name: 'jestMock',
-    base: 'function',
+    base: 'wrapperObject',
+    unwrap: value => jestMockToSinonSpy(value),
+    prefix: output => output,
+    suffix: output => output,
     identify: value => typeof value === 'function' && value._isMockFunction
 });
 
@@ -315,22 +318,11 @@ registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
 baseExpect.addAssertion(
     '<jestMock> to have been called with <CalledWithSpec>',
-    (expect, subject, calledWithSpec) => {
-        expect.errorMode = 'bubble';
-        expect(
-            jestMockToSinonSpy(subject),
-            'to have been called with',
-            calledWithSpec
-        );
-    }
-);
-
-baseExpect.addAssertion(
-    '<spy> to have been called with <CalledWithSpec>',
     (expect, subject, { spec }) => {
+        const spy = jestMockToSinonSpy(subject);
         const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
 
-        expect(subject, 'to have a call satisfying', callArgs);
+        expect(spy, 'to have a call satisfying', callArgs);
     }
 );
 

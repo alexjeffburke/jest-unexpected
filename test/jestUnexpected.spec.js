@@ -604,11 +604,7 @@ describe('toHaveBeenCalledTimes()', () => {
             () => expect(mockFunction).not.toHaveBeenCalledTimes(2),
             'to throw',
             trim`
-                expected
-                function mockConstructor() {
-                  return fn.apply(this, arguments);
-                }
-                not to have been called times 2
+                expected callback not to have been called times 2
                   expected 2 not to be 2
             `
         );
@@ -709,11 +705,7 @@ describe('toHaveReturned()', () => {
             () => expect(mock).not.toHaveReturned(),
             'to throw',
             trim`
-                expected
-                function mockConstructor() {
-                  return fn.apply(this, arguments);
-                }
-                not to have returned
+                expected jest.fn() not to have returned
             `
         );
     });
@@ -761,11 +753,7 @@ describe('toHaveReturnedTimes()', () => {
             () => expect(mock).not.toHaveReturnedTimes(1),
             'to throw',
             trim`
-                expected
-                function mockConstructor() {
-                  return fn.apply(this, arguments);
-                }
-                not to have returned times 1
+                expected jest.fn() not to have returned times 1
                   expected 1 to be less than 1
             `
         );
@@ -814,11 +802,7 @@ describe('toHaveReturnedWith()', () => {
             () => expect(mock).not.toHaveReturnedWith({ foo: 'bar' }),
             'to throw',
             trim`
-                expected
-                function mockConstructor() {
-                  return fn.apply(this, arguments);
-                }
-                not to have returned with { foo: 'bar' }
+                expected jest.fn() not to have returned with { foo: 'bar' }
                   expected [ undefined, { foo: 'bar' } ] not to contain { foo: 'bar' }
 
                   [
@@ -957,11 +941,7 @@ describe('toHaveNthReturnedWith()', () => {
             () => expect(mock).not.toHaveNthReturnedWith(1, { foo: 'bar' }),
             'to throw',
             trim`
-                expected
-                function mockConstructor() {
-                  return fn.apply(this, arguments);
-                }
-                not to have nth returned with 1, { foo: 'bar' }
+                expected jest.fn() not to have nth returned with 1, { foo: 'bar' }
                   expected { foo: 'bar' } not to equal { foo: 'bar' }
             `
         );
