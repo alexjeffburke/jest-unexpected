@@ -1,5 +1,6 @@
-const sinon = require('sinon');
 const unexpected = require('unexpected');
+const jestMockToSinonSpy = require('./jestMockToSinonSpy');
+
 const baseExpect = unexpected.clone();
 
 // pull in plugin for -sinon assertions
@@ -203,19 +204,9 @@ baseExpect.addAssertion(
     }
 );
 
-function jestMockToSinon(fn) {
-    const sinonSpy = sinon.spy().named(fn.getMockName());
-
-    fn.mock.calls.forEach(callArgs => {
-        sinonSpy(...callArgs);
-    });
-
-    return sinonSpy;
-}
-
 baseExpect.addAssertion('<jestMock> was [not] called', (expect, subject) => {
     expect.errorMode = 'bubble';
-    expect(jestMockToSinon(subject), 'was [not] called');
+    expect(jestMockToSinonSpy(subject), 'was [not] called');
 });
 
 baseExpect.addAssertion(
@@ -312,10 +303,10 @@ baseExpect.addAssertion(
     (expect, subject, value) => {
         if (expect.flags.not) {
             expect.errorMode = 'nested';
-            expect(jestMockToSinon(subject).callCount, 'not to be', value);
+            expect(jestMockToSinonSpy(subject).callCount, 'not to be', value);
         }
         expect.errorMode = 'bubble';
-        expect(jestMockToSinon(subject), 'was [not] called times', value);
+        expect(jestMockToSinonSpy(subject), 'was [not] called times', value);
     }
 );
 
@@ -327,7 +318,7 @@ baseExpect.addAssertion(
     (expect, subject, calledWithSpec) => {
         expect.errorMode = 'bubble';
         expect(
-            jestMockToSinon(subject),
+            jestMockToSinonSpy(subject),
             'to have been called with',
             calledWithSpec
         );

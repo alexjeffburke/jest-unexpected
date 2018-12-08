@@ -8,8 +8,6 @@ const unexpected = require('unexpected').clone();
 expect.output.preferredWidth = 80;
 
 const isTranspiled = !!process.version.match(/v4/);
-// adjust the error messages from relevant changes
-const outputJestMocks = isTranspiled ? '' : 'fn.mock.calls.forEach.callArgs ';
 
 unexpected.addAssertion(
     '<function> to error outputting <string>',
@@ -559,7 +557,7 @@ describe('toHaveBeenCalled()', () => {
                 trim`
                     expected callback was not called
 
-                    callback( null ); at ${outputJestMocks}(<path>:*:*) // should be removed
+                    callback( null ); // should be removed
                 `
             );
         });
@@ -589,8 +587,8 @@ describe('toHaveBeenCalledTimes()', () => {
             trim`
                 expected callback was called times 3
                   expected
-                  callback(); at ${outputJestMocks}(<path>:*:*)
-                  callback(); at ${outputJestMocks}(<path>:*:*)
+                  callback();
+                  callback();
                   to have length 3
                     expected 2 to be 3
             `
@@ -644,7 +642,7 @@ describe('toHaveBeenCalledWith()', () => {
                       //
                       // -a
                       // +b
-                ); at ${outputJestMocks}(<path>:*:*)
+                );
             `
         );
     });
@@ -1679,7 +1677,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a string
-                    ); at ${outputJestMocks}(<path>:*:*)
+                    );
                 `
             );
         });
@@ -1703,7 +1701,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a SomeClass
-                    ); at ${outputJestMocks}(<path>:*:*)
+                    );
                 `
             );
         });
@@ -1725,7 +1723,7 @@ describe('expect.any', () => {
                     callback(
                       'foobar'
                       // missing: should be a () => {}
-                    ); at ${outputJestMocks}(<path>:*:*)
+                    );
                 `
             );
         });
@@ -1791,7 +1789,7 @@ describe('expect.anything', () => {
 
                 callback(
                   null // should not be null
-                ); at ${outputJestMocks}(<path>:*:*)
+                );
             `
         );
     });
@@ -1808,7 +1806,7 @@ describe('expect.anything', () => {
 
                 callback(
                   undefined // should not be undefined
-                ); at ${outputJestMocks}(<path>:*:*)
+                );
             `
         );
     });
