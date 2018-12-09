@@ -679,6 +679,17 @@ describe('toHaveBeenLastCalledWith()', () => {
             `
         );
     });
+
+    it('should allow the use of "not"', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'a');
+
+        unexpected(
+            () => expect(mockFunction).not.toHaveBeenLastCalledWith('a', 'b'),
+            'not to throw'
+        );
+    });
 });
 
 describe('toHaveBeenNthCalledWith()', () => {

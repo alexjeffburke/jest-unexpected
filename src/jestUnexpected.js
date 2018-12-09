@@ -395,7 +395,7 @@ baseExpect.addAssertion(
     '<jestMock> [not] to have been last called with <CalledWithSpec>',
     (expect, subject, calledWithSpec) => {
         calledWithSpec.value = calledWithSpec.spec.length;
-        expect(subject, 'to have been nth called with', calledWithSpec);
+        expect(subject, '[not] to have been nth called with', calledWithSpec);
     }
 );
 
