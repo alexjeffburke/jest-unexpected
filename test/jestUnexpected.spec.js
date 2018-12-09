@@ -768,7 +768,13 @@ describe('toHaveReturned()', () => {
             mock();
         } catch (e) {}
 
-        unexpected(() => expect(mock).toHaveReturned(), 'not to throw');
+        unexpected(
+            () => expect(mock).toHaveReturned(),
+            'to throw',
+            trim`
+                expected jest.fn() to have returned
+            `
+        );
     });
 
     it('should allow the use of "not"', () => {
@@ -776,13 +782,7 @@ describe('toHaveReturned()', () => {
             mock();
         } catch (e) {}
 
-        unexpected(
-            () => expect(mock).not.toHaveReturned(),
-            'to throw',
-            trim`
-                expected jest.fn() not to have returned
-            `
-        );
+        unexpected(() => expect(mock).not.toHaveReturned(), 'not to throw');
     });
 });
 
