@@ -47,6 +47,65 @@ baseExpect.addAssertion(
     }
 );
 
+baseExpect.addAssertion(
+    '<any> to strict equal <any>',
+    (expect, subject, value) => {
+        if (
+            !(
+                typeof subject === 'object' &&
+                subject &&
+                typeof value === 'object' &&
+                value
+            )
+        ) {
+            expect.fail({ message: '' });
+        }
+
+        const lhsKeyMap = {};
+        const rhsOnlyKeys = [];
+        Object.keys(subject).forEach(key => (lhsKeyMap[key] = true));
+        Object.keys(value).forEach(key => {
+            if (key in lhsKeyMap) {
+                delete lhsKeyMap[key];
+            } else {
+                rhsOnlyKeys.push(key);
+            }
+        });
+
+        Object.keys(lhsKeyMap).forEach(subjectKey => {
+            if (
+                subject[subjectKey] === undefined &&
+                subject.hasOwnProperty &&
+                subject.hasOwnProperty(subjectKey)
+            ) {
+                expect.errorMode = 'nested';
+                expect.fail(
+                    'expected {0} not to contain property {1}',
+                    subject,
+                    subjectKey
+                );
+            }
+        });
+
+        rhsOnlyKeys.forEach(valueKey => {
+            if (
+                value[valueKey] === undefined &&
+                value.hasOwnProperty &&
+                value.hasOwnProperty(valueKey)
+            ) {
+                expect.errorMode = 'nested';
+                expect.fail(
+                    'expected {0} to contain property {1}',
+                    subject,
+                    valueKey
+                );
+            }
+        });
+
+        expect(subject, 'to equal', value);
+    }
+);
+
 class CustomSpec {
     constructor(spec, value, isTopLevel = true) {
         this.spec = spec;
@@ -671,6 +730,7 @@ module.exports = function expect(subject, ...rest) {
                 'jest-unexpected: toMatchInlineSnapshot() is not supported.'
             );
         },
+        toStrictEqual: buildAssertion('to strict equal'),
         toThrow: buildAssertionSomeArgs('to throw'),
         toThrowErrorMatchingSnapshot: () => {
             throw new Error(

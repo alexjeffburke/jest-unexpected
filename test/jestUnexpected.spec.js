@@ -1401,6 +1401,48 @@ describe('toMatchInlineSnapshot()', () => {
     });
 });
 
+describe('toStrictEqual()', () => {
+    it('should pass', () => {
+        return unexpected(() => {
+            expect({
+                a: undefined,
+                b: 2
+            }).toStrictEqual({ a: undefined, b: 2 });
+        }, 'not to throw');
+    });
+
+    it('should fail with undefined on the LHS', () => {
+        return unexpected(
+            () => {
+                expect({
+                    a: undefined,
+                    b: 2
+                }).toStrictEqual({ b: 2 });
+            },
+            'to throw',
+            trim`
+                expected { a: undefined, b: 2 } to strict equal { b: 2 }
+                  expected { a: undefined, b: 2 } not to contain property 'a'
+            `
+        );
+    });
+
+    it('should fail with undefined on the RHS', () => {
+        return unexpected(
+            () => {
+                expect({
+                    b: 2
+                }).toStrictEqual({ a: undefined, b: 2 });
+            },
+            'to throw',
+            trim`
+                expected { b: 2 } to strict equal { a: undefined, b: 2 }
+                  expected { b: 2 } to contain property 'a'
+            `
+        );
+    });
+});
+
 describe('toThrow()', () => {
     it('should pass on throw', () => {
         return unexpected(() => {
