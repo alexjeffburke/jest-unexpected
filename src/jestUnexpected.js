@@ -376,12 +376,18 @@ class CalledWithSpec extends CustomSpec {}
 registerUnexpectedTypeForCustomSpec(CalledWithSpec);
 
 baseExpect.addAssertion(
-    '<jestMock> to have been called with <CalledWithSpec>',
+    '<jestMock> [not] to have been called with <CalledWithSpec>',
     (expect, subject, { spec }) => {
         const spy = jestMockToSinonSpy(subject);
         const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
 
-        expect(spy, 'to have a call satisfying', callArgs);
+        expect(
+            spy,
+            expect.flags.not
+                ? 'to have no calls satisfying'
+                : 'to have a call satisfying',
+            callArgs
+        );
     }
 );
 

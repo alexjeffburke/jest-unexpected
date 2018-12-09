@@ -1848,6 +1848,20 @@ describe('expect.any', () => {
                 `
             );
         });
+
+        it('should allow the use of "not"', () => {
+            const mockFunction = jestMock.fn().mockName('callback');
+            mockFunction('foobar');
+
+            unexpected(
+                () =>
+                    expect(mockFunction).not.toHaveBeenCalledWith(
+                        expect.any(String),
+                        expect.any(String)
+                    ),
+                'not to throw'
+            );
+        });
     });
 
     describe('within toMatchObject()', () => {
