@@ -352,10 +352,10 @@ baseExpect.addAssertion(
         const nthResult =
             results.length >= index ? results[index] : { isThrow: true };
 
-        expect.errorMode = 'bubble';
-        expect(nthResult.isThrow, 'to be false');
-
         expect.errorMode = 'nested';
+        if (nthResult.isThrow) {
+            expect.fail('expected {0} not to throw', subject);
+        }
         expect(nthResult.value, '[not] to equal', value);
     }
 );
@@ -394,7 +394,7 @@ baseExpect.addAssertion(
 baseExpect.addAssertion(
     '<jestMock> [not] to have been last called with <CalledWithSpec>',
     (expect, subject, calledWithSpec) => {
-        calledWithSpec.value = calledWithSpec.spec.length;
+        calledWithSpec.value = subject.mock.calls.length;
         expect(subject, '[not] to have been nth called with', calledWithSpec);
     }
 );
@@ -402,17 +402,17 @@ baseExpect.addAssertion(
 baseExpect.addAssertion(
     '<jestMock> [not] to have been nth called with <CalledWithSpec>',
     (expect, subject, { spec, value: n }) => {
-        const { calls, results } = subject.mock;
-        const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
-        const index = n - 1;
-        const nthResult =
-            results.length >= index ? results[index] : { isThrow: true };
-
-        expect.errorMode = 'bubble';
-        expect(nthResult.isThrow, 'to be false');
-
-        const nthCallArgs = calls[index];
         expect.errorMode = 'nested';
+        if (n === 0) {
+            // TODO: surface nested error output
+            expect.fail('expected {0} was called', subject);
+        }
+
+        const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
+        const { calls } = subject.mock;
+        const index = n - 1;
+        const nthCallArgs = calls[index];
+
         expect(nthCallArgs, '[not] to equal', callArgs);
     }
 );

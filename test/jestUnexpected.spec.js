@@ -680,6 +680,50 @@ describe('toHaveBeenLastCalledWith()', () => {
         );
     });
 
+    it('should fail when the last call failed', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction.mockImplementation(() => {
+            throw new Error();
+        });
+
+        try {
+            mockFunction();
+        } catch (e) {}
+        try {
+            mockFunction();
+        } catch (e) {}
+
+        unexpected(
+            () =>
+                expect(mockFunction).toHaveBeenLastCalledWith({
+                    foo: 'bar'
+                }),
+            'to throw',
+            trim`
+                expected callback to have been last called with [ { foo: 'bar' } ]
+
+                [
+                  // missing { foo: 'bar' }
+                ]
+            `
+        );
+    });
+
+    it('should fail when there were no calls', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+
+        unexpected(
+            () =>
+                expect(mockFunction).toHaveBeenLastCalledWith({
+                    foo: 'bar'
+                }),
+            'to throw',
+            trim`
+                expected callback to have been last called with [ { foo: 'bar' } ]
+            `
+        );
+    });
+
     it('should allow the use of "not"', () => {
         const mockFunction = jestMock.fn().mockName('callback');
         mockFunction('a', 'a');
@@ -931,7 +975,8 @@ describe('toHaveLastReturnedWith()', () => {
 
         unexpected(
             () => expect(mock).toHaveLastReturnedWith({ foo: 'bar' }),
-            'to throw'
+            'to throw',
+            "expected jest.fn() to have last returned with { foo: 'bar' }"
         );
     });
 
@@ -947,7 +992,8 @@ describe('toHaveLastReturnedWith()', () => {
 
         unexpected(
             () => expect(mock).toHaveLastReturnedWith({ foo: 'bar' }),
-            'to throw'
+            'to throw',
+            "expected jest.fn() to have last returned with { foo: 'bar' }"
         );
     });
 
@@ -995,7 +1041,11 @@ describe('toHaveNthReturnedWith()', () => {
 
         unexpected(
             () => expect(mock).toHaveNthReturnedWith(1, { foo: 'bar' }),
-            'to throw'
+            'to throw',
+            trim`
+                expected jest.fn() to have nth returned with 1, { foo: 'bar' }
+                  expected undefined to equal { foo: 'bar' }
+            `
         );
     });
 
@@ -1011,7 +1061,11 @@ describe('toHaveNthReturnedWith()', () => {
 
         unexpected(
             () => expect(mock).toHaveNthReturnedWith(1, { foo: 'bar' }),
-            'to throw'
+            'to throw',
+            trim`
+                expected jest.fn() to have nth returned with 1, { foo: 'bar' }
+                  expected jest.fn() not to throw
+            `
         );
     });
 
