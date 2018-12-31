@@ -9,8 +9,6 @@ const expect = process.env.CI_TEST_LIB
 
 expect.output.preferredWidth = 80;
 
-const isTranspiled = !!process.version.match(/v4/);
-
 unexpected.addAssertion(
     '<function> to error outputting <string>',
     (expect, subject, expected) => {
@@ -21,7 +19,7 @@ unexpected.addAssertion(
                 .getErrorMessage('text')
                 .toString();
 
-            expect(truncate(errorMessage, isTranspiled), 'to equal', expected);
+            expect(truncate(errorMessage), 'to equal', expected);
         });
     }
 );

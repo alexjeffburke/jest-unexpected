@@ -24,7 +24,6 @@
     "unexpected-sinon": "^10.8.2"
   },
   "devDependencies": {
-    "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
     "babel-plugin-transform-es2015-block-scoping": "6.26.0",
     "babel-plugin-transform-es2015-classes": "6.24.1",

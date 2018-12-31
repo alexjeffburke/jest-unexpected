@@ -1,16 +1,10 @@
 const TRACE_IT_REGEX = /^(.*?at [a-zA-Z]+\..+?)\((.*?)(:\d+)(:\d+)?\)( \/\/ .*$)?/;
-const TRACE_IT_REGEX_NODE_4 = /^(.*?at )(.*?)(:\d+)(:\d+)( \/\/ .*$)?/;
 
-function matchAndTransfromItTrace(line, isTranspiled = false) {
+function matchAndTransfromItTrace(line) {
     let match = line.match(TRACE_IT_REGEX);
 
     if (match === null) {
-        if (isTranspiled) {
-            match = line.match(TRACE_IT_REGEX_NODE_4);
-            if (match === null) return line;
-        } else {
-            return line;
-        }
+        return line;
     }
 
     return [
