@@ -8,7 +8,7 @@
     "lint": "eslint src/ test/",
     "prepublish": "npm run build",
     "test": "npm run test-src",
-    "test-lib": "npm run build && CI_TEST_LIB=true mocha --require babel-register",
+    "test-lib": "npm run build && CI_TEST_LIB=true mocha",
     "test-src": "mocha --require babel-register"
   },
   "keywords": [],
