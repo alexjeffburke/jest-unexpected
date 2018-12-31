@@ -4,7 +4,7 @@
   "description": "Use the power of Unexpected in Jest assertions",
   "main": "lib/jestUnexpected.js",
   "scripts": {
-    "build": "webpack",
+    "build": "rollup -c rollup.config.js",
     "lint": "eslint src/ test/",
     "prepublish": "npm run build",
     "test": "npm run test-src",
@@ -42,6 +42,10 @@
     "jest-mock": "23.2.0",
     "mocha": "5.2.0",
     "prettier": "1.15.2",
-    "webpack": "3.6.0"
+    "rollup": "^1.0.0",
+    "rollup-plugin-babel": "^3.0.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
   }
 }

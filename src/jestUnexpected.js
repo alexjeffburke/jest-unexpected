@@ -588,7 +588,7 @@ function defaultFlags(assertion, flags) {
     return flags.not ? `not ${assertion}` : assertion;
 }
 
-module.exports = function expect(subject, ...rest) {
+function expect(subject, ...rest) {
     if (rest.length > 0) {
         throw new Error('Expect takes at most one argument.');
     }
@@ -796,21 +796,23 @@ module.exports = function expect(subject, ...rest) {
         },
         assertions
     );
-};
+}
 
-module.exports.addSnapshotSerializer = () => {
+expect.addSnapshotSerializer = () => {
     throw new Error(
         'jest-unexpected: expect.addSnapshotSerializer() is not supported.'
     );
 };
-module.exports.any = buildCustomSpecWrapper(AnySpec);
-module.exports.anything = buildCustomSpecWrapper(AnythingSpec);
-module.exports.arrayContaining = buildCustomSpecWrapper(ArrayContainingSpec);
-module.exports.extend = () => {
+expect.any = buildCustomSpecWrapper(AnySpec);
+expect.anything = buildCustomSpecWrapper(AnythingSpec);
+expect.arrayContaining = buildCustomSpecWrapper(ArrayContainingSpec);
+expect.extend = () => {
     throw new Error('jest-unexpected: expect.extend() is not supported.');
 };
-module.exports.objectContaining = buildCustomSpecWrapper(ObjectContainingSpec);
-module.exports.stringContaining = buildCustomSpecWrapper(StringContainingSpec);
-module.exports.stringMatching = buildCustomSpecWrapper(StringMatchingSpec);
+expect.objectContaining = buildCustomSpecWrapper(ObjectContainingSpec);
+expect.stringContaining = buildCustomSpecWrapper(StringContainingSpec);
+expect.stringMatching = buildCustomSpecWrapper(StringMatchingSpec);
 // attach Unexpected output object to allow controlling e.g. terminal width
-module.exports.output = baseExpect.output;
+expect.output = baseExpect.output;
+
+module.exports = expect;
