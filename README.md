@@ -23,15 +23,16 @@ describe('a null value', () => {
 Almost the entirety of Jest `expect` API in implemented with only the following
 missing methods which the library will highlight during execution (an exception
 will be thrown with a clear message indicating the method name):
-* toBeCloseTo()
+
 * snapshot related functionality
     - toMatchSnapshot()
     - toThrowErrorMatchingSnapshot()
     - expect.addSnapshotSerializer()
 * extension related functionality
     - expect.extend()
+* secondary assertion aliases
 
-This library supports and is tested against node version **4** and above.
+This library supports and is tested against node version **6** and above.
 
 ## Output
 
