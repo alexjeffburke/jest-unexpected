@@ -18,6 +18,8 @@ describe('a null value', () => {
 });
 ```
 
+Read [the documentation](https://alexjeffburke.github.io/jest-unexpected/).
+
 ## Compatibility
 
 Almost the entirety of Jest `expect` API in implemented with only the following
