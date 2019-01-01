@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="../../static/normalize.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../../static/main.css" type="text/css" media="screen" />
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="../../static/bug-icon-black.ico">
+    <title>toHaveProperty</title>
+</head>
+<body class="sidebar-hidden has-sidebar"> 
+    <header>
+        <div class="logo-icon"></div>
+        <nav>
+            <ul>
+                <li class="menu-toggle-item">
+                    <button class="menu-toggle" onclick="toggleSidebar()"></button>
+                </li>
+                
+                <li class=""><a href="../../">jest-unexpected</a></li>
+                
+                
+                
+                <li class="active"><a href="../expect/">API</a></li>
+                
+                
+            </ul>
+        </nav>
+        <div class="search" style="visibility: hidden">
+            <input id="search" placeholder="Search..." value="">
+            <div id="searchDropDown" class="dropDown">
+                <ul id="searchResults"></ul>
+            </div>
+        </div>
+    </header>
+
+<section id="api">
+    <nav id="api-menu" class="sidebar js-remember-scroll-position">
+    <ul>
+        
+        <li class="">
+            <a href="../expect/">expect</a>
+        </li>
+        
+        <li class="">
+            <a href="../toBe/">toBe</a>
+        </li>
+        
+        <li class="">
+            <a href="../toBeDefined/">toBeDefined</a>
+        </li>
+        
+        <li class="">
+            <a href="../toBeFalsy/">toBeFalsy</a>
+        </li>
+        
+        <li class="">
+            <a href="../toBeInstanceOf/">toBeInstanceOf</a>
+        </li>
+        
+        <li class="">
+            <a href="../toBeTruthy/">toBeTruthy</a>
+        </li>
+        
+        <li class="">
+            <a href="../toBeUndefined/">toBeUndefined</a>
+        </li>
+        
+        <li class="">
+            <a href="../toContain/">toContain</a>
+        </li>
+        
+        <li class="">
+            <a href="../toContainEqual/">toContainEqual</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveBeenCalled/">toHaveBeenCalled</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveBeenCalledTimes/">toHaveBeenCalledTimes</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveBeenCalledWith/">toHaveBeenCalledWith</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveBeenLastCalledWith/">toHaveBeenLastCalledWith</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveBeenNthCalledWith/">toHaveBeenNthCalledWith</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveLastReturnedWith/">toHaveLastReturnedWith</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveNthReturnedWith/">toHaveNthReturnedWith</a>
+        </li>
+        
+        <li class="active">
+            <a href="/">toHaveProperty</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveReturned/">toHaveReturned</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveReturnedTimes/">toHaveReturnedTimes</a>
+        </li>
+        
+        <li class="">
+            <a href="../toHaveReturnedWith/">toHaveReturnedWith</a>
+        </li>
+        
+        <li class="">
+            <a href="../toMatch/">toMatch</a>
+        </li>
+        
+        <li class="">
+            <a href="../toMatchObject./">toMatchObject.</a>
+        </li>
+        
+        <li class="">
+            <a href="../toStrictEqual/">toStrictEqual</a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <div class="main" tabindex="-1">
+        <div class="content">
+            <h1 id="-tohaveproperty-">.toHaveProperty()</h1>
+<p>This assertion checks for a the presence of a property.
+The value of the proprty can also optionally be chcked.</p>
+<h2 id="presence">Presence</h2>
+<div class="code lang-javascript"><div><span style="color: #000000">jestUnexpected</span><span style="color: #000000">({</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;foo<span style="color: #000000">:</span>&nbsp;<span style="color: #0086b3">1</span><span style="color: #000000">,</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;baz<span style="color: #000000">:</span>&nbsp;<span style="color: #000000">{</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;baz<span style="color: #000000">:</span>&nbsp;<span style="color: #a71d5d">null</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #000000">}</span></div><div><span style="color: #000000">}).</span><span style="color: #000000">toHaveProperty</span><span style="color: #000000">(</span><span style="color: #df5000">'foo.bar'</span><span style="color: #000000">);</span></div></div><div class="output"><div><span style="color: red; font-weight: bold">expected</span>&nbsp;{&nbsp;<span style="color: #555">foo</span>:&nbsp;<span style="color: #0086b3">1</span>,&nbsp;<span style="color: #555">baz</span>:&nbsp;{&nbsp;<span style="color: #555">baz</span>:&nbsp;<span style="color: #0086b3">null</span>&nbsp;}&nbsp;}&nbsp;<span style="color: red; font-weight: bold">to&nbsp;have&nbsp;property</span></div><div>KeyPathSpec({</div><div>&nbsp;&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #555">spec</span>:&nbsp;<span style="color: #df5000">'foo.bar'</span>,&nbsp;<span style="color: #555">value</span>:&nbsp;<span style="color: #0086b3">undefined</span>,&nbsp;<span style="color: #555">nested</span>:&nbsp;<span style="color: #0086b3">false</span>,</div><div><span style="color: #555">isValueExplicit</span>:&nbsp;<span style="color: #0086b3">false</span></div></div></div><div>})</div><div>&nbsp;</div><div>{</div><div>&nbsp;&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #555">foo</span>:&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #0086b3">1</span>,&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: red; font-weight: bold">//</span></div><div><span style="color: red; font-weight: bold">//</span></div></div>&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: red; font-weight: bold">⨯&nbsp;</span><div style="display: inline-block; vertical-align: top"><div><span style="color: red; font-weight: bold">should&nbsp;be&nbsp;an&nbsp;object</span></div></div><span style="color: #969896">&nbsp;and</span></div><div><span style="color: red; font-weight: bold">⨯&nbsp;</span><div style="display: inline-block; vertical-align: top"><div><span style="color: red; font-weight: bold">should&nbsp;have&nbsp;property</span>&nbsp;PropOrUndefined({&nbsp;<span style="color: #555">value</span>:&nbsp;<span style="color: #df5000">'bar'</span>&nbsp;})</div></div></div></div></div></div></div></div></div><div>&nbsp;&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #555">baz</span>:&nbsp;{&nbsp;<span style="color: #555">baz</span>:&nbsp;<span style="color: #0086b3">null</span>&nbsp;}</div></div></div><div>}</div></div><h2 id="value">Value</h2>
+<p>You can also specify the value the property must have.</p>
+<div class="code lang-javascript"><div><span style="color: #000000">jestUnexpected</span><span style="color: #000000">({</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;foo<span style="color: #000000">:</span>&nbsp;<span style="color: #000000">{</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bar<span style="color: #000000">:</span>&nbsp;<span style="color: #df5000">&quot;baz&quot;</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #000000">},</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;baz<span style="color: #000000">:</span>&nbsp;<span style="color: #000000">{</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;baz<span style="color: #000000">:</span>&nbsp;<span style="color: #a71d5d">null</span></div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #000000">}</span></div><div><span style="color: #000000">}).</span><span style="color: #000000">toHaveProperty</span><span style="color: #000000">(</span><span style="color: #df5000">'foo.bar'</span><span style="color: #000000">,</span>&nbsp;<span style="color: #df5000">'bar'</span><span style="color: #000000">)</span></div></div><div class="output"><div><span style="color: red; font-weight: bold">expected</span>&nbsp;{&nbsp;<span style="color: #555">foo</span>:&nbsp;{&nbsp;<span style="color: #555">bar</span>:&nbsp;<span style="color: #df5000">'baz'</span>&nbsp;},&nbsp;<span style="color: #555">baz</span>:&nbsp;{&nbsp;<span style="color: #555">baz</span>:&nbsp;<span style="color: #0086b3">null</span>&nbsp;}&nbsp;}</div><div><span style="color: red; font-weight: bold">to&nbsp;have&nbsp;property</span>&nbsp;KeyPathSpec({&nbsp;<span style="color: #555">spec</span>:&nbsp;<span style="color: #df5000">'foo.bar'</span>,&nbsp;<span style="color: #555">value</span>:&nbsp;<span style="color: #df5000">'bar'</span>,&nbsp;<span style="color: #555">nested</span>:&nbsp;<span style="color: #0086b3">false</span>,&nbsp;<span style="color: #555">isValueExplicit</span>:&nbsp;<span style="color: #0086b3">true</span>&nbsp;})</div><div>&nbsp;</div><div>{</div><div>&nbsp;&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #555">foo</span>:&nbsp;{</div><div>&nbsp;&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #555">bar</span>:&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #df5000">'baz'</span>&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: red; font-weight: bold">//</span></div><div><span style="color: red; font-weight: bold">//</span></div><div><span style="color: red; font-weight: bold">//</span></div><div><span style="color: red; font-weight: bold">//</span></div></div>&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: red; font-weight: bold">should&nbsp;equal</span>&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #df5000">'bar'</span></div></div></div><div>&nbsp;</div><div><span style="background-color: red; color: white">baz</span></div><div><span style="background-color: green; color: white">bar</span></div></div></div></div></div></div></div><div>},</div></div></div><div>&nbsp;&nbsp;<div style="display: inline-block; vertical-align: top"><div><span style="color: #555">baz</span>:&nbsp;{&nbsp;<span style="color: #555">baz</span>:&nbsp;<span style="color: #0086b3">null</span>&nbsp;}</div></div></div><div>}</div></div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    baseUrl = '../..';
+</script>
+<script type="text/javascript" src="../../static/toggleSidebar.js"></script>
+<script type="text/javascript" src="../../static/rememberScrollPosition.js"></script>
+<script type="text/javascript" src="../../static/focusMain.js"></script>
+<script type="text/javascript" src="../../static/search.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,94 @@
+[
+  {
+    "label": "expect (api)",
+    "url": "/api/expect/"
+  },
+  {
+    "label": "toBe (api)",
+    "url": "/api/toBe/"
+  },
+  {
+    "label": "toBeDefined (api)",
+    "url": "/api/toBeDefined/"
+  },
+  {
+    "label": "toBeFalsy (api)",
+    "url": "/api/toBeFalsy/"
+  },
+  {
+    "label": "toBeInstanceOf (api)",
+    "url": "/api/toBeInstanceOf/"
+  },
+  {
+    "label": "toBeTruthy (api)",
+    "url": "/api/toBeTruthy/"
+  },
+  {
+    "label": "toBeUndefined (api)",
+    "url": "/api/toBeUndefined/"
+  },
+  {
+    "label": "toContain (api)",
+    "url": "/api/toContain/"
+  },
+  {
+    "label": "toContainEqual (api)",
+    "url": "/api/toContainEqual/"
+  },
+  {
+    "label": "toHaveBeenCalled (api)",
+    "url": "/api/toHaveBeenCalled/"
+  },
+  {
+    "label": "toHaveBeenCalledTimes (api)",
+    "url": "/api/toHaveBeenCalledTimes/"
+  },
+  {
+    "label": "toHaveBeenCalledWith (api)",
+    "url": "/api/toHaveBeenCalledWith/"
+  },
+  {
+    "label": "toHaveBeenLastCalledWith (api)",
+    "url": "/api/toHaveBeenLastCalledWith/"
+  },
+  {
+    "label": "toHaveBeenNthCalledWith (api)",
+    "url": "/api/toHaveBeenNthCalledWith/"
+  },
+  {
+    "label": "toHaveLastReturnedWith (api)",
+    "url": "/api/toHaveLastReturnedWith/"
+  },
+  {
+    "label": "toHaveNthReturnedWith (api)",
+    "url": "/api/toHaveNthReturnedWith/"
+  },
+  {
+    "label": "toHaveProperty (api)",
+    "url": "/api/toHaveProperty/"
+  },
+  {
+    "label": "toHaveReturned (api)",
+    "url": "/api/toHaveReturned/"
+  },
+  {
+    "label": "toHaveReturnedTimes (api)",
+    "url": "/api/toHaveReturnedTimes/"
+  },
+  {
+    "label": "toHaveReturnedWith (api)",
+    "url": "/api/toHaveReturnedWith/"
+  },
+  {
+    "label": "toMatch (api)",
+    "url": "/api/toMatch/"
+  },
+  {
+    "label": "toMatchObject. (api)",
+    "url": "/api/toMatchObject./"
+  },
+  {
+    "label": "toStrictEqual (api)",
+    "url": "/api/toStrictEqual/"
+  }
+]
