@@ -1,0 +1,10 @@
+.test {
+    text-align: center;
+}
+
+.test > div,
+.test > pre {
+    padding: 20px;
+    text-align: left;
+    margin: 0;
+}

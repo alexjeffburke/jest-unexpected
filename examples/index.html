@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <script src="../node_modules/unexpected/unexpected.js"></script>
+        <script src="../node_modules/unexpected-sinon/lib/unexpected-sinon.js"></script>
+        <script src="../lib/jestUnexpected.umd.js"></script>
+        <link rel="stylesheet" href="./index.css" />
+    </head>
+    <body>
+        <h1>Jest Unexpected in the browser</h1>
+        <div class="test">
+            <pre>jestUnexpected({ foo: 'bar' }).toEqual({ foo: 'baz' });</pre>
+            <div>
+                <span id="output"></span>
+            </div>
+        </div>
+        <script type="text/javascript">
+            try {
+                jestUnexpected({ foo: 'bar' }).toEqual({ foo: 'baz' });
+            } catch (e) {
+                document.getElementById('output').innerHTML = e.htmlMessage;
+            }
+        </script>
+    </body>
+</html>
