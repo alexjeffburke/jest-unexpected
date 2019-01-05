@@ -1,10 +1,8 @@
+/*global expect:true*/
 const jestMock = require('jest-mock');
 const trim = require('./utils/trim');
 const truncate = require('./utils/truncate');
 const unexpected = require('unexpected').clone();
-const expect = process.env.CI_TEST_LIB
-    ? require('../lib/jestUnexpected')
-    : require('../src/jestUnexpected');
 
 expect.output.preferredWidth = 80;
 
