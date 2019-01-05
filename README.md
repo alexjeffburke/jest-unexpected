@@ -1,5 +1,6 @@
 # Jest-Unexpected
 
+[![NPM version](https://badge.fury.io/js/jest-unexpected.svg)](http://badge.fury.io/js/jest-unexpected)
 [![Build Status](https://travis-ci.org/alexjeffburke/jest-unexpected.svg?branch=master)](https://travis-ci.org/alexjeffburke/jest-unexpected)
 
 This library provides a mapping layer allowing assertions using Jest `expect`
