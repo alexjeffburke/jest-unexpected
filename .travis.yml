@@ -6,3 +6,4 @@ node_js:
 script:
   - "npm run test-src"
   - "npm run test-lib"
+  - "npm run test-browser"
