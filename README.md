@@ -20,6 +20,18 @@ describe('a null value', () => {
 
 Read [the documentation](https://alexjeffburke.github.io/jest-unexpected/).
 
+## Browser
+
+Unexpected has full browser support which is inherited by Jest-Unexpected.
+The library fuly executes in the browser, and demonstration of this is
+available in the `examples` folder or interactively by checking out this
+repository and executing:
+
+```
+$ npm install
+$ npm start
+```
+
 ## Compatibility
 
 Almost the entirety of Jest `expect` API in implemented with only the following
