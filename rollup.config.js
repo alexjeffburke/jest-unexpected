@@ -1,3 +1,10 @@
+const plugins = [
+    require('rollup-plugin-commonjs')(),
+    require('rollup-plugin-node-resolve')(),
+    require('rollup-plugin-node-globals')(),
+    require('rollup-plugin-babel')({ runtimeHelpers: true })
+];
+
 module.exports = [
     {
         input: 'src/jestUnexpected.js',
@@ -8,11 +15,6 @@ module.exports = [
             sourcemap: true,
             strict: false
         },
-        plugins: [
-            require('rollup-plugin-commonjs')(),
-            require('rollup-plugin-node-resolve')(),
-            require('rollup-plugin-node-globals')(),
-            require('rollup-plugin-babel')({ runtimeHelpers: true })
-        ]
+        plugins
     }
 ];
