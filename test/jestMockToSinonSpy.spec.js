@@ -1,4 +1,4 @@
-const expect = require('unexpected').clone();
+const unexpected = require('unexpected').clone();
 const jestMock = require('jest-mock');
 
 const jestMockToSinonSpy = require('../src/jestMockToSinonSpy');
@@ -11,9 +11,9 @@ describe('jestMockToSinonSpy', () => {
 
         const sinonSpy = jestMockToSinonSpy(mockFunction);
 
-        expect(sinonSpy.callCount, 'to equal', 2);
-        expect(sinonSpy.getCall(0).args, 'to equal', ['a', 'a']);
-        expect(sinonSpy.getCall(1).args, 'to equal', ['a', 'b']);
+        unexpected(sinonSpy.callCount, 'to equal', 2);
+        unexpected(sinonSpy.getCall(0).args, 'to equal', ['a', 'a']);
+        unexpected(sinonSpy.getCall(1).args, 'to equal', ['a', 'b']);
     });
 
     it('should convert returned values', () => {
@@ -25,9 +25,9 @@ describe('jestMockToSinonSpy', () => {
 
         const sinonSpy = jestMockToSinonSpy(mockFunction);
 
-        expect(sinonSpy.callCount, 'to equal', 2);
-        expect(sinonSpy.getCall(0).returnValue, 'to equal', ['a', 'a']);
-        expect(sinonSpy.getCall(1).returnValue, 'to equal', ['a', 'b']);
+        unexpected(sinonSpy.callCount, 'to equal', 2);
+        unexpected(sinonSpy.getCall(0).returnValue, 'to equal', ['a', 'a']);
+        unexpected(sinonSpy.getCall(1).returnValue, 'to equal', ['a', 'b']);
     });
 
     it('should convert thrown exceptions', () => {
@@ -46,8 +46,8 @@ describe('jestMockToSinonSpy', () => {
 
         const sinonSpy = jestMockToSinonSpy(mockFunction);
 
-        expect(sinonSpy.callCount, 'to equal', 2);
-        expect(sinonSpy.getCall(0).exception, 'to equal', expectedError);
-        expect(sinonSpy.getCall(1).exception, 'to equal', expectedError);
+        unexpected(sinonSpy.callCount, 'to equal', 2);
+        unexpected(sinonSpy.getCall(0).exception, 'to equal', expectedError);
+        unexpected(sinonSpy.getCall(1).exception, 'to equal', expectedError);
     });
 });

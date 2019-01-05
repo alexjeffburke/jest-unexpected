@@ -1,4 +1,3 @@
-const jestExpect = require('expect');
 const jestMock = require('jest-mock');
 const trim = require('./utils/trim');
 const truncate = require('./utils/truncate');
@@ -1371,22 +1370,6 @@ describe('toMatch()', () => {
                     "expected 'foo' to match /bar/"
                 );
             });
-        });
-    });
-
-    describe.skip('with non-string subject', () => {
-        it('should give a meaningful error', () => {
-            try {
-                jestExpect(['foo']).toMatch('foo');
-                throw new Error('expected jest to throw :-(');
-            } catch (e) {
-                if (/to throw :-/.test(e.message)) throw e;
-                unexpected(
-                    () => expect(['foo']).toMatch('foo'),
-                    'to throw',
-                    e.message
-                );
-            }
         });
     });
 });
