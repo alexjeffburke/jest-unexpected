@@ -13,7 +13,7 @@
     "prepublishOnly": "npm run build",
     "test": "npm run test-src",
     "test-lib": "npm run build && CI_TEST_LIB=true mocha",
-    "test-src": "mocha --require babel-register",
+    "test-src": "mocha --require babel-register test/* test/utils/*",
     "deploy-site": "deploy-site",
     "generate-site": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js",
     "update-examples": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js --update-examples"
