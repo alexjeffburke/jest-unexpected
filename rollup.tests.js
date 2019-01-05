@@ -20,7 +20,6 @@ module.exports = [
             require('rollup-plugin-node-globals')(),
             require('rollup-plugin-babel')({
                 plugins: ['external-helpers'],
-                externalHelpers: true,
                 runtimeHelpers: true
             })
         ]
