@@ -752,9 +752,13 @@ function expect(subject, ...rest) {
 
     const createChainedAssertionPromiseForState = (promiseState, toSubject) => {
         _promise = expect.promise(() => {
-            return expect(subject, `to be ${promiseState} with`, result => {
-                subject = toSubject(result);
-            });
+            return expect(
+                subject,
+                `to be ${promiseState} with`,
+                expect.it(result => {
+                    subject = toSubject(result);
+                })
+            );
         });
         // attach the assertion methods to allow chaining on the output value
         Object.assign(_promise, assertions);

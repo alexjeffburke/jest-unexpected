@@ -9,15 +9,19 @@ expect.output.preferredWidth = 80;
 unexpected.addAssertion(
     '<function> to error outputting <string>',
     (expect, subject, expected) => {
-        return expect(subject, 'to error', unexpectedError => {
-            expect.errorMode = 'bubble';
+        return expect(
+            subject,
+            'to error',
+            expect.it(unexpectedError => {
+                expect.errorMode = 'bubble';
 
-            const errorMessage = unexpectedError
-                .getErrorMessage('text')
-                .toString();
+                const errorMessage = unexpectedError
+                    .getErrorMessage('text')
+                    .toString();
 
-            expect(truncate(errorMessage), 'to equal', expected);
-        });
+                expect(truncate(errorMessage), 'to equal', expected);
+            })
+        );
     }
 );
 
@@ -1632,9 +1636,7 @@ describe('.resolves', () => {
         return unexpected(
             expect(Promise.resolve(resolutionValue)).resolves,
             'to be fulfilled with',
-            result => {
-                return unexpected(result, 'to equal', resolutionValue);
-            }
+            resolutionValue
         );
     });
 
