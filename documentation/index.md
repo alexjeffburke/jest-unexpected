@@ -2,7 +2,7 @@
 template: default.ejs
 theme: dark
 title: jest-unexpected
-repository: https://github.com/unexpectedjs/unexpected-sinon
+repository: https://github.com/alexjeffburke/jest-unexpected
 ---
 
 # jest Unexpected adapter
