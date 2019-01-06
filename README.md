@@ -24,7 +24,7 @@ Read [the documentation](https://alexjeffburke.github.io/jest-unexpected/).
 ## Browser
 
 Unexpected has full browser support which is inherited by Jest-Unexpected.
-The library fuly executes in the browser, and demonstration of this is
+The library fully executes in the browser, and a demonstration of this is
 available in the `examples` folder or interactively by checking out this
 repository and executing:
 
