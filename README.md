@@ -2,6 +2,7 @@
 
 [![NPM version](https://badge.fury.io/js/jest-unexpected.svg)](http://badge.fury.io/js/jest-unexpected)
 [![Build Status](https://travis-ci.org/alexjeffburke/jest-unexpected.svg?branch=master)](https://travis-ci.org/alexjeffburke/jest-unexpected)
+[![Coverage Status](https://img.shields.io/coveralls/alexjeffburke/jest-unexpected.svg?style=flat)](https://coveralls.io/r/alexjeffburke/jest-unexpected?branch=master)
 
 This library provides a mapping layer allowing assertions using Jest `expect`
 API to execute via Unexpected and leverage it's output capabilities.
