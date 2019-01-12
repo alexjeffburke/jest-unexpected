@@ -4,6 +4,6 @@ node_js:
   - "8"
   - "10"
 script:
-  - "npm run test-src"
+  - "npm run coverage"
   - "npm run test-lib"
   - "npm run test-browser"
