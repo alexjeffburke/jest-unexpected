@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build-tests": "rollup -c rollup.tests.js",
-    "coverage": "nyc npm test",
+    "coverage": "nyc --reporter lcov --reporter text npm run test-src",
     "lint": "eslint src/ test/",
     "prepublishOnly": "npm run build",
     "start": "serve",
