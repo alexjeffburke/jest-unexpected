@@ -651,12 +651,7 @@ function expect(subject, ...rest) {
     const assertions = {
         toBe: buildAssertion('to be'),
         toBeCloseTo: buildAssertion('to be close to'),
-        toBeDefined: buildAssertion('to be defined', {
-            numberOfArgs: 0,
-            withFlags: assertion => {
-                return flags.not ? 'to be undefined' : assertion;
-            }
-        }),
+        toBeDefined: buildAssertion('to be defined', { numberOfArgs: 0 }),
         toBeFalsy: banVal(buildAssertion('to be falsy', { numberOfArgs: 0 })),
         toBeGreaterThan: buildAssertion('to be greater than'),
         toBeGreaterThanOrEqual: buildAssertion(
@@ -667,12 +662,7 @@ function expect(subject, ...rest) {
         toBeLessThanOrEqual: buildAssertion('to be less than or equal to'),
         toBeNull: buildAssertion('to be null', { numberOfArgs: 0 }),
         toBeTruthy: banVal(buildAssertion('to be truthy', { numberOfArgs: 0 })),
-        toBeUndefined: buildAssertion('to be undefined', {
-            numberOfArgs: 0,
-            withFlags: assertion => {
-                return flags.not ? 'to be defined' : assertion;
-            }
-        }),
+        toBeUndefined: buildAssertion('to be undefined', { numberOfArgs: 0 }),
         toContain: buildAssertion('to contain', {
             wrapValue: value => new ContainSpec(value)
         }),

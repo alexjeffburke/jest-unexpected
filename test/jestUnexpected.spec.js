@@ -100,7 +100,7 @@ describe('toBeDefined()', () => {
         unexpected(
             () => expect({}).not.toBeDefined(),
             'to throw',
-            'expected {} to be undefined'
+            'expected {} not to be defined'
         );
     });
 });
@@ -289,7 +289,7 @@ describe('toBeUndefined()', () => {
         return unexpected(
             () => expect(undefined).not.toBeUndefined(),
             'to throw',
-            'expected undefined to be defined'
+            'expected undefined not to be undefined'
         );
     });
 });
