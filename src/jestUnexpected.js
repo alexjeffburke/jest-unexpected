@@ -740,6 +740,19 @@ function expect(subject, ...rest) {
         }
     };
 
+    // <method aliases>
+    assertions.toBeCalled = assertions.toHaveBeenCalled;
+    assertions.toBeCalledTimes = assertions.toHaveBeenCalledTimes;
+    assertions.toBeCalledWith = assertions.toHaveBeenCalledWith;
+    assertions.lastCalledWith = assertions.toHaveBeenLastCalledWith;
+    assertions.nthCalledWith = assertions.toHaveBeenNthCalledWith;
+    assertions.toReturn = assertions.toHaveReturned;
+    assertions.toReturnTimes = assertions.toHaveReturnedTimes;
+    assertions.toReturnWith = assertions.toHaveReturnedWith;
+    assertions.lastReturnedWith = assertions.toHaveLastReturnedWith;
+    assertions.nthReturnedWith = assertions.toHaveNthReturnedWith;
+    // </method aliases>
+
     const createChainedAssertionPromiseForState = (promiseState, toSubject) => {
         _promise = expect.promise(() => {
             return expect(

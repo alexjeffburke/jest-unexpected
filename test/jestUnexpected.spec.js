@@ -538,6 +538,13 @@ describe('toHaveBeenCalled()', () => {
         );
     });
 
+    it('should have an alias', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction();
+
+        unexpected(() => expect(mockFunction).toBeCalled(), 'not to throw');
+    });
+
     describe('.not', () => {
         it('should pass', () => {
             const mockFunction = jestMock.fn().mockName('callback');
@@ -596,6 +603,17 @@ describe('toHaveBeenCalledTimes()', () => {
         );
     });
 
+    it('should have an alias', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction();
+        mockFunction();
+
+        unexpected(
+            () => expect(mockFunction).toBeCalledTimes(2),
+            'not to throw'
+        );
+    });
+
     it('should alow the use of "not"', () => {
         const mockFunction = jestMock.fn().mockName('callback');
         mockFunction();
@@ -641,6 +659,16 @@ describe('toHaveBeenCalledWith()', () => {
                       // +b
                 );
             `
+        );
+    });
+
+    it('should have an alias', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'b');
+
+        unexpected(
+            () => expect(mockFunction).toBeCalledWith('a', 'b'),
+            'not to throw'
         );
     });
 });
@@ -723,6 +751,17 @@ describe('toHaveBeenLastCalledWith()', () => {
         );
     });
 
+    it('should have an alias', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'b');
+
+        unexpected(
+            () => expect(mockFunction).lastCalledWith('a', 'b'),
+            'not to throw'
+        );
+    });
+
     it('should allow the use of "not"', () => {
         const mockFunction = jestMock.fn().mockName('callback');
         mockFunction('a', 'a');
@@ -769,6 +808,18 @@ describe('toHaveBeenNthCalledWith()', () => {
                         // +b
                   ]
             `
+        );
+    });
+
+    it('should have an alias', () => {
+        const mockFunction = jestMock.fn().mockName('callback');
+        mockFunction('a', 'a');
+        mockFunction('a', 'b');
+        mockFunction('a', 'c');
+
+        unexpected(
+            () => expect(mockFunction).nthCalledWith(2, 'a', 'b'),
+            'not to throw'
         );
     });
 });
@@ -831,6 +882,15 @@ describe('toHaveReturned()', () => {
         );
     });
 
+    it('should have an alias', () => {
+        try {
+            mock();
+        } catch (e) {}
+        mock();
+
+        unexpected(() => expect(mock).toReturn(), 'not to throw');
+    });
+
     it('should allow the use of "not"', () => {
         try {
             mock();
@@ -870,6 +930,16 @@ describe('toHaveReturnedTimes()', () => {
         } catch (e) {}
 
         unexpected(() => expect(mock).toHaveReturnedTimes(2), 'to throw');
+    });
+
+    it('should have an alias', () => {
+        try {
+            mock();
+        } catch (e) {}
+        mock();
+        mock();
+
+        unexpected(() => expect(mock).toReturnTimes(2), 'not to throw');
     });
 
     it('should allow the use of "not"', () => {
@@ -920,6 +990,17 @@ describe('toHaveReturnedWith()', () => {
         unexpected(
             () => expect(mock).toHaveReturnedWith({ foo: 'bar' }),
             'to throw'
+        );
+    });
+
+    it('should have an alias', () => {
+        mock();
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).toReturnWith({ foo: 'bar' }),
+            'not to throw'
         );
     });
 
@@ -976,6 +1057,16 @@ describe('toHaveLastReturnedWith()', () => {
             () => expect(mock).toHaveLastReturnedWith({ foo: 'bar' }),
             'to throw',
             "expected jest.fn() to have last returned with { foo: 'bar' }"
+        );
+    });
+
+    it('should have an alias', () => {
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).lastReturnedWith({ foo: 'bar' }),
+            'not to throw'
         );
     });
 
@@ -1065,6 +1156,16 @@ describe('toHaveNthReturnedWith()', () => {
                 expected jest.fn() to have nth returned with 1, { foo: 'bar' }
                   expected jest.fn() not to throw
             `
+        );
+    });
+
+    it('should have an alias', () => {
+        mock();
+        mock();
+
+        unexpected(
+            () => expect(mock).nthReturnedWith(2, { foo: 'bar' }),
+            'not to throw'
         );
     });
 
