@@ -46,7 +46,6 @@ will be thrown with a clear message indicating the method name):
     - expect.addSnapshotSerializer()
 * extension related functionality
     - expect.extend()
-* secondary assertion aliases
 
 This library supports and is tested against node version **6** and above.
 
