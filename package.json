@@ -1,6 +1,6 @@
 {
   "name": "jest-unexpected",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Use the power of Unexpected in Jest assertions",
   "main": "lib/jestUnexpected.js",
   "browser": "lib/jestUnexpected.umd.js",
