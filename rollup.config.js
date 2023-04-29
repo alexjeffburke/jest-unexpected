@@ -1,26 +1,11 @@
 const pkg = require('./package.json');
 
 const plugins = [
-    require('rollup-plugin-commonjs')(),
-    require('rollup-plugin-node-resolve')(),
-    require('rollup-plugin-node-globals')(),
+    require('@rollup/plugin-commonjs')(),
+    require('@rollup/plugin-node-resolve')(),
 ];
 
 module.exports = [
-    {
-        input: 'src/jestUnexpected.js',
-        external: ['unexpected', 'unexpected-sinon', 'sinon'],
-        output: {
-            file: pkg.main,
-            format: 'cjs',
-            sourcemap: true,
-            strict: false,
-        },
-        plugins: [
-            ...plugins,
-            require('rollup-plugin-babel')({ runtimeHelpers: true }),
-        ],
-    },
     {
         input: 'src/jestUnexpected.js',
         external: ['unexpected', 'unexpected-sinon', 'sinon'],
@@ -36,12 +21,6 @@ module.exports = [
                 sinon: 'sinon',
             },
         },
-        plugins: [
-            ...plugins,
-            require('rollup-plugin-babel')({
-                plugins: ['external-helpers'],
-                runtimeHelpers: true,
-            }),
-        ],
+        plugins,
     },
 ];

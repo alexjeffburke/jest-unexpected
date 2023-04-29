@@ -2,10 +2,11 @@
   "name": "jest-unexpected",
   "version": "2.3.1",
   "description": "Use the power of Unexpected in Jest assertions",
-  "main": "lib/jestUnexpected.js",
+  "main": "src/jestUnexpected.js",
   "browser": "lib/jestUnexpected.umd.js",
   "files": [
-    "lib/*"
+    "lib/*",
+    "src/*"
   ],
   "scripts": {
     "build": "rollup -c rollup.config.js",
@@ -17,8 +18,7 @@
     "test": "npm run test-src && npm run test-browser",
     "test-browser": "npm run build && npm run build-tests && karma start --single-run",
     "test-docs": "npm run build && evaldown --require ./bootstrap-unexpected-markdown.js --validate --reporter=spec ./documentation",
-    "test-lib": "CI_TEST_LIB=true mocha --require ./test/common",
-    "test-src": "mocha --require babel-register --require ./test/common test/* test/utils/*",
+    "test-src": "mocha --require ./test/common test/* test/utils/*",
     "deploy-site": "deploy-site",
     "generate-site": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js",
     "update-examples": "npm run build && evaldown --require ./bootstrap-unexpected-markdown.js --inplace ./documentation",
@@ -37,14 +37,8 @@
     "unexpected-sinon": "^11.1.0"
   },
   "devDependencies": {
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-es2015-block-scoping": "6.26.0",
-    "babel-plugin-transform-es2015-classes": "6.24.1",
-    "babel-plugin-transform-es2015-destructuring": "6.23.0",
-    "babel-plugin-transform-es2015-parameters": "6.24.1",
-    "babel-plugin-transform-es2015-spread": "6.22.0",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-register": "^6.26.0",
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard": "^17.0.0",
@@ -62,11 +56,7 @@
     "offline-github-changelog": "^3.0.1",
     "prettier": "~2.8.8",
     "puppeteer": "^19.11.1",
-    "rollup": "^1.0.0",
-    "rollup-plugin-babel": "^3.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-globals": "^1.4.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup": "^3.21.1",
     "serve": "^14.2.0",
     "unexpected-documentation-site-generator": "^7.1.0"
   }

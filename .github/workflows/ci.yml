@@ -15,17 +15,12 @@ jobs:
           - '18'
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node (build)
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '16'
       - run: npm install
-      - run: npm run build
-      - name: Setup node (test)
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm run test-lib
+      - run: npm run test-src
 
   test-targets:
     runs-on: ubuntu-20.04

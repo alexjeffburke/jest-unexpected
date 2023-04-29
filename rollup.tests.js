@@ -13,14 +13,9 @@ module.exports = [
             },
         },
         plugins: [
-            require('rollup-plugin-commonjs')(),
-            require('rollup-plugin-node-resolve')({
+            require('@rollup/plugin-commonjs')(),
+            require('@rollup/plugin-node-resolve')({
                 browser: true,
-            }),
-            require('rollup-plugin-node-globals')(),
-            require('rollup-plugin-babel')({
-                plugins: ['external-helpers'],
-                runtimeHelpers: true,
             }),
         ],
     },
