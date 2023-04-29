@@ -276,13 +276,7 @@ baseExpect.addAssertion(
     (expect, subject) => {
         const { results } = subject.mock;
 
-        let isValid = false;
-        results.some((result) => {
-            if (!result.isThrow) {
-                isValid = true;
-                return true;
-            }
-        });
+        const isValid = results.some((result) => !result.isThrow);
 
         expect(isValid, expect.flags.not ? 'to be false' : 'to be true');
     }
