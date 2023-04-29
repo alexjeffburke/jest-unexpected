@@ -12,7 +12,7 @@ unexpected.addAssertion(
         return expect(
             subject,
             'to error',
-            expect.it(unexpectedError => {
+            expect.it((unexpectedError) => {
                 expect.errorMode = 'bubble';
 
                 const errorMessage = unexpectedError
@@ -371,7 +371,7 @@ describe('toContain()', () => {
                 expect([
                     { foo: 'bar' },
                     instance,
-                    { quux: 'xuuq' }
+                    { quux: 'xuuq' },
                 ]).not.toContain(instance),
             'to throw'
         );
@@ -396,7 +396,7 @@ describe('toContainEqual()', () => {
                 expect([
                     { foo: 'bar' },
                     instance,
-                    { quux: 'xuuq' }
+                    { quux: 'xuuq' },
                 ]).toContainEqual(clonedInstance),
             'not to throw'
         );
@@ -429,7 +429,7 @@ describe('toContainEqual()', () => {
                 expect([
                     { foo: 'bar' },
                     { a: 'something' },
-                    { quux: 'xuuq' }
+                    { quux: 'xuuq' },
                 ]).toContain({ a: 'something', b: 'else' }),
             'to throw',
             trim`
@@ -469,7 +469,7 @@ describe('toContainEqual()', () => {
                 expect([
                     { foo: 'bar' },
                     instance,
-                    { quux: 'xuuq' }
+                    { quux: 'xuuq' },
                 ]).not.toContainEqual(clonedInstance),
             'to throw'
         );
@@ -723,7 +723,7 @@ describe('toHaveBeenLastCalledWith()', () => {
         unexpected(
             () =>
                 expect(mockFunction).toHaveBeenLastCalledWith({
-                    foo: 'bar'
+                    foo: 'bar',
                 }),
             'to throw',
             trim`
@@ -742,7 +742,7 @@ describe('toHaveBeenLastCalledWith()', () => {
         unexpected(
             () =>
                 expect(mockFunction).toHaveBeenLastCalledWith({
-                    foo: 'bar'
+                    foo: 'bar',
                 }),
             'to throw',
             trim`
@@ -1194,7 +1194,7 @@ describe('toHaveProperty()', () => {
             () =>
                 expect({
                     foo: 'bar',
-                    baz: null
+                    baz: null,
                 }).toHaveProperty('foo'),
             'not to throw'
         );
@@ -1207,9 +1207,9 @@ describe('toHaveProperty()', () => {
                     foo: {
                         bar: {
                             quux: 'baz',
-                            xuuq: 'baz'
-                        }
-                    }
+                            xuuq: 'baz',
+                        },
+                    },
                 }).toHaveProperty('foo.bar'),
             'not to throw'
         );
@@ -1222,9 +1222,9 @@ describe('toHaveProperty()', () => {
                     foo: {
                         bar: {
                             quux: 'baz',
-                            xuuq: 'baz'
-                        }
-                    }
+                            xuuq: 'baz',
+                        },
+                    },
                 }).toHaveProperty(['foo', 'bar', 'quux'], 'baz'),
             'not to throw'
         );
@@ -1243,8 +1243,8 @@ describe('toHaveProperty()', () => {
                 expect({
                     foo: 1,
                     baz: {
-                        baz: null
-                    }
+                        baz: null,
+                    },
                 }).toHaveProperty('foo.bar'),
             'to throw',
             trim`
@@ -1265,8 +1265,8 @@ describe('toHaveProperty()', () => {
                 expect({
                     foo: 1,
                     baz: {
-                        baz: null
-                    }
+                        baz: null,
+                    },
                 }).toHaveProperty('bar.baz'),
             'to throw',
             trim`
@@ -1288,10 +1288,10 @@ describe('toHaveProperty()', () => {
                 expect({
                     foo: 1,
                     bar: {
-                        baz: null
-                    }
+                        baz: null,
+                    },
                 }).toHaveProperty('bar.baz', {
-                    a: 1
+                    a: 1,
                 }),
             'to throw',
             trim`
@@ -1336,7 +1336,7 @@ describe('toHaveProperty()', () => {
             unexpected(
                 () =>
                     expect({
-                        a: { b: { c: { d: 1 } } }
+                        a: { b: { c: { d: 1 } } },
                     }).not.toHaveProperty('a.b.ttt.d', 1),
                 'not to throw'
             );
@@ -1422,7 +1422,7 @@ describe('toHaveProperty()', () => {
                 expect({ a: { b: [1, 2, 3] } }).not.toHaveProperty([
                     'a',
                     'b',
-                    4
+                    4,
                 ]);
             }, 'not to throw');
         });
@@ -1483,10 +1483,10 @@ describe('toMatchObject()', () => {
             expect({
                 a: 'foo',
                 b: 'bar',
-                c: 'baz'
+                c: 'baz',
             }).toMatchObject({
                 a: 'foo',
-                b: 'bar'
+                b: 'bar',
             });
         }, 'not to error');
     });
@@ -1496,10 +1496,10 @@ describe('toMatchObject()', () => {
             () => {
                 expect({
                     a: 'foo',
-                    b: 'baz'
+                    b: 'baz',
                 }).toMatchObject({
                     a: 'foo',
-                    b: 'bar'
+                    b: 'bar',
                 });
             },
             'to error',
@@ -1555,7 +1555,7 @@ describe('toStrictEqual()', () => {
         return unexpected(() => {
             expect({
                 a: undefined,
-                b: 2
+                b: 2,
             }).toStrictEqual({ a: undefined, b: 2 });
         }, 'not to throw');
     });
@@ -1565,7 +1565,7 @@ describe('toStrictEqual()', () => {
             () => {
                 expect({
                     a: undefined,
-                    b: 2
+                    b: 2,
                 }).toStrictEqual({ b: 2 });
             },
             'to throw',
@@ -1580,7 +1580,7 @@ describe('toStrictEqual()', () => {
         return unexpected(
             () => {
                 expect({
-                    b: 2
+                    b: 2,
                 }).toStrictEqual({ a: undefined, b: 2 });
             },
             'to throw',
@@ -2044,9 +2044,9 @@ describe('expect.any', () => {
                 () =>
                     expect({
                         foo: 1,
-                        bar: null
+                        bar: null,
                     }).toMatchObject({
-                        foo: expect.any(Number)
+                        foo: expect.any(Number),
                     }),
                 'not to throw'
             );
@@ -2057,9 +2057,9 @@ describe('expect.any', () => {
                 () =>
                     expect({
                         foo: 1,
-                        bar: null
+                        bar: null,
                     }).toMatchObject({
-                        foo: expect.any(String)
+                        foo: expect.any(String),
                     }),
                 'to throw',
                 trim`
@@ -2241,7 +2241,7 @@ describe('expect.stringMatching', () => {
                     expect(['foobar', 'foobaz']).toEqual(
                         expect.arrayContaining([
                             expect.stringMatching(/bar/),
-                            expect.stringMatching(/baz/)
+                            expect.stringMatching(/baz/),
                         ])
                     ),
                 'not to throw'
@@ -2254,7 +2254,7 @@ describe('expect.stringMatching', () => {
                     expect(['foobaz', 'foobaz']).toEqual(
                         expect.arrayContaining([
                             expect.stringMatching(/bar/),
-                            expect.stringMatching(/baz/)
+                            expect.stringMatching(/baz/),
                         ])
                     ),
                 'to throw',
@@ -2277,11 +2277,11 @@ describe('expect.stringMatching', () => {
                 () =>
                     expect({
                         a: 'foobar',
-                        b: 'foobaz'
+                        b: 'foobaz',
                     }).toEqual(
                         expect.objectContaining({
                             a: expect.stringMatching(/bar/),
-                            b: expect.stringMatching(/baz/)
+                            b: expect.stringMatching(/baz/),
                         })
                     ),
                 'not to throw'
@@ -2293,11 +2293,11 @@ describe('expect.stringMatching', () => {
                 () =>
                     expect({
                         a: 'foobaz',
-                        b: 'foobaz'
+                        b: 'foobaz',
                     }).toEqual(
                         expect.objectContaining({
                             a: expect.stringMatching(/bar/),
-                            b: expect.stringMatching(/baz/)
+                            b: expect.stringMatching(/baz/),
                         })
                     ),
                 'to throw',
@@ -2321,13 +2321,13 @@ describe('with deeply nested containing declarations', () => {
             () =>
                 expect({
                     foo: ['foobar', 'foobaz'],
-                    b: 'foobaz'
+                    b: 'foobaz',
                 }).toMatchObject(
                     expect.objectContaining({
                         foo: expect.arrayContaining([
                             expect.stringMatching(/bar/),
-                            expect.any(String)
-                        ])
+                            expect.any(String),
+                        ]),
                     })
                 ),
             'not to throw'
@@ -2339,13 +2339,13 @@ describe('with deeply nested containing declarations', () => {
             () =>
                 expect({
                     foo: ['foobaz', 'foobaz'],
-                    b: 'foobaz'
+                    b: 'foobaz',
                 }).toMatchObject(
                     expect.objectContaining({
                         foo: expect.arrayContaining([
                             expect.stringMatching(/bar/),
-                            expect.any(String)
-                        ])
+                            expect.any(String),
+                        ]),
                     })
                 ),
             'to throw',

@@ -9,10 +9,10 @@ baseExpect.use(require('unexpected-sinon'));
 baseExpect.addType({
     name: 'jestMock',
     base: 'wrapperObject',
-    unwrap: value => jestMockToSinonSpy(value),
-    prefix: output => output,
-    suffix: output => output,
-    identify: value => typeof value === 'function' && value._isMockFunction
+    unwrap: (value) => jestMockToSinonSpy(value),
+    prefix: (output) => output,
+    suffix: (output) => output,
+    identify: (value) => typeof value === 'function' && value._isMockFunction,
 });
 
 baseExpect.addAssertion(
@@ -23,13 +23,13 @@ baseExpect.addAssertion(
         return expect.promise
             .props({
                 null: expect(subject, 'not to be null')
-                    .catch(e => e)
+                    .catch((e) => e)
                     .then(() => null),
                 undefined: expect(subject, 'not to be undefined')
-                    .catch(e => e)
-                    .then(() => null)
+                    .catch((e) => e)
+                    .then(() => null),
             })
-            .then(results => {
+            .then((results) => {
                 var passNull = results.null === null;
                 var passUndefined = results.undefined === null;
 
@@ -63,8 +63,8 @@ baseExpect.addAssertion(
 
         const lhsKeyMap = {};
         const rhsOnlyKeys = [];
-        Object.keys(subject).forEach(key => (lhsKeyMap[key] = true));
-        Object.keys(value).forEach(key => {
+        Object.keys(subject).forEach((key) => (lhsKeyMap[key] = true));
+        Object.keys(value).forEach((key) => {
             if (key in lhsKeyMap) {
                 delete lhsKeyMap[key];
             } else {
@@ -72,7 +72,7 @@ baseExpect.addAssertion(
             }
         });
 
-        Object.keys(lhsKeyMap).forEach(subjectKey => {
+        Object.keys(lhsKeyMap).forEach((subjectKey) => {
             if (
                 subject[subjectKey] === undefined &&
                 subject.hasOwnProperty &&
@@ -87,7 +87,7 @@ baseExpect.addAssertion(
             }
         });
 
-        rhsOnlyKeys.forEach(valueKey => {
+        rhsOnlyKeys.forEach((valueKey) => {
             if (
                 value[valueKey] === undefined &&
                 value.hasOwnProperty &&
@@ -115,7 +115,7 @@ class CustomSpec {
 }
 
 function buildCustomSpecWrapper(Type) {
-    return value => {
+    return (value) => {
         return new Type(value, undefined, false);
     };
 }
@@ -124,7 +124,7 @@ function registerUnexpectedTypeForCustomSpec(Type, options = {}) {
     baseExpect.addType({
         name: Type.name,
         base: 'object',
-        identify: value => value instanceof Type,
+        identify: (value) => value instanceof Type,
         inspect:
             options.inspect !== undefined
                 ? options.inspect
@@ -134,7 +134,7 @@ function registerUnexpectedTypeForCustomSpec(Type, options = {}) {
                           output.append(inspect(spec, depth));
                       }
                       if (nested) output.text(')');
-                  }
+                  },
     });
 }
 
@@ -150,7 +150,7 @@ function unpackNestedSpecs(expect, spec) {
     if (spec instanceof CustomSpec) spec = unpackNestedSpec(expect, spec);
 
     if (Array.isArray(spec)) {
-        spec = spec.map(item => {
+        spec = spec.map((item) => {
             if (item instanceof CustomSpec) {
                 return unpackNestedSpecs(expect, item);
             } else {
@@ -159,7 +159,7 @@ function unpackNestedSpecs(expect, spec) {
         });
     } else if (typeof spec === 'object' && spec !== null && !isRegExp(spec)) {
         spec = Object.assign({}, spec);
-        Object.keys(spec).forEach(key => {
+        Object.keys(spec).forEach((key) => {
             const value = spec[key];
             if (value instanceof CustomSpec) {
                 spec[key] = unpackNestedSpecs(expect, value);
@@ -212,7 +212,7 @@ registerUnexpectedTypeForCustomSpec(AnySpec, {
         if (nested) output.text(`AnySpec(`);
         output.append(inspectWithNativeConstructor(spec, depth, inspect));
         if (nested) output.text(')');
-    }
+    },
 });
 
 baseExpect.addAssertion(
@@ -257,7 +257,7 @@ baseExpect.addAssertion(
             // XXX workaround having no direct containing assertion
             expect.apply(expect, assertContainingArray(subject, spec));
         } catch (e) {
-            const present = spec.filter(element =>
+            const present = spec.filter((element) =>
                 isPresentIn(element, subject)
             );
 
@@ -277,7 +277,7 @@ baseExpect.addAssertion(
         const { results } = subject.mock;
 
         let isValid = false;
-        results.some(result => {
+        results.some((result) => {
             if (!result.isThrow) {
                 isValid = true;
                 return true;
@@ -294,7 +294,7 @@ baseExpect.addAssertion(
         const { results } = subject.mock;
 
         let timesCount = 0;
-        results.forEach(result => {
+        results.forEach((result) => {
             if (!result.isThrow) {
                 timesCount += 1;
             }
@@ -319,7 +319,7 @@ baseExpect.addAssertion(
 
         const validResultValues = [];
         const { results } = subject.mock;
-        results.forEach(call => {
+        results.forEach((call) => {
             if (!call.isThrow) {
                 validResultValues.push(call.value);
             }
@@ -379,7 +379,7 @@ baseExpect.addAssertion(
     '<jestMock> [not] to have been called with <CalledWithSpec>',
     (expect, subject, { spec }) => {
         const spy = jestMockToSinonSpy(subject);
-        const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
+        const callArgs = spec.map((v) => unpackNestedSpecs(expect, v));
 
         expect(
             spy,
@@ -408,7 +408,7 @@ baseExpect.addAssertion(
             expect.fail('expected {0} was called', subject);
         }
 
-        const callArgs = spec.map(v => unpackNestedSpecs(expect, v));
+        const callArgs = spec.map((v) => unpackNestedSpecs(expect, v));
         const { calls } = subject.mock;
         const index = n - 1;
         const nthCallArgs = calls[index];
@@ -500,7 +500,7 @@ class PropOrUndefined {
 }
 registerUnexpectedTypeForCustomSpec(PropOrUndefined, {
     inspect: (subject, depth, output, inspect) =>
-        output.append(inspect(subject.value))
+        output.append(inspect(subject.value)),
 });
 
 function keyPathToSatisfySpec(
@@ -538,7 +538,7 @@ function keyPathToSatisfySpec(
         const property = keyPath.pop();
         // nest previous value within a new object
         nestedObjects = {
-            [property]: nestedObjects
+            [property]: nestedObjects,
         };
     }
 
@@ -595,7 +595,7 @@ function expect(subject, ...rest) {
 
     const expect = baseExpect;
     const flags = {
-        not: false
+        not: false,
     };
     let _promise = null;
 
@@ -604,11 +604,11 @@ function expect(subject, ...rest) {
             numberOfArgs = 1,
             withFlags = defaultFlags,
             noWrapArgs = false,
-            wrapValue = v => v
+            wrapValue = (v) => v,
         } = options;
 
         if (numberOfArgs === 1) {
-            return value =>
+            return (value) =>
                 expect(subject, withFlags(assertion, flags), wrapValue(value));
         } else if (numberOfArgs === 0) {
             return () => expect(subject, withFlags(assertion, flags));
@@ -633,12 +633,12 @@ function expect(subject, ...rest) {
         };
     };
 
-    const buildAssertionSomeArgs = assertionOrOptions => {
+    const buildAssertionSomeArgs = (assertionOrOptions) => {
         let options;
         if (typeof assertionOrOptions === 'string') {
             options = {
                 assertionOneArg: assertionOrOptions,
-                assertionNoArgs: assertionOrOptions
+                assertionNoArgs: assertionOrOptions,
             };
         } else {
             options = assertionOrOptions;
@@ -649,16 +649,18 @@ function expect(subject, ...rest) {
             options.assertionNoArgs,
             Object.assign({}, options, { numberOfArgs: 0 })
         );
-        return value => (value === undefined ? noArgs() : oneArg(value));
+        return (value) => (value === undefined ? noArgs() : oneArg(value));
     };
 
-    const banVal = fn => (...args) => {
-        if (args.length === 0) {
-            return fn();
-        } else {
-            expect.fail({ message: 'No values expected for assertion.' });
-        }
-    };
+    const banVal =
+        (fn) =>
+        (...args) => {
+            if (args.length === 0) {
+                return fn();
+            } else {
+                expect.fail({ message: 'No values expected for assertion.' });
+            }
+        };
 
     const assertions = {
         toBe: buildAssertion('to be'),
@@ -676,57 +678,58 @@ function expect(subject, ...rest) {
         toBeTruthy: banVal(buildAssertion('to be truthy', { numberOfArgs: 0 })),
         toBeUndefined: buildAssertion('to be undefined', { numberOfArgs: 0 }),
         toContain: buildAssertion('to contain', {
-            wrapValue: value => new ContainSpec(value)
+            wrapValue: (value) => new ContainSpec(value),
         }),
         toContainEqual: buildAssertion('to contain equal', {
-            wrapValue: value => new ContainSpec(value)
+            wrapValue: (value) => new ContainSpec(value),
         }),
         toEqual: buildAssertion('to equal'),
         toHaveBeenCalled: buildAssertion('was called', {
             numberOfArgs: 0,
-            withFlags: assertion => {
+            withFlags: (assertion) => {
                 return flags.not ? 'was not called' : assertion;
-            }
+            },
         }),
         toHaveBeenCalledTimes: buildAssertion('to have been called times'),
         toHaveBeenCalledWith: buildAssertion('to have been called with', {
             numberOfArgs: Infinity,
-            wrapValue: args => new CalledWithSpec(args)
+            wrapValue: (args) => new CalledWithSpec(args),
         }),
         toHaveBeenLastCalledWith: buildAssertion(
             'to have been last called with',
             {
                 numberOfArgs: Infinity,
-                wrapValue: args => new CalledWithSpec(args)
+                wrapValue: (args) => new CalledWithSpec(args),
             }
         ),
         toHaveBeenNthCalledWith: buildAssertion(
             'to have been nth called with',
             {
                 numberOfArgs: Infinity,
-                wrapValue: ([value, ...args]) => new CalledWithSpec(args, value)
+                wrapValue: ([value, ...args]) =>
+                    new CalledWithSpec(args, value),
             }
         ),
         toHaveLength: buildAssertion('to have length'),
         toHaveProperty: buildAssertion('to have property', {
             numberOfArgs: 2,
-            wrapValue: args => new KeyPathSpec(args)
+            wrapValue: (args) => new KeyPathSpec(args),
         }),
         toHaveReturned: buildAssertion('to have returned', {
-            numberOfArgs: 0
+            numberOfArgs: 0,
         }),
         toHaveReturnedTimes: buildAssertion('to have returned times'),
         toHaveReturnedWith: buildAssertion('to have returned with'),
         toHaveLastReturnedWith: buildAssertion('to have last returned with'),
         toHaveNthReturnedWith: buildAssertion('to have nth returned with', {
             numberOfArgs: 2,
-            noWrapArgs: true
+            noWrapArgs: true,
         }),
         toMatch: buildAssertion('to match', {
-            wrapValue: value => new MatchSpec(value)
+            wrapValue: (value) => new MatchSpec(value),
         }),
         toMatchObject: buildAssertion('to equal', {
-            wrapValue: value => new ObjectContainingSpec(value)
+            wrapValue: (value) => new ObjectContainingSpec(value),
         }),
         toMatchSnapshot: () => {
             throw new Error(
@@ -749,7 +752,7 @@ function expect(subject, ...rest) {
             throw new Error(
                 'jest-unexpected: toThrowErrorMatchingInlineSnapshot() is not supported.'
             );
-        }
+        },
     };
 
     // <method aliases>
@@ -770,7 +773,7 @@ function expect(subject, ...rest) {
             return expect(
                 subject,
                 `to be ${promiseState} with`,
-                expect.it(result => {
+                expect.it((result) => {
                     subject = toSubject(result);
                 })
             );
@@ -782,7 +785,7 @@ function expect(subject, ...rest) {
             get: () => {
                 flags.not = true;
                 return _promise;
-            }
+            },
         });
         // return the promise so these calls can be awaited
         return _promise;
@@ -797,7 +800,7 @@ function expect(subject, ...rest) {
             get resolves() {
                 const resolves = createChainedAssertionPromiseForState(
                     'fulfilled',
-                    result => result
+                    (result) => result
                 );
                 // override "to throw" for .resolves as it makes no sense
                 resolves.toThrow = () => {
@@ -816,16 +819,16 @@ function expect(subject, ...rest) {
             get rejects() {
                 const rejects = createChainedAssertionPromiseForState(
                     'rejected',
-                    result => result
+                    (result) => result
                 );
                 // override "to throw" for .rejects to allow asserting the captured error
                 rejects.toThrow = buildAssertionSomeArgs({
                     assertionNoArgs: 'to be defined',
                     assertionOneArg: 'to match',
-                    wrapValue: value => new MatchSpec(value)
+                    wrapValue: (value) => new MatchSpec(value),
                 });
                 return rejects;
-            }
+            },
         },
         assertions
     );

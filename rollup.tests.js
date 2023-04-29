@@ -9,19 +9,19 @@ module.exports = [
             strict: false,
             globals: {
                 unexpected: 'weknowhow.expect',
-                'jest-mock': 'jest-mock'
-            }
+                'jest-mock': 'jest-mock',
+            },
         },
         plugins: [
             require('rollup-plugin-commonjs')(),
             require('rollup-plugin-node-resolve')({
-                browser: true
+                browser: true,
             }),
             require('rollup-plugin-node-globals')(),
             require('rollup-plugin-babel')({
                 plugins: ['external-helpers'],
-                runtimeHelpers: true
-            })
-        ]
-    }
+                runtimeHelpers: true,
+            }),
+        ],
+    },
 ];

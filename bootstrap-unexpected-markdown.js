@@ -6,5 +6,5 @@ jestUnexpected.output.preferredWidth = 80;
 jestMock = require('jest-mock');
 
 jest = {
-    fn: jestMock.fn.bind(jestMock)
+    fn: jestMock.fn.bind(jestMock),
 };

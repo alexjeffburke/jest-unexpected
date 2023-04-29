@@ -18,7 +18,7 @@ module.exports = function jestMockToSinonSpy(fn) {
         return callArgs;
     });
 
-    fn.mock.results.forEach(result => {
+    fn.mock.results.forEach((result) => {
         let returnValue;
         let exception;
 

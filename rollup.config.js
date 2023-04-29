@@ -3,7 +3,7 @@ const pkg = require('./package.json');
 const plugins = [
     require('rollup-plugin-commonjs')(),
     require('rollup-plugin-node-resolve')(),
-    require('rollup-plugin-node-globals')()
+    require('rollup-plugin-node-globals')(),
 ];
 
 module.exports = [
@@ -14,12 +14,12 @@ module.exports = [
             file: pkg.main,
             format: 'cjs',
             sourcemap: true,
-            strict: false
+            strict: false,
         },
         plugins: [
             ...plugins,
-            require('rollup-plugin-babel')({ runtimeHelpers: true })
-        ]
+            require('rollup-plugin-babel')({ runtimeHelpers: true }),
+        ],
     },
     {
         input: 'src/jestUnexpected.js',
@@ -33,15 +33,15 @@ module.exports = [
             globals: {
                 unexpected: 'weknowhow.expect',
                 'unexpected-sinon': 'weknowhow.unexpectedSinon',
-                sinon: 'sinon'
-            }
+                sinon: 'sinon',
+            },
         },
         plugins: [
             ...plugins,
             require('rollup-plugin-babel')({
                 plugins: ['external-helpers'],
-                runtimeHelpers: true
-            })
-        ]
-    }
+                runtimeHelpers: true,
+            }),
+        ],
+    },
 ];

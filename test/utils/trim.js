@@ -9,7 +9,7 @@ const trim = (strs, ...args) => {
 
     return str
         .split('\n')
-        .map(str => str.replace(indent, ''))
+        .map((str) => str.replace(indent, ''))
         .join('\n')
         .replace(/^\n/, '')
         .replace(/\n\s*$/, '');

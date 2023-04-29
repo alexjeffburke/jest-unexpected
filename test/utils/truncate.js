@@ -1,4 +1,5 @@
-const TRACE_IT_REGEX = /^(.*?at [a-zA-Z]+\..+?)\((.*?)(:\d+)(:\d+)?\)( \/\/ .*$)?/;
+const TRACE_IT_REGEX =
+    /^(.*?at [a-zA-Z]+\..+?)\((.*?)(:\d+)(:\d+)?\)( \/\/ .*$)?/;
 
 function matchAndTransfromItTrace(line) {
     let match = line.match(TRACE_IT_REGEX);
@@ -14,15 +15,12 @@ function matchAndTransfromItTrace(line) {
         match[3].replace(/\d+/, '*'),
         match[4].replace(/\d+/, '*'),
         ')',
-        match[5] || ''
+        match[5] || '',
     ].join('');
 }
 
 function truncate(output) {
-    return output
-        .split('\n')
-        .map(matchAndTransfromItTrace)
-        .join('\n');
+    return output.split('\n').map(matchAndTransfromItTrace).join('\n');
 }
 
 module.exports = truncate;

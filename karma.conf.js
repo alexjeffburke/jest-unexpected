@@ -1,7 +1,7 @@
 var puppeteer = require('puppeteer');
 process.env.CHROME_BIN = puppeteer.executablePath();
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
         frameworks: ['mocha'],
 
@@ -12,16 +12,16 @@ module.exports = function(config) {
             './lib/jestUnexpected.umd.js',
             './test/common.js',
             './node_modules/jest-mock/build-es5/index.js',
-            './build/jestUnexpected.spec.js'
+            './build/jestUnexpected.spec.js',
         ],
 
         client: {
             mocha: {
                 reporter: 'html',
-                timeout: 60000
-            }
+                timeout: 60000,
+            },
         },
 
-        browsers: ['ChromeHeadless']
+        browsers: ['ChromeHeadless'],
     });
 };
