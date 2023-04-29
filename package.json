@@ -16,7 +16,7 @@
     "start": "serve",
     "test": "npm run test-src && npm run test-browser",
     "test-browser": "npm run build && npm run build-tests && karma start --single-run",
-    "test-lib": "npm run build && CI_TEST_LIB=true mocha --require ./test/common",
+    "test-lib": "CI_TEST_LIB=true mocha --require ./test/common",
     "test-src": "mocha --require babel-register --require ./test/common test/* test/utils/*",
     "deploy-site": "deploy-site",
     "generate-site": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js",
