@@ -633,10 +633,22 @@ function expect(subject, ...rest) {
         };
     };
 
-    const buildAssertionSomeArgs = assertion => {
-        const oneArg = buildAssertion(assertion);
-        const noArgs = buildAssertion(assertion, { numberOfArgs: 0 });
+    const buildAssertionSomeArgs = assertionOrOptions => {
+        let options;
+        if (typeof assertionOrOptions === 'string') {
+            options = {
+                assertionOneArg: assertionOrOptions,
+                assertionNoArgs: assertionOrOptions
+            };
+        } else {
+            options = assertionOrOptions;
+        }
 
+        const oneArg = buildAssertion(options.assertionOneArg, options);
+        const noArgs = buildAssertion(
+            options.assertionNoArgs,
+            Object.assign({}, options, { numberOfArgs: 0 })
+        );
         return value => (value === undefined ? noArgs() : oneArg(value));
     };
 
@@ -787,8 +799,18 @@ function expect(subject, ...rest) {
                     'fulfilled',
                     result => result
                 );
-                // override "to throw" using "to error" to allow .resolves.toThrow()
-                resolves.toThrow = () => expect(() => resolves, 'to error');
+                // override "to throw" for .resolves as it makes no sense
+                resolves.toThrow = () => {
+                    return _promise
+                        .catch(() => {
+                            // ignore any coming out of the promise to which we attached
+                        })
+                        .then(() => {
+                            throw new Error(
+                                'jest-unexpected: nonsensical .toThrow() while expecting .resolves'
+                            );
+                        });
+                };
                 return resolves;
             },
             get rejects() {
@@ -796,8 +818,12 @@ function expect(subject, ...rest) {
                     'rejected',
                     result => result
                 );
-                // override "to throw" using "to error" to allow .rejects.toThrow()
-                rejects.toThrow = () => expect(() => rejects, 'not to error');
+                // override "to throw" for .rejects to allow asserting the captured error
+                rejects.toThrow = buildAssertionSomeArgs({
+                    assertionNoArgs: 'to be defined',
+                    assertionOneArg: 'to match',
+                    wrapValue: value => new MatchSpec(value)
+                });
                 return rejects;
             }
         },

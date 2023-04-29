@@ -1694,14 +1694,30 @@ describe('toThrow()', () => {
     });
 
     describe('when chained onto a promise assertion', () => {
-        it('should pass', () => {
-            return unexpected(() => {
-                return expect(
-                    Promise.resolve(() => {
-                        throw new Error();
-                    })
-                ).resolves.toThrow();
-            }, 'not to error');
+        it('should fail calling .toThrow() on .resolves', () => {
+            return unexpected(
+                () => {
+                    return expect(
+                        Promise.resolve(() => {
+                            throw new Error();
+                        })
+                    ).resolves.toThrow();
+                },
+                'to error',
+                'jest-unexpected: nonsensical .toThrow() while expecting .resolves'
+            );
+        });
+
+        it('should fail mismatched .toThrow() on .rejects', () => {
+            return unexpected(
+                () => {
+                    return expect(
+                        Promise.reject(new Error('other_error'))
+                    ).rejects.toThrow('some_error');
+                },
+                'to error',
+                "expected Error('other_error') to match 'some_error'\n\nother_error"
+            );
         });
     });
 });
@@ -1830,6 +1846,17 @@ describe('.rejects', () => {
 
             return unexpected(
                 expect(Promise.reject(rejectionValue)).rejects.toThrow(),
+                'to be fulfilled'
+            );
+        });
+
+        it('should allow checking rejection with .toThrow() with argument', () => {
+            const rejectionValue = new Error('foobar');
+
+            return unexpected(
+                expect(Promise.reject(rejectionValue)).rejects.toThrow(
+                    'foobar'
+                ),
                 'to be fulfilled'
             );
         });
