@@ -1,4 +1,4 @@
-/*global expect:true*/
+/* global expect:false */
 const jestMock = require('jest-mock');
 const trim = require('./utils/trim');
 const truncate = require('./utils/truncate');

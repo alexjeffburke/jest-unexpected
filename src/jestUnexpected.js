@@ -30,8 +30,8 @@ baseExpect.addAssertion(
                     .then(() => null),
             })
             .then((results) => {
-                var passNull = results.null === null;
-                var passUndefined = results.undefined === null;
+                const passNull = results.null === null;
+                const passUndefined = results.undefined === null;
 
                 if (passNull && passUndefined) {
                     // neither failed so we succeed

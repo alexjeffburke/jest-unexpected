@@ -2,7 +2,7 @@ const TRACE_IT_REGEX =
     /^(.*?at [a-zA-Z]+\..+?)\((.*?)(:\d+)(:\d+)?\)( \/\/ .*$)?/;
 
 function matchAndTransfromItTrace(line) {
-    let match = line.match(TRACE_IT_REGEX);
+    const match = line.match(TRACE_IT_REGEX);
 
     if (match === null) {
         return line;

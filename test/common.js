@@ -1,4 +1,4 @@
-/*global expect:true*/
+/* global expect:true */
 /* eslint no-unused-vars: "off" */
 expect =
     typeof exports === 'object'
