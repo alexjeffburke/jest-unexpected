@@ -75,8 +75,7 @@ baseExpect.addAssertion(
         Object.keys(lhsKeyMap).forEach((subjectKey) => {
             if (
                 subject[subjectKey] === undefined &&
-                subject.hasOwnProperty &&
-                subject.hasOwnProperty(subjectKey)
+                Object.prototype.hasOwnProperty.call(subject, subjectKey)
             ) {
                 expect.errorMode = 'nested';
                 expect.fail(
@@ -90,8 +89,7 @@ baseExpect.addAssertion(
         rhsOnlyKeys.forEach((valueKey) => {
             if (
                 value[valueKey] === undefined &&
-                value.hasOwnProperty &&
-                value.hasOwnProperty(valueKey)
+                Object.prototype.hasOwnProperty.call(value, valueKey)
             ) {
                 expect.errorMode = 'nested';
                 expect.fail(
@@ -557,9 +555,8 @@ baseExpect.addAssertion(
         if (Array.isArray(subject)) {
             return expect(subject, 'to contain', value);
         } else if (
-            subject.hasOwnProperty &&
-            subject.hasOwnProperty(value) &&
-            subject[value] === undefined
+            subject[value] === undefined &&
+            Object.prototype.hasOwnProperty.call(subject, value)
         ) {
             return expect(subject[value], 'to be undefined');
         } else {
