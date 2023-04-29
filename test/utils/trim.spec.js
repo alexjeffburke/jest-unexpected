@@ -16,7 +16,7 @@ it('should trim output', () => {
     );
 });
 
-it('should trim output', () => {
+it('should trim output and preserve nested spacing', () => {
     expect(
         trim`
             foo

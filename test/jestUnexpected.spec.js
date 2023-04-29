@@ -311,7 +311,7 @@ describe('toContain()', () => {
         unexpected(() => expect([1, 2, 3, 4]).toContain(1), 'not to throw');
     });
 
-    it('should fail with arrays of strings', () => {
+    it('should pass with arrays of strings', () => {
         unexpected(
             () => expect(['a', 'b', 'c', 'd']).toContain('a'),
             'not to throw'
@@ -2103,7 +2103,7 @@ describe('expect.anything', () => {
         );
     });
 
-    it('should fail on null', () => {
+    it('should fail on undefined', () => {
         const mockFunction = jestMock.fn().mockName('callback');
         mockFunction(undefined);
 
