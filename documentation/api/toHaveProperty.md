@@ -14,12 +14,14 @@ jestUnexpected({
 }).toHaveProperty('foo.bar');
 ```
 
-```output
-expected { foo: 1, baz: { baz: null } } to have property KeyPathSpec({ spec: 'foo.bar', value: undefined, nested: false, isValueExplicit: false })
+<!-- evaldown output:true -->
+
+```
+expected { foo: 1, baz: { baz: null } } to have property 'foo.bar'
 
 {
   foo: 1, // ⨯ should be an object and
-          // ⨯ should have property PropOrUndefined({ value: 'bar' })
+          // ⨯ should have property 'bar'
   baz: { baz: null }
 }
 ```
@@ -39,8 +41,10 @@ jestUnexpected({
 }).toHaveProperty('foo.bar', 'bar')
 ```
 
-```output
-expected { foo: { bar: 'baz' }, baz: { baz: null } } to have property KeyPathSpec({ spec: 'foo.bar', value: 'bar', nested: false, isValueExplicit: true })
+<!-- evaldown output:true -->
+
+```
+expected { foo: { bar: 'baz' }, baz: { baz: null } } to have property 'foo.bar'
 
 {
   foo: {

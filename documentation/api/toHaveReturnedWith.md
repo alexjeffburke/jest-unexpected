@@ -20,11 +20,9 @@ mock();
 jestUnexpected(mock).toHaveReturnedWith("bar");
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have returned with 'bar'
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have returned with 'bar'
   expected [ 'baz', 'foobar', 'baz' ] to contain 'bar'
 ```

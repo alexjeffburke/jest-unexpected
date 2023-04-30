@@ -10,6 +10,8 @@ jestUnexpected(['a', 'b', { foo: 'bar' }, 'd']).toContainEqual({ foo: 'bar' });
 jestUnexpected(['a', 'b', { foo: 'bar' }, 'd']).toContainEqual({ foo: 'baz' });
 ```
 
-```output
-expected [ 'a', 'b', { foo: 'bar' }, 'd' ] to contain equal ContainSpec({ spec: { foo: 'baz' }, value: undefined, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected [ 'a', 'b', { foo: 'bar' }, 'd' ] to contain equal { foo: 'baz' }
 ```

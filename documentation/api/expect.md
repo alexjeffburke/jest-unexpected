@@ -26,7 +26,9 @@ let someThing;
 jestUnexpected(someThing).toBeDefined();
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected undefined to be defined
 ```
 
@@ -42,8 +44,10 @@ const ourString = "very string";
 jestUnexpected(ourString).toContain("important");
 ```
 
-```output
-expected 'very string' to contain ContainSpec({ spec: 'important', value: undefined, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected 'very string' to contain 'important'
 
 very string
 ```
@@ -54,7 +58,9 @@ const anInteger = 0;
 jestUnexpected(anInteger).toBeGreaterThan(0);
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected 0 to be greater than 0
 ```
 

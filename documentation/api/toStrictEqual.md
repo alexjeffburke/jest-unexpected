@@ -9,7 +9,9 @@ jestUnexpected({
 }).toStrictEqual({ b: 2 });
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected { a: undefined, b: 2 } to strict equal { b: 2 }
   expected { a: undefined, b: 2 } not to contain property 'a'
 ```
@@ -20,7 +22,9 @@ jestUnexpected({
 }).toStrictEqual({ a: undefined, b: 2 });
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected { b: 2 } to strict equal { a: undefined, b: 2 }
   expected { b: 2 } to contain property 'a'
 ```

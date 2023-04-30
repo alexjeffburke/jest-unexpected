@@ -8,6 +8,8 @@ const promise = Promise.resolve();
 jestUnexpected(promise).toBeInstanceOf(Error);
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected Promise to be a Error
 ```

@@ -22,11 +22,9 @@ try {
 jestUnexpected(mock).toHaveReturnedTimes(2);
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have returned times 2
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have returned times 2
   expected 1 to be greater than or equal to 2
 ```

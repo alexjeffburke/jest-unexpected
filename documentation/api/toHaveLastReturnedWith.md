@@ -20,12 +20,10 @@ mock();
 jestUnexpected(mock).toHaveLastReturnedWith("foobar");
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have last returned with 'foobar'
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have last returned with 'foobar'
 
 -baz
 +foobar

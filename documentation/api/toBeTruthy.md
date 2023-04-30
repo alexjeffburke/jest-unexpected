@@ -8,6 +8,8 @@ let subject;
 jestUnexpected(null).toBeTruthy();
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected null to be truthy
 ```

@@ -16,7 +16,9 @@ jestUnexpected({
 });
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected { a: 'foo', b: 'baz' } to satisfy { a: 'foo', b: 'bar' }
 
 {

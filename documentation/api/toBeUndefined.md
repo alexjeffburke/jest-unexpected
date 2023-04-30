@@ -6,6 +6,8 @@ This assertion checks a subject is undefined.
 jestUnexpected({}).toBeUndefined();
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected {} to be undefined
 ```

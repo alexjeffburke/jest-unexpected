@@ -8,6 +8,8 @@ let subject;
 jestUnexpected({}).toBeFalsy();
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected {} to be falsy
 ```

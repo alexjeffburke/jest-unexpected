@@ -15,10 +15,8 @@ try {
 jestUnexpected(mock).toHaveReturned();
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have returned
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have returned
 ```

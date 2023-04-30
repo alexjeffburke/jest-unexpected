@@ -8,6 +8,8 @@ let subject;
 jestUnexpected(subject).toBeDefined();
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected undefined to be defined
 ```

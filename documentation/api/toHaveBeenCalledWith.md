@@ -10,16 +10,12 @@ mock('foo', 'baz');
 jestUnexpected(mock).toHaveBeenCalledWith('foo', 'bar');
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have been called with CalledWithSpec({ spec: [ 'foo', 'bar' ], value: undefined, nested: false })
+<!-- evaldown output:true -->
 
-function proxy() {
-  return p.invoke(func, this, slice.call(arguments));
-}(
+```
+expected jest.fn() to have been called with [ 'foo', 'bar' ]
+
+jest.fn()(
   'foo',
   'baz' // should equal 'bar'
         //

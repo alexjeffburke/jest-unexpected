@@ -11,12 +11,10 @@ mock('foo', 'baz');
 jestUnexpected(mock).toHaveBeenLastCalledWith('foo', 'bar');
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have been last called with CalledWithSpec({ spec: [ 'foo', 'bar' ], value: 2, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have been last called with [ 'foo', 'bar' ]
 
 [
   'foo',

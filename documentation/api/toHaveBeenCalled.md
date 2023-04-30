@@ -8,10 +8,8 @@ const mock = jest.fn();
 jestUnexpected(mock).toHaveBeenCalled();
 ```
 
-```output
-expected
-function proxy() {
-  return p.invoke(func, this, slice.call(arguments));
-}
-was called
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() was called
 ```

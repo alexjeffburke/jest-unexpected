@@ -14,8 +14,10 @@ jestUnexpected(['a', 'b', 'c', 'd']).toContain('a');
 jestUnexpected(['a', 'b', 'c', 'd']).toContain('e');
 ```
 
-```output
-expected [ 'a', 'b', 'c', 'd' ] to contain ContainSpec({ spec: 'e', value: undefined, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected [ 'a', 'b', 'c', 'd' ] to contain 'e'
 ```
 
 If you need structural equality use `.toContainEqual()`:
@@ -33,8 +35,10 @@ const other = { foo: 'bar' };
 jestUnexpected(['a', object, 'c', 'd']).toContain(other);
 ```
 
-```output
-expected [ 'a', { foo: 'bar' }, 'c', 'd' ] to contain ContainSpec({ spec: { foo: 'bar' }, value: undefined, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected [ 'a', { foo: 'bar' }, 'c', 'd' ] to contain { foo: 'bar' }
 ```
 
 ## string
@@ -43,8 +47,10 @@ expected [ 'a', { foo: 'bar' }, 'c', 'd' ] to contain ContainSpec({ spec: { foo:
 jestUnexpected("foo bar").toContain("baz");
 ```
 
-```output
-expected 'foo bar' to contain ContainSpec({ spec: 'baz', value: undefined, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected 'foo bar' to contain 'baz'
 
 foo bar
     ^^

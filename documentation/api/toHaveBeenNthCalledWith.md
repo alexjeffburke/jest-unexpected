@@ -11,12 +11,10 @@ mock('foo', 'baz');
 jestUnexpected(mock).toHaveBeenNthCalledWith(2, 'foo', 'bar');
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have been nth called with CalledWithSpec({ spec: [ 'foo', 'bar' ], value: 2, nested: false })
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have been nth called with [ 'foo', 'bar' ]
   expected [ 'foo', 'baz' ] to equal [ 'foo', 'bar' ]
 
   [

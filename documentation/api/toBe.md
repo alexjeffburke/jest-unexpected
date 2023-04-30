@@ -15,6 +15,8 @@ const otherPromise = Promise.resolve();
 jestUnexpected(somePromise).toBe(otherPromise);
 ```
 
-```output
+<!-- evaldown output:true -->
+
+```
 expected Promise to be Promise
 ```

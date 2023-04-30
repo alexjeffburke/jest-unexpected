@@ -19,12 +19,10 @@ mock();
 jestUnexpected(mock).toHaveNthReturnedWith(1, "foobar");
 ```
 
-```output
-expected
-function mockConstructor() {
-  return fn.apply(this, arguments);
-}
-to have nth returned with 1, 'foobar'
+<!-- evaldown output:true -->
+
+```
+expected jest.fn() to have nth returned with 1, 'foobar'
   expected 'baz' to equal 'foobar'
 
   -baz
