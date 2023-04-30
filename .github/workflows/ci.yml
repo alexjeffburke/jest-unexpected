@@ -40,6 +40,8 @@ jobs:
             target: 'lint'
           - name: 'Coverage'
             target: 'coverage'
+          - name: 'Documentation'
+            target: 'test-docs'
           - name: 'Browser'
             target: 'test-browser'
 
