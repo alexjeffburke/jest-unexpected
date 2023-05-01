@@ -47,7 +47,8 @@ will be thrown with a clear message indicating the method name):
 * extension related functionality
     - expect.extend()
 
-This library supports and is tested against node version **6** and above.
+This library supports and is tested against node version **6** and above and
+the API supported is at the level of expect exposed by jest version **27.0**.
 
 ## Output
 

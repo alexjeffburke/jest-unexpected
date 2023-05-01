@@ -66,5 +66,5 @@ expected 0 to be greater than 0
 
 # Assertions
 
-We have implemented all assertions present in jest expect incuded in
-version 23.6.x of the library.
+We have implemented all assertions present in jest expect that are
+included in version 27.0 of the library.
