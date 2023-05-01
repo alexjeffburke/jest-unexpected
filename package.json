@@ -45,7 +45,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "evaldown": "^1.8.0",
+    "evaldown": "^2.0.0",
     "jest-mock": "23.2.0",
     "karma": "^6.4.2",
     "karma-chrome-launcher": "^3.2.0",
@@ -58,6 +58,6 @@
     "puppeteer": "^19.11.1",
     "rollup": "^3.21.1",
     "serve": "^14.2.0",
-    "unexpected-documentation-site-generator": "^7.1.0"
+    "unexpected-documentation-site-generator": "^8.0.0"
   }
 }
