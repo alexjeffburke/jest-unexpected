@@ -2148,6 +2148,28 @@ describe('expect.arrayContaining', () => {
             `
         );
     });
+
+    describe('.not', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect(['foo', 'bar']).toEqual(
+                        expect.not.arrayContaining(['barbar'])
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect(['foo', 'barbar']).toEqual(
+                        expect.not.arrayContaining(['barbar'])
+                    ),
+                'to throw'
+            );
+        });
+    });
 });
 
 describe('expect.extend', () => {
@@ -2194,6 +2216,28 @@ describe('expect.objectContaining', () => {
             `
         );
     });
+
+    describe('.not', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect({ foo: 'barfoo' }).toEqual(
+                        expect.not.objectContaining({ foo: 'bar' })
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect({ foo: 'barfoo' }).toEqual(
+                        expect.not.objectContaining({ foo: 'barfoo' })
+                    ),
+                'to throw'
+            );
+        });
+    });
 });
 
 describe('expect.stringContaining', () => {
@@ -2216,6 +2260,28 @@ describe('expect.stringContaining', () => {
             `
         );
     });
+
+    describe('.not', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect('foobarbaz').toEqual(
+                        expect.not.stringContaining('barbar')
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect('foobarbaz').toEqual(
+                        expect.not.stringContaining('foobar')
+                    ),
+                'to throw'
+            );
+        });
+    });
 });
 
 describe('expect.stringMatching', () => {
@@ -2232,6 +2298,28 @@ describe('expect.stringMatching', () => {
             'to error',
             "expected 'foobarbar' to equal StringMatchingSpec(/baz/)"
         );
+    });
+
+    describe('.not', () => {
+        it('should pass', () => {
+            unexpected(
+                () =>
+                    expect('foobarbaz').toEqual(
+                        expect.not.stringMatching(/barbar/)
+                    ),
+                'not to throw'
+            );
+        });
+
+        it('should fail', () => {
+            unexpected(
+                () =>
+                    expect('foobarbaz').toEqual(
+                        expect.not.stringMatching(/foobar/)
+                    ),
+                'to throw'
+            );
+        });
     });
 
     describe('within expect.arrayContaining', () => {
@@ -2267,6 +2355,19 @@ describe('expect.stringMatching', () => {
                       'foobaz'
                     ]
                 `
+            );
+        });
+
+        it('should allow the use of "not"', () => {
+            unexpected(
+                () =>
+                    expect(['foobar', 'foobaz']).toEqual(
+                        expect.not.arrayContaining([
+                            expect.stringMatching(/bar/),
+                            expect.stringMatching(/baz/),
+                        ])
+                    ),
+                'to throw'
             );
         });
     });

@@ -3,6 +3,10 @@ const jestMockToSinonSpy = require('./jestMockToSinonSpy');
 
 const baseExpect = unexpected.clone();
 
+const baseExpectFlags = {
+    not: false,
+};
+
 // pull in plugin for -sinon assertions
 baseExpect.use(require('unexpected-sinon'));
 
@@ -105,16 +109,21 @@ baseExpect.addAssertion(
 );
 
 class CustomSpec {
-    constructor(spec, value, isTopLevel = true) {
+    constructor(spec, value, isTopLevel = true, scope = null) {
         this.spec = spec;
         this.value = value;
         this.nested = !isTopLevel;
+        this.scope = scope;
+    }
+
+    static applyScope(scope, expect) {
+        expect.flags.not = scope.flags.not;
     }
 }
 
-function buildCustomSpecWrapper(Type) {
+function buildCustomSpecWrapper(Type, scope) {
     return (value) => {
-        return new Type(value, undefined, false);
+        return new Type(value, undefined, false, scope);
     };
 }
 
@@ -233,7 +242,7 @@ registerUnexpectedTypeForCustomSpec(ArrayContainingSpec);
 
 function assertContainingArray(subject, spec) {
     // create a containing assertion and flatten out the elements to check for
-    return [subject, 'to contain'].concat(spec);
+    return [subject, '[not] to contain'].concat(spec);
 }
 
 function isPresentIn(element, subject) {
@@ -242,13 +251,15 @@ function isPresentIn(element, subject) {
 
 baseExpect.addAssertion(
     '<array> to equal <ArrayContainingSpec>',
-    (expect, subject, { spec }) => {
+    (expect, subject, { spec, scope }) => {
+        if (scope !== null) CustomSpec.applyScope(scope, expect);
+
         spec = unpackNestedSpecs(expect, spec);
 
         // check if we are operating on a subset
         if (subject.length === spec.length) {
             // prefer "to satisfy" since we are not
-            return expect(subject, 'to satisfy', spec);
+            return expect(subject, '[not] to satisfy', spec);
         }
 
         try {
@@ -259,7 +270,7 @@ baseExpect.addAssertion(
                 isPresentIn(element, subject)
             );
 
-            expect(present, 'to equal', spec);
+            expect(present, '[not] to equal', spec);
         }
     }
 );
@@ -414,7 +425,9 @@ registerUnexpectedTypeForCustomSpec(ObjectContainingSpec);
 
 baseExpect.addAssertion(
     '<object> [not] to equal <ObjectContainingSpec>',
-    (expect, subject, { spec, nested }) => {
+    (expect, subject, { spec, nested, scope }) => {
+        if (scope !== null) CustomSpec.applyScope(scope, expect);
+
         spec = unpackNestedSpecs(expect, spec);
 
         if (!nested) expect.errorMode = 'bubble';
@@ -427,8 +440,10 @@ registerUnexpectedTypeForCustomSpec(StringContainingSpec);
 
 baseExpect.addAssertion(
     '<string> to equal <StringContainingSpec>',
-    (expect, subject, { spec }) => {
-        return expect(subject, 'to contain', spec);
+    (expect, subject, { spec, scope }) => {
+        if (scope !== null) CustomSpec.applyScope(scope, expect);
+
+        return expect(subject, '[not] to contain', spec);
     }
 );
 
@@ -570,8 +585,10 @@ registerUnexpectedTypeForCustomSpec(StringMatchingSpec);
 
 baseExpect.addAssertion(
     '<string> to equal <StringMatchingSpec>',
-    (expect, subject, { spec }) => {
-        return expect(subject, 'to match', spec);
+    (expect, subject, { spec, scope }) => {
+        if (scope !== null) CustomSpec.applyScope(scope, expect);
+
+        return expect(subject, '[not] to match', spec);
     }
 );
 
@@ -585,9 +602,7 @@ function expect(subject, ...rest) {
     }
 
     const expect = baseExpect;
-    const flags = {
-        not: false,
-    };
+    const flags = { ...baseExpectFlags };
     let _promise = null;
 
     const _buildAssertion = (assertion, options = {}) => {
@@ -825,20 +840,63 @@ function expect(subject, ...rest) {
     );
 }
 
+// loudly mention unsupported methods
 expect.addSnapshotSerializer = () => {
     throw new Error(
         'jest-unexpected: expect.addSnapshotSerializer() is not supported.'
     );
 };
-expect.any = buildCustomSpecWrapper(AnySpec);
-expect.anything = buildCustomSpecWrapper(AnythingSpec);
-expect.arrayContaining = buildCustomSpecWrapper(ArrayContainingSpec);
 expect.extend = () => {
     throw new Error('jest-unexpected: expect.extend() is not supported.');
 };
-expect.objectContaining = buildCustomSpecWrapper(ObjectContainingSpec);
-expect.stringContaining = buildCustomSpecWrapper(StringContainingSpec);
-expect.stringMatching = buildCustomSpecWrapper(StringMatchingSpec);
+expect.any = buildCustomSpecWrapper(AnySpec);
+expect.anything = buildCustomSpecWrapper(AnythingSpec);
+
+class StructualComparisons {
+    constructor({ flags = baseExpectFlags } = {}) {
+        this.flags = { ...flags };
+    }
+
+    get arrayContaining() {
+        return buildCustomSpecWrapper(ArrayContainingSpec, this);
+    }
+
+    get objectContaining() {
+        return buildCustomSpecWrapper(ObjectContainingSpec, this);
+    }
+
+    get stringContaining() {
+        return buildCustomSpecWrapper(StringContainingSpec, this);
+    }
+
+    get stringMatching() {
+        return buildCustomSpecWrapper(StringMatchingSpec, this);
+    }
+
+    static register(comparisons, target) {
+        const attachComparison = (propertyName) => {
+            Object.defineProperty(target, propertyName, {
+                get: () => comparisons[propertyName],
+            });
+        };
+
+        // attach the comparisons as properties to the target object
+        const prototype = Object.getPrototypeOf(comparisons);
+        for (const propertyName of Object.getOwnPropertyNames(prototype)) {
+            if (propertyName === 'constructor') continue;
+            attachComparison(propertyName);
+        }
+    }
+}
+
+// expose structural comparisions
+StructualComparisons.register(new StructualComparisons(), expect);
+
+// return negated structural comparisons for top-level .not
+Object.defineProperty(expect, 'not', {
+    get: () => new StructualComparisons({ flags: { not: true } }),
+});
+
 // attach Unexpected output object to allow controlling e.g. terminal width
 expect.output = baseExpect.output;
 
