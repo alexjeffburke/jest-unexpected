@@ -1,10 +1,16 @@
-/* global expect:false */
+/* global expect:false, TEST_ENV:false */
 const jestMock = require('jest-mock');
 const trim = require('./utils/trim');
 const truncate = require('./utils/truncate');
 const unexpected = require('unexpected').clone();
 
-expect.output.preferredWidth = 80;
+const isIe =
+    TEST_ENV === 'browser' &&
+    window.navigator &&
+    /Windows/.test(window.navigator.userAgent) &&
+    /Trident\//.test(window.navigator.userAgent);
+
+expect.output.preferredWidth = 100;
 
 unexpected.addAssertion(
     '<function> to error outputting <string>',
@@ -15,9 +21,9 @@ unexpected.addAssertion(
             expect.it((unexpectedError) => {
                 expect.errorMode = 'bubble';
 
-                const errorMessage = unexpectedError
-                    .getErrorMessage('text')
-                    .toString();
+                const errorMessage = unexpectedError.getErrorMessage
+                    ? unexpectedError.getErrorMessage('text').toString()
+                    : unexpectedError.toString();
 
                 expect(truncate(errorMessage), 'to equal', expected);
             })
@@ -333,8 +339,7 @@ describe('toContain()', () => {
                 ),
             'to throw',
             trim`
-                expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ]
-                to contain { a: 'something' }
+                expected [ { foo: 'bar' }, { a: 'something' }, { quux: 'xuuq' } ] to contain { a: 'something' }
             `
         );
     });
@@ -1628,11 +1633,11 @@ describe('toThrow()', () => {
     it('should fail on no throw', () => {
         return unexpected(
             () => {
-                expect(() => {}).toThrow();
+                expect(function () {}).toThrow();
             },
             'to error',
             trim`
-                expected () => {} to throw
+                expected function () {} to throw
                   did not throw
             `
         );
@@ -1641,13 +1646,13 @@ describe('toThrow()', () => {
     it('should fail on mismatch string', () => {
         return unexpected(
             () => {
-                expect(() => {
+                expect(function () {
                     throw new Error('baz');
                 }).toThrow('ba');
             },
             'to error',
             trim`
-                expected () => { throw new Error('baz'); } to throw 'ba'
+                expected function () { throw new Error('baz'); } to throw 'ba'
                   expected Error('baz') to satisfy 'ba'
 
                   -baz
@@ -1659,13 +1664,13 @@ describe('toThrow()', () => {
     it('should fail on mismatch regex', () => {
         return unexpected(
             () => {
-                expect(() => {
+                expect(function () {
                     throw new Error('baz');
                 }).toThrow(/bar/);
             },
             'to error',
             trim`
-                expected () => { throw new Error('baz'); } to throw /bar/
+                expected function () { throw new Error('baz'); } to throw /bar/
                   expected Error('baz') to satisfy /bar/
             `
         );
@@ -1674,13 +1679,13 @@ describe('toThrow()', () => {
     it('should fail on mismatch error', () => {
         return unexpected(
             () => {
-                expect(() => {
+                expect(function () {
                     throw new Error('baz');
                 }).toThrow(new Error('bar'));
             },
             'to error',
             trim`
-                expected () => { throw new Error('baz'); } to throw Error('bar')
+                expected function () { throw new Error('baz'); } to throw Error('bar')
                   expected Error('baz') to satisfy Error('bar')
 
                   Error({
@@ -1942,6 +1947,10 @@ describe('expect.any', () => {
     });
 
     describe('within toHaveBeenCalledWith()', () => {
+        it.skipIf = function (bool, descr, block) {
+            (bool ? it.skip : it)(descr, block);
+        };
+
         it('should pass', () => {
             const mockFunction = jestMock.fn().mockName('callback');
             mockFunction('foobar');
@@ -1955,7 +1964,7 @@ describe('expect.any', () => {
             );
         });
 
-        it('should fail', () => {
+        it.skipIf(isIe, 'should fail', () => {
             const mockFunction = jestMock.fn().mockName('callback');
             mockFunction('foobar');
 
@@ -1977,7 +1986,7 @@ describe('expect.any', () => {
             );
         });
 
-        it('should fail and correctly treat a custom constructor', () => {
+        const testFn = () => {
             const mockFunction = jestMock.fn().mockName('callback');
             mockFunction('foobar');
 
@@ -1999,11 +2008,19 @@ describe('expect.any', () => {
                     );
                 `
             );
-        });
+        };
+        it.skipIf(
+            isIe,
+            'should fail and correctly treat custom constructor',
+            testFn
+        );
 
-        it('should fail and correctly treat a function', () => {
+        it.skipIf(isIe, 'should fail and correctly treat a function', () => {
             const mockFunction = jestMock.fn().mockName('callback');
             mockFunction('foobar');
+
+            const emptyFnString =
+                TEST_ENV !== 'src' ? 'function () {}' : '() => {}';
 
             unexpected(
                 () =>
@@ -2013,11 +2030,11 @@ describe('expect.any', () => {
                     ),
                 'to error outputting',
                 trim`
-                    expected callback to have been called with [ AnySpec(String), AnySpec(() => {}) ]
+                    expected callback to have been called with [ AnySpec(String), AnySpec(${emptyFnString}) ]
 
                     callback(
                       'foobar'
-                      // missing: should be a () => {}
+                      // missing: should be a ${emptyFnString}
                     );
                 `
             );
@@ -2203,8 +2220,7 @@ describe('expect.objectContaining', () => {
                 ),
             'to error',
             trim`
-                expected { foo: 'barbar', baz: 'qux' }
-                to equal ObjectContainingSpec({ foo: 'bar' })
+                expected { foo: 'barbar', baz: 'qux' } to equal ObjectContainingSpec({ foo: 'bar' })
 
                 {
                   foo: 'barbar', // should equal 'bar'

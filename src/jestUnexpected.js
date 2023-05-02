@@ -1,5 +1,10 @@
+/* global Promise:true */
+const objectAssign = require('object-assign');
 const unexpected = require('unexpected');
 const jestMockToSinonSpy = require('./jestMockToSinonSpy');
+
+if (Object.assign !== objectAssign) Object.assign = objectAssign;
+if (typeof Promise === 'undefined') Promise = unexpected.promise.Promise;
 
 const baseExpect = unexpected.clone();
 
@@ -127,16 +132,31 @@ function buildCustomSpecWrapper(Type, scope) {
     };
 }
 
+function decodeFunctionName(f) {
+    if (typeof f.name === 'string') {
+        return f.name;
+    }
+    const functionName = Function.prototype.toString.call(f);
+    const matchFunctionName = functionName.match(/function ([^(]+)/);
+    if (matchFunctionName) {
+        return matchFunctionName[1];
+    } else {
+        return '';
+    }
+}
+
 function registerUnexpectedTypeForCustomSpec(Type, options = {}) {
+    const typeName = decodeFunctionName(Type);
+
     baseExpect.addType({
-        name: Type.name,
+        name: typeName,
         base: 'object',
         identify: (value) => value instanceof Type,
         inspect:
             options.inspect !== undefined
                 ? options.inspect
                 : ({ spec, nested }, depth, output, inspect) => {
-                      if (nested) output.text(`${Type.name}(`);
+                      if (nested) output.text(`${typeName}(`);
                       if (spec !== undefined) {
                           output.append(inspect(spec, depth));
                       }
@@ -530,7 +550,8 @@ function keyPathToSatisfySpec(
                     : keyPathValue;
 
             // the innermost property will point to a value
-            nestedObjects = { [lastKeyPathPart]: value };
+            nestedObjects = {};
+            nestedObjects[lastKeyPathPart] = value;
         } else {
             // the innermost property need only to exist in the subject
             nestedObjects = expect
@@ -542,11 +563,11 @@ function keyPathToSatisfySpec(
     }
 
     while (keyPath.length > 0) {
-        const property = keyPath.pop();
+        const lastKeyPathPart = keyPath.pop();
+        const value = nestedObjects;
         // nest previous value within a new object
-        nestedObjects = {
-            [property]: nestedObjects,
-        };
+        nestedObjects = {};
+        nestedObjects[lastKeyPathPart] = value;
     }
 
     return nestedObjects;
@@ -882,10 +903,10 @@ class StructualComparisons {
 
         // attach the comparisons as properties to the target object
         const prototype = Object.getPrototypeOf(comparisons);
-        for (const propertyName of Object.getOwnPropertyNames(prototype)) {
-            if (propertyName === 'constructor') continue;
+        Object.getOwnPropertyNames(prototype).forEach((propertyName) => {
+            if (propertyName === 'constructor') return;
             attachComparison(propertyName);
-        }
+        });
     }
 }
 

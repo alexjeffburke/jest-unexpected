@@ -22,6 +22,23 @@ module.exports = function (config) {
             },
         },
 
+        browserStack: {
+            video: false,
+            project: 'jest-unexpected',
+        },
+
         browsers: ['ChromeHeadless'],
+
+        customLaunchers: {
+            ie11: {
+                base: 'BrowserStack',
+                browser: 'IE',
+                browser_version: '11',
+                os: 'Windows',
+                os_version: '7',
+            },
+        },
+
+        reporters: ['dots', 'BrowserStack'],
     });
 };

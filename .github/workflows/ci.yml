@@ -3,10 +3,14 @@ name: Tests
   push:
   pull_request:
 
+env:
+  BROWSER_STACK_ACCESS_KEY: '${{ secrets.BROWSER_STACK_ACCESS_KEY }}'
+  BROWSER_STACK_USERNAME: '${{ secrets.BROWSER_STACK_USERNAME }}'
+
 jobs:
   test:
     runs-on: ubuntu-20.04
-    name: Node ${{ matrix.node }}
+    name: Node ${{ matrix.node }} (lib)
     strategy:
       matrix:
         node:
@@ -30,6 +34,23 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm run test-lib
 
+  test-lib:
+    runs-on: ubuntu-20.04
+    name: Node ${{ matrix.node }} (src)
+    strategy:
+      matrix:
+        node:
+          - '14'
+          - '16'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install
+      - run: npm run test-src
+
   test-targets:
     runs-on: ubuntu-20.04
     name: ${{ matrix.targets.name }}
@@ -44,6 +65,8 @@ jobs:
             target: 'test-docs'
           - name: 'Browser'
             target: 'test-browser'
+          - name: 'Browser - IE11'
+            target: 'test-browser-ie11'
 
     steps:
       - uses: actions/checkout@v2
