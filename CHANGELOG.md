@@ -1,3 +1,8 @@
+### v2.3.1 (2023-05-03)
+
+- [Add automatic changelog generation.](https://github.com/alexjeffburke/jest-unexpected/commit/5bf4ff026086dc1342be3aeaa7cc4768c3e90ac6) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+- [Restore IE11 support as a final farewell to this version.](https://github.com/alexjeffburke/jest-unexpected/commit/94914c2508064126b1e661dfe5df2d9069c4f226) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+
 ### v2.3.0 (2023-05-02)
 
 - [Document equivalence to expect in jest 27.0.](https://github.com/alexjeffburke/jest-unexpected/commit/bc0317cfb8af30187c46ba3650be38f45c705c18) ([Alex J Burke](mailto:alex@alexjeffburke.com))
