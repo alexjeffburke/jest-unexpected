@@ -22,7 +22,8 @@
     "test-src": "mocha --require ./test/common test/* test/utils/*",
     "deploy-site": "deploy-site",
     "generate-site": "npm run build && generate-site --require ./bootstrap-unexpected-markdown.js",
-    "update-examples": "npm run build && evaldown --require ./bootstrap-unexpected-markdown.js --inplace ./documentation"
+    "update-examples": "npm run build && evaldown --require ./bootstrap-unexpected-markdown.js --inplace ./documentation",
+    "version": "offline-github-changelog --next=${npm_package_version} > CHANGELOG.md && git add CHANGELOG.md"
   },
   "keywords": [],
   "author": "Alex J Burke <alex@alexjeffburke.com>",
@@ -63,6 +64,7 @@
     "karma-mocha": "^2.0.1",
     "mocha": "5.2.0",
     "nyc": "^15.1.0",
+    "offline-github-changelog": "^3.0.1",
     "prettier": "~2.8.8",
     "puppeteer": "^19.11.1",
     "rollup": "^1.0.0",
