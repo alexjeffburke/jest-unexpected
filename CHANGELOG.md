@@ -1,3 +1,12 @@
+### v3.0.0 (2023-05-09)
+
+- [Update README with note about older node\/browser versions and IE11.](https://github.com/alexjeffburke/jest-unexpected/commit/cf1bee137d4fb1aec75e9b088c7ef375e3f548c8) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+- [Upgrade dependencies related to documentation handling.](https://github.com/alexjeffburke/jest-unexpected/commit/c52b9f040b7813879551fc498de52f1233fe1631) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+- [Bump to mocha 10.x \(drops node &lt; 14\).](https://github.com/alexjeffburke/jest-unexpected/commit/1cad501504cbc0f1832d2ad11bc10a2a395918b0) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+- [Axe the use of babel and move to a modern bundle only build.](https://github.com/alexjeffburke/jest-unexpected/commit/2abde963599cddbf420aa67587791478e1f43609) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+- [Bump all runtime dependencies.](https://github.com/alexjeffburke/jest-unexpected/commit/0798a9f110358a1b0dff24723d3b1619b918ee0e) ([Alex J Burke](mailto:alex@alexjeffburke.com))
+- [+2 more](https://github.com/alexjeffburke/jest-unexpected/compare/v2.3.1...v3.0.0)
+
 ### v2.3.1 (2023-05-03)
 
 - [Add automatic changelog generation.](https://github.com/alexjeffburke/jest-unexpected/commit/5bf4ff026086dc1342be3aeaa7cc4768c3e90ac6) ([Alex J Burke](mailto:alex@alexjeffburke.com))
